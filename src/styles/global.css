@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --holiday-pine: #0B3B24;
+    --holiday-pinedark: #062416;
+    --holiday-red: #C41E3A;
+    --holiday-gold: #D4AF37;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #0F172A;
+    background-color: #F8FAFC;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+/* Glassmorphism & Festive Cards */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.glass-holiday-dark {
+  background: rgba(11, 59, 36, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.glass-festive-red {
+  background: linear-gradient(135deg, rgba(196, 30, 58, 0.95), rgba(158, 21, 45, 0.95));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(243, 192, 83, 0.3);
+}
+
+/* Golden glow utilities */
+.gold-glow {
+  box-shadow: 0 0 25px -5px rgba(212, 175, 55, 0.35);
+}
+
+.pine-glow {
+  box-shadow: 0 10px 30px -10px rgba(11, 59, 36, 0.4);
+}
+
+/* Fixed container sizes for CLS=0.00 stability */
+.stable-widget-container {
+  min-height: 520px;
+  contain: layout style;
+}
+
+/* Subtle snowflake background styling */
+.snowflake-particle {
+  position: absolute;
+  color: white;
+  user-select: none;
+  pointer-events: none;
+}

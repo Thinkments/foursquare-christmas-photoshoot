@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WardrobeMatcher from '../components/WardrobeMatcher.tsx';
+---
+
+<Layout
+  title="Holiday Wardrobe & Studio Backdrop Guide | Foursquare Christmas 2026"
+  description="Discover what to wear for your holiday photo session. Interactive color matcher for festive scrubs, velvet jewel tones, cozy winter knits, and our 4 studio sets."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Wardrobe & Backdrop Styling
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Studio Style & Color Harmony Guide
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        Coordinate your attire with our studio softbox lighting and festive backgrounds for picture-perfect portraits.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <WardrobeMatcher client:load />
+
+    {/* Style Advice Sections */}
+    <div class="mt-12 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-base text-slate-900 mb-2 font-heading">For Clinical Staff & Units</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Clean solid scrubs (Navy, Ceil Blue, Emerald Green, or Holiday Maroon) photograph with exceptional contrast. Unit groups that coordinate scrub color palettes create the most cohesive and celebrated hospital holiday cards.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+        <h3 class="font-bold text-base text-slate-900 mb-2 font-heading">For Resident & Multi-Gen Families</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Choose 2 to 3 complementary tones (such as Burgundy, Cream, and Deep Green) rather than identical matching outfits. Avoid small high-frequency micro-stripes, and bring warm shawls or festive cardigans for seated comfort.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

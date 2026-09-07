@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SchedulerWizard from '../components/SchedulerWizard.tsx';
+---
+
+<Layout
+  title="Schedule Your Session | Foursquare Christmas Photo Shoot 2026"
+  description="Interactive holiday portrait booking wizard for Foursquare Healthcare staff, residents, and families. Choose your campus, slot, and accessibility accommodations."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Online Reservation Portal
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Schedule Your Holiday Photo Shoot
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        Book your shift express session, resident family portrait, Santa visit, or unit team holiday card across DFW hospital campuses.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <SchedulerWizard client:load />
+
+    <div class="mt-12 max-w-4xl mx-auto p-6 bg-white border border-slate-200 rounded-3xl text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <strong class="text-slate-900 block text-sm mb-0.5">Need a custom time slot for a large 30+ person unit?</strong>
+        <span>Contact the holiday coordinator desk at holiday@foursquarehealthcare.com or (800) 555-4779.</span>
+      </div>
+      <a href="/prep-checklist" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition shrink-0">
+        View Prep Checklist →
+      </a>
+    </div>
+  </div>
+</Layout>

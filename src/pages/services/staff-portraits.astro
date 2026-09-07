@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Staff & Shift Express Mini-Sessions | Foursquare Christmas 2026"
+  description="15-minute quick holiday portraits tailored for 3x12 clinical shift workers, nurses, techs, and hospital staff. Pre-shift, post-night, and handoff slots available."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-16 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Clinical Hero Recognition
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Staff & Shift Express Mini-Sessions
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        Tailored for the demanding schedules of 3x12 nurses, physicians, allied health professionals, and support teams.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-extrabold text-holiday-red uppercase">Shift Flexible</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">Handoff Timing</h3>
+        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+          Slots open at 6:45 AM, 7:15 AM, and 6:45 PM to accommodate day/night shift handoffs without taking personal time off.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-extrabold text-emerald-700 uppercase">100% Subsidized</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">Free Sitting Fee</h3>
+        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+          Covered by the Foursquare Healthcare Employee Appreciation Fund. Includes 3 high-res digital files delivered within 48 hours.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-extrabold text-holiday-gold uppercase">Fast Turnaround</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">Ready for Cards</h3>
+        <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+          Digital proofs delivered to your email with full print release for holiday greeting cards and personal gifts.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-slate-900 text-white p-8 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-6 border border-holiday-gold/30">
+      <div>
+        <h2 class="text-2xl font-bold font-heading">Ready to Reserve Your Express Slot?</h2>
+        <p class="text-xs text-slate-300 mt-1">Takes less than 60 seconds to lock in your date and time.</p>
+      </div>
+      <a
+        href="/schedule"
+        class="px-6 py-3.5 bg-holiday-red hover:bg-holiday-reddark text-white font-extrabold text-sm rounded-xl shadow-lg transition transform hover:scale-105 shrink-0"
+      >
+        Book Express Session Now →
+      </a>
+    </div>
+
+    {/* Internal linking mesh */}
+    <div class="pt-8 border-t border-slate-200 flex flex-wrap gap-3 text-xs">
+      <span class="font-bold text-slate-700">Explore Related Pages:</span>
+      <a href="/services/department-teams" class="text-holiday-pine hover:underline">Unit Group Sessions</a> •
+      <a href="/calculator" class="text-holiday-pine hover:underline">Package Pricing Calculator</a> •
+      <a href="/style-guide" class="text-holiday-pine hover:underline">Holiday Scrub Styling</a> •
+      <a href="/locations/dallas-regional" class="text-holiday-pine hover:underline">Dallas Regional Studio</a>
+    </div>
+  </div>
+</Layout>

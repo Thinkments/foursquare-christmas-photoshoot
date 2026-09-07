@@ -1,0 +1,33 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PrepChecklist from '../components/PrepChecklist.tsx';
+---
+
+<Layout
+  title="Photo Shoot Prep & Mobility Checklist | Foursquare Christmas 2026"
+  description="Step-by-step preparation checklist for healthcare workers, resident families, and unit coordinators. Arrival guidelines, wheelchair transfer readiness, and props."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Session Readiness Protocol
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Photo Shoot Preparation Checklist
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        Follow these simple steps before your scheduled studio session to ensure a relaxed, seamless, and memorable holiday shoot.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PrepChecklist client:load />
+
+    <div class="mt-8 text-center">
+      <a href="/schedule" class="inline-flex items-center gap-2 px-6 py-3 bg-holiday-pine hover:bg-holiday-pinelight text-holiday-gold font-bold text-sm rounded-xl shadow-lg transition">
+        <span>Ready to Book? Schedule Your Slot Now</span> →
+      </a>
+    </div>
+  </div>
+</Layout>

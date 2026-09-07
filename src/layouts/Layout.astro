@@ -1,0 +1,131 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  ogType?: string;
+  canonicalUrl?: string;
+}
+
+const {
+  title = "Foursquare Christmas Photo Shoot Scheduler | DFW Healthcare Holiday Portraits",
+  description = "Official Christmas photo shoot booking portal for Foursquare Healthcare staff, nurses, physicians, residents, and families across Dallas-Fort Worth hospital campuses.",
+  publishedTime = "2026-09-07T08:00:00-06:00",
+  modifiedTime = "2026-09-07T10:30:00-06:00",
+  ogType = "website",
+  canonicalUrl = Astro.url.href,
+} = Astro.props;
+
+// Schema.org Graph Node
+const schemaGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "MedicalBusiness",
+      "@id": "https://foursquare-christmas-photoshoot.netlify.app/#organization",
+      "name": "Foursquare Healthcare Network",
+      "url": "https://foursquare-christmas-photoshoot.netlify.app",
+      "logo": "https://foursquare-christmas-photoshoot.netlify.app/favicon.svg",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1011 N Galloway Ave",
+        "addressLocality": "Mesquite",
+        "addressRegion": "TX",
+        "postalCode": "75149",
+        "addressCountry": "US"
+      },
+      "telephone": "+1-800-555-4779",
+      "sameAs": [
+        "https://www.facebook.com/FoursquareHealthcare",
+        "https://www.linkedin.com/company/foursquare-healthcare"
+      ]
+    },
+    {
+      "@type": ["PhotographyBusiness", "Event"],
+      "@id": "https://foursquare-christmas-photoshoot.netlify.app/#event",
+      "name": "Foursquare Annual Christmas Photo Shoot & Portrait Scheduler",
+      "startDate": "2026-12-01T07:00:00-06:00",
+      "endDate": "2026-12-15T20:00:00-06:00",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "Foursquare Healthcare Campuses (DFW)",
+        "address": "Dallas, Fort Worth, Plano, Arlington TX"
+      },
+      "organizer": {
+        "@id": "https://foursquare-christmas-photoshoot.netlify.app/#organization"
+      },
+      "description": description
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalUrl}#webpage`,
+      "url": canonicalUrl,
+      "name": title,
+      "description": description,
+      "datePublished": publishedTime,
+      "dateModified": modifiedTime,
+      "inLanguage": "en-US",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://foursquare-christmas-photoshoot.netlify.app/#website",
+        "name": "Foursquare Healthcare Christmas Scheduler",
+        "url": "https://foursquare-christmas-photoshoot.netlify.app"
+      }
+    }
+  ]
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* Dual QDF Timestamps */}
+    <meta property="article:published_time" content={publishedTime} />
+    <meta property="article:modified_time" content={modifiedTime} />
+
+    {/* Open Graph / Social */}
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content="Foursquare Christmas Photo Shoot Scheduler" />
+
+    {/* PWA Tags & Theme Color */}
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#0B3B24" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    {/* Structured Schema.org JSON-LD */}
+    <script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
+
+    {/* Service Worker Registration */}
+    <script is:inline>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-holiday-red selection:text-white">
+    <Header />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

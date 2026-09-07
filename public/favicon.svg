@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="treeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B5E20" />
+      <stop offset="100%" stop-color="#0B3B24" />
+    </linearGradient>
+    <radialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF9C4" />
+      <stop offset="100%" stop-color="#D4AF37" />
+    </radialGradient>
+  </defs>
+  <!-- Background circular festive badge -->
+  <circle cx="50" cy="50" r="48" fill="#0B3B24" stroke="#D4AF37" stroke-width="2.5" />
+  <!-- Stylized Christmas Tree -->
+  <polygon points="50,18 36,36 44,36 30,54 40,54 22,76 78,76 60,54 70,54 56,36 64,36" fill="url(#treeGrad)" stroke="#1B5E20" stroke-width="1.5" />
+  <!-- Tree Trunk -->
+  <rect x="46" y="76" width="8" height="10" rx="1.5" fill="#5D4037" />
+  <!-- Gold Top Star -->
+  <polygon points="50,10 52.5,16 58,16.5 53.5,20.5 55,26 50,22.5 45,26 46.5,20.5 42,16.5 47.5,16" fill="url(#starGlow)" stroke="#FFF" stroke-width="0.5" />
+  <!-- Red Camera Shutter / Ornament in Center -->
+  <circle cx="50" cy="52" r="7" fill="#C41E3A" stroke="#FFF" stroke-width="1.5" />
+  <circle cx="50" cy="52" r="3" fill="#FFF" />
+</svg>

@@ -1,0 +1,18 @@
+{
+  "name": "Foursquare Christmas Photo Shoot Scheduler",
+  "short_name": "4SQ Christmas",
+  "description": "Book your holiday photo shoot across Foursquare Healthcare facilities in DFW.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B3B24",
+  "theme_color": "#0B3B24",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

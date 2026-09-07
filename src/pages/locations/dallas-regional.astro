@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout
+  title="Dallas Regional Medical Center Holiday Studio | Foursquare Christmas 2026"
+  description="Holiday portrait studio details for Dallas Regional Medical Center in Mesquite, TX. Studio dates Dec 2-4 in the Executive Boardroom & Winter Conservatory."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-16 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Hospital Campus Studio
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Dallas Regional Medical Center
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        1011 N Galloway Ave, Mesquite / Dallas, TX 75149 • Executive Boardroom & Winter Conservatory
+      </p>
+    </div>
+  </div>
+
+  <div class="py-16 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto space-y-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-bold text-holiday-red uppercase">Dates Active</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">December 2 – 4, 2026</h3>
+        <p class="text-xs text-slate-600 mt-2">
+          Morning shift prep from 6:45 AM, midday slots, and evening handoff blocks through 8:00 PM.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-bold text-holiday-pine uppercase">Studio Room</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">West Wing 1st Floor</h3>
+        <p class="text-xs text-slate-600 mt-2">
+          Directly past the main atrium lobby. Clear directional signs and host check-in table.
+        </p>
+      </div>
+
+      <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-md">
+        <span class="text-xs font-bold text-holiday-gold uppercase">Place ID</span>
+        <h3 class="text-lg font-bold text-slate-900 mt-1">Google Place Verified</h3>
+        <p class="text-xs text-slate-600 mt-2">
+          <code>ChIJ7V6N26GZToYRFX_L3Z7R1XU</code> • Convenient employee & visitor parking garage access.
+        </p>
+      </div>
+    </div>
+
+    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-lg">
+      <h2 class="text-xl font-bold font-heading text-slate-900 mb-4">Arrival & Parking Instructions</h2>
+      <p class="text-xs text-slate-600 leading-relaxed mb-4">
+        Employees can take the West Wing clinical elevators to Ground Level. Visiting family members should park in Visitor Lot B and enter through the Main Entrance. Check in with the Holiday Concierge table wearing your Foursquare badge or reservation code.
+      </p>
+      <a
+        href="/schedule"
+        class="inline-flex items-center gap-2 px-6 py-3.5 bg-holiday-pine hover:bg-holiday-pinelight text-holiday-gold font-bold text-sm rounded-xl shadow-md transition"
+      >
+        <span>Schedule Slot at Dallas Regional</span> →
+      </a>
+    </div>
+
+    {/* Internal linking mesh */}
+    <div class="pt-8 border-t border-slate-200 flex flex-wrap gap-3 text-xs">
+      <span class="font-bold text-slate-700">Other DFW Studios:</span>
+      <a href="/locations/fort-worth-senior-living" class="text-holiday-pine hover:underline">Fort Worth Senior Living</a> •
+      <a href="/locations/plano-specialty" class="text-holiday-pine hover:underline">Plano Specialty Hospital</a> •
+      <a href="/locations/arlington-pavilion" class="text-holiday-pine hover:underline">Arlington Emergency Pavilion</a> •
+      <a href="/calculator" class="text-holiday-pine hover:underline">Holiday Package Calculator</a>
+    </div>
+  </div>
+</Layout>

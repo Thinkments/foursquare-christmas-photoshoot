@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PackageCalculator from '../components/PackageCalculator.tsx';
+---
+
+<Layout
+  title="Photo Package & Print Pricing Calculator | Foursquare Christmas 2026"
+  description="Calculate your holiday portrait packages, digital high-res downloads, custom foil greeting cards, and framed prints with active employee appreciation discounts."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Transparent Pricing Estimator
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Holiday Package & Print Calculator
+      </h1>
+      <p class="text-sm sm:text-base text-slate-200 mt-2 max-w-2xl mx-auto">
+        Preview package costs, greeting card bundles, and framed wall art with automatic 20% staff discounts.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <PackageCalculator client:load />
+
+    {/* Zero-JS Static Fallback & SEO Matrix */}
+    <div class="mt-12 max-w-4xl mx-auto bg-white border border-slate-200 rounded-3xl p-6 sm:p-8">
+      <h3 class="text-base font-bold text-slate-900 mb-2 font-heading">
+        Static Package & Pricing Matrix (Zero-JS Reference)
+      </h3>
+      <p class="text-xs text-slate-500 mb-4">
+        All sitting fees for active hospital personnel are 100% subsidized by the Foursquare Healthcare Employee Appreciation Fund.
+      </p>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse border border-slate-200">
+          <thead>
+            <tr class="bg-slate-50 text-slate-700 font-bold border-b border-slate-200">
+              <th class="p-3 border">Package Name</th>
+              <th class="p-3 border">Duration</th>
+              <th class="p-3 border">Digital Images</th>
+              <th class="p-3 border">Hospital Employee Price</th>
+              <th class="p-3 border">Visiting Family Price</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 text-slate-700">
+            <tr>
+              <td class="p-3 font-bold">Hospital Staff Express</td>
+              <td class="p-3">15 Minutes</td>
+              <td class="p-3">3 High-Res Files</td>
+              <td class="p-3 text-emerald-700 font-bold">$0 (Free Subsidized)</td>
+              <td class="p-3">$29</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold">Premier Holiday Keepsake</td>
+              <td class="p-3">30 Minutes</td>
+              <td class="p-3">Full Gallery (12+)</td>
+              <td class="p-3 font-bold">$39 (Discounted)</td>
+              <td class="p-3">$49</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold">Grand Family & Unit Heirloom</td>
+              <td class="p-3">45 Minutes</td>
+              <td class="p-3">Unlimited Gallery</td>
+              <td class="p-3 font-bold">$79 (Discounted)</td>
+              <td class="p-3">$99</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</Layout>
