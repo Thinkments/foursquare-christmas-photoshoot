@@ -1,427 +1,68 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import CountdownTimer from '../components/CountdownTimer.tsx';
-import SchedulerWizard from '../components/SchedulerWizard.tsx';
-import PackageCalculator from '../components/PackageCalculator.tsx';
-import WardrobeMatcher from '../components/WardrobeMatcher.tsx';
-import PrepChecklist from '../components/PrepChecklist.tsx';
+import SimpleHolidayScheduler from '../components/SimpleHolidayScheduler.tsx';
 ---
 
 <Layout
-  title="Foursquare Christmas Photo Shoot Scheduler | 2026 DFW Healthcare Holiday Sessions"
-  description="Book your annual holiday portrait session across Foursquare Healthcare facilities in Dallas, Fort Worth, Plano, and Arlington. 15-min shift slots, resident family staging, and Santa visits."
+  title="Foursquare Christmas Photo Shoot Scheduler | 2026 Resident Family Sessions"
+  description="Schedule your 15-minute holiday photo shoot with your resident loved one across Foursquare Healthcare facilities. Automated reminders and self-service rescheduling."
 >
-  {/* Hero Section */}
-  <section class="relative bg-gradient-to-b from-holiday-pinedark via-holiday-pine to-holiday-pinedark text-white pt-12 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-holiday-gold/30">
-    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#D4AF37_1px,transparent_1px)] [background-size:16px_16px]"></div>
-    
-    <div class="max-w-5xl mx-auto text-center relative z-10">
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-holiday-gold/40 text-xs font-bold text-holiday-gold uppercase tracking-widest mb-4">
-        <span>✨ 2026 Annual Healthcare Holiday Celebration</span>
-      </div>
+  {/* Simple & Elegant Festive Header */}
+  <div class="bg-gradient-to-b from-holiday-pinedark via-holiday-pine to-holiday-pinedark text-white pt-10 pb-14 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-3xl mx-auto">
+      <span class="inline-block text-xs uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-holiday-gold/40 mb-3">
+        🎄 2026 Resident Christmas Portraits
+      </span>
 
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-heading text-white tracking-tight leading-tight">
-        Foursquare Christmas <br class="hidden sm:inline" />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-holiday-gold via-holiday-goldlight to-white">
-          Photo Shoot & Shift Scheduler
-        </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight">
+        Resident Family Photo Shoot Scheduler
       </h1>
 
-      <p class="mt-4 text-base sm:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed">
-        Professional on-campus holiday portrait sessions dedicated to our healthcare champions, nurses, physicians, senior residents, and visiting families across North Texas.
+      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-xl mx-auto leading-relaxed">
+        Book your 15-minute holiday portrait with your resident loved one. Replaces the receptionist paper sign-up sheet with automated reminders and instant self-service rescheduling.
       </p>
 
-      {/* Countdown Timer Island */}
-      <div class="my-6">
-        <span class="text-xs uppercase font-bold text-slate-300 tracking-wider">Holiday Studio Kickoff In:</span>
-        <CountdownTimer client:load />
-      </div>
-
-      <div class="flex flex-wrap items-center justify-center gap-4 mt-6">
-        <a
-          href="#scheduler-section"
-          class="px-8 py-4 bg-holiday-red hover:bg-holiday-reddark text-white font-heading font-extrabold text-sm sm:text-base rounded-2xl shadow-2xl transition transform hover:scale-105 border border-holiday-gold/50 flex items-center gap-2"
-        >
-          <span>Reserve Your Session Slot</span>
-          <svg class="w-5 h-5 text-holiday-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-        </a>
-        <a
-          href="/calculator"
-          class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base rounded-2xl backdrop-blur-md border border-white/20 transition"
-        >
-          <span>Calculate Package Prices</span>
-        </a>
-      </div>
-
-      {/* Trust Badges */}
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-8 border-t border-white/15 text-left text-xs">
-        <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-          <span class="text-slate-300 font-medium">100% Free Staff Sitting</span>
+      {/* 3 Simple Feature Highlights */}
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-slate-300">
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 15-Minute Rapid Slots
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-holiday-gold"></span>
-          <span class="text-slate-300 font-medium">48-Hr Digital Gallery</span>
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> Automated SMS & Email Reminders
         </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
-          <span class="text-slate-300 font-medium">Full ADA Wheelchair Ramp</span>
-        </div>
-        <div class="flex items-center gap-2.5">
-          <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
-          <span class="text-slate-300 font-medium">Texas HHS Sanitized Sets</span>
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 1-Click Self-Service Rescheduling
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
-  {/* Core Service Hubs Cards */}
-  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-12">
-      <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-        Tailored Experiences
-      </span>
-      <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-        Four Signature Holiday Portrait Categories
-      </h2>
-      <p class="text-sm sm:text-base text-slate-600 mt-2">
-        Crafted specifically for the diverse needs of hospital shifts, long-term care communities, and healthcare families.
-      </p>
-    </div>
+  {/* Main Scheduler Area */}
+  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <SimpleHolidayScheduler client:load />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {/* 1. Staff Express */}
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition flex flex-col justify-between group">
-        <div>
-          <div class="w-12 h-12 rounded-2xl bg-holiday-pine/10 text-holiday-pine flex items-center justify-center mb-4 group-hover:bg-holiday-pine group-hover:text-holiday-gold transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          </div>
-          <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-            Shift-Friendly
-          </span>
-          <h3 class="text-lg font-bold text-slate-900 mt-2">Staff & Shift Express</h3>
-          <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-            15-minute quick portrait sessions designed for 3x12 nurses and clinical shift handoffs. Wear scrubs, festive accessories, or holiday casual.
-          </p>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-500">15 min • 3 Images</span>
-          <a href="/services/staff-portraits" class="text-xs font-bold text-holiday-pine hover:text-holiday-pinelight flex items-center gap-1">
-            <span>Learn More</span> →
-          </a>
-        </div>
-      </div>
-
-      {/* 2. Resident Family */}
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition flex flex-col justify-between group">
-        <div>
-          <div class="w-12 h-12 rounded-2xl bg-holiday-pine/10 text-holiday-pine flex items-center justify-center mb-4 group-hover:bg-holiday-pine group-hover:text-holiday-gold transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-          </div>
-          <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">
-            100% ADA Staged
-          </span>
-          <h3 class="text-lg font-bold text-slate-900 mt-2">Resident & Multi-Gen Family</h3>
-          <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-            Generous 30-minute unrushed portraits with level threshold access, quiet sensory pacing, and gentle seated transfer assistance.
-          </p>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-500">30 min • Full Family</span>
-          <a href="/services/resident-family" class="text-xs font-bold text-holiday-pine hover:text-holiday-pinelight flex items-center gap-1">
-            <span>Learn More</span> →
-          </a>
-        </div>
-      </div>
-
-      {/* 3. Santa Experience */}
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition flex flex-col justify-between group">
-        <div>
-          <div class="w-12 h-12 rounded-2xl bg-holiday-pine/10 text-holiday-pine flex items-center justify-center mb-4 group-hover:bg-holiday-pine group-hover:text-holiday-gold transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-          </div>
-          <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800">
-            Kids & Grandkids
-          </span>
-          <h3 class="text-lg font-bold text-slate-900 mt-2">Santa Claus & North Pole</h3>
-          <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-            Personal, zero-wait audience with Santa Claus for staff kids, toddlers, and resident grandchildren. Includes holiday treats and wish list moment.
-          </p>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-500">20 min • North Pole</span>
-          <a href="/services/santa-experience" class="text-xs font-bold text-holiday-pine hover:text-holiday-pinelight flex items-center gap-1">
-            <span>Learn More</span> →
-          </a>
-        </div>
-      </div>
-
-      {/* 4. Unit / Department Teams */}
-      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition flex flex-col justify-between group">
-        <div>
-          <div class="w-12 h-12 rounded-2xl bg-holiday-pine/10 text-holiday-pine flex items-center justify-center mb-4 group-hover:bg-holiday-pine group-hover:text-holiday-gold transition">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          </div>
-          <span class="text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
-            Whole Department
-          </span>
-          <h3 class="text-lg font-bold text-slate-900 mt-2">Unit & Department Cards</h3>
-          <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-            Wide-angle studio setup tailored for clinical units, ICU/ER staff, pharmacy, therapy, and leadership teams for custom holiday cards.
-          </p>
-        </div>
-        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-          <span class="text-xs font-bold text-slate-500">30 min • Up to 25 Pax</span>
-          <a href="/services/department-teams" class="text-xs font-bold text-holiday-pine hover:text-holiday-pinelight flex items-center gap-1">
-            <span>Learn More</span> →
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* DFW Location Studios Section */}
-  <section class="py-16 bg-slate-100 px-4 sm:px-6 lg:px-8 border-y border-slate-200">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-12">
-        <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-          North Texas Campuses
-        </span>
-        <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-          DFW Hospital Photo Studio Schedules
-        </h2>
-        <p class="text-sm text-slate-600 mt-2">
-          Find your facility's dedicated studio room, dates, and coordinator contact.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Dallas Regional */}
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
-              Dec 2 – Dec 4
-            </span>
-            <h3 class="font-bold text-base text-slate-900 mt-2">Dallas Regional Medical Center</h3>
-            <p class="text-xs text-slate-500">1011 N Galloway Ave, Mesquite, TX</p>
-            <div class="mt-3 p-3 bg-slate-50 rounded-xl text-xs text-slate-600">
-              <strong>Studio Room:</strong> Executive Boardroom & Winter Conservatory
-            </div>
-          </div>
-          <a href="/locations/dallas-regional" class="mt-4 text-xs font-bold text-holiday-pine hover:underline">
-            View Campus Map & Times →
-          </a>
-        </div>
-
-        {/* Fort Worth Senior Living */}
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
-              Dec 5 – Dec 7
-            </span>
-            <h3 class="font-bold text-base text-slate-900 mt-2">Fort Worth Senior Living & Rehab</h3>
-            <p class="text-xs text-slate-500">2800 W 7th St, Fort Worth, TX</p>
-            <div class="mt-3 p-3 bg-slate-50 rounded-xl text-xs text-slate-600">
-              <strong>Studio Room:</strong> Fireside Grand Hearth Lounge
-            </div>
-          </div>
-          <a href="/locations/fort-worth-senior-living" class="mt-4 text-xs font-bold text-holiday-pine hover:underline">
-            View Campus Map & Times →
-          </a>
-        </div>
-
-        {/* Plano Specialty Hospital */}
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
-              Dec 9 – Dec 11
-            </span>
-            <h3 class="font-bold text-base text-slate-900 mt-2">Plano Specialty Hospital</h3>
-            <p class="text-xs text-slate-500">3801 W 15th St, Plano, TX</p>
-            <div class="mt-3 p-3 bg-slate-50 rounded-xl text-xs text-slate-600">
-              <strong>Studio Room:</strong> Winter Garden Atrium
-            </div>
-          </div>
-          <a href="/locations/plano-specialty" class="mt-4 text-xs font-bold text-holiday-pine hover:underline">
-            View Campus Map & Times →
-          </a>
-        </div>
-
-        {/* Arlington Emergency Pavilion */}
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-[10px] font-extrabold uppercase tracking-wider text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
-              Dec 12 – Dec 14
-            </span>
-            <h3 class="font-bold text-base text-slate-900 mt-2">Arlington Emergency Pavilion</h3>
-            <p class="text-xs text-slate-500">800 W Randol Mill Rd, Arlington, TX</p>
-            <div class="mt-3 p-3 bg-slate-50 rounded-xl text-xs text-slate-600">
-              <strong>Studio Room:</strong> Community Education & Santa Suite
-            </div>
-          </div>
-          <a href="/locations/arlington-pavilion" class="mt-4 text-xs font-bold text-holiday-pine hover:underline">
-            View Campus Map & Times →
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {/* Interactive Scheduler Section */}
-  <section id="scheduler-section" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-10">
-      <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-        Instant Booking Portal
-      </span>
-      <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-        Schedule Your Holiday Photo Shoot
-      </h2>
-      <p class="text-sm text-slate-600 mt-2">
-        Select your campus, choose your session category, pick your shift slot, and receive an instant calendar pass.
-      </p>
-    </div>
-
-    {/* Scheduler Wizard Island */}
-    <SchedulerWizard client:load />
-
-    {/* Zero-JS Static Fallback Schedule Table */}
-    <noscript>
-      <div class="mt-8 p-6 bg-white border border-slate-300 rounded-2xl text-xs text-slate-700">
-        <h4 class="font-bold text-sm text-slate-900 mb-2">Static Schedule Directory (No-JS Fallback)</h4>
-        <p class="mb-4">To schedule via phone or assistance, please contact the employee holiday desk at 1-800-555-4779.</p>
-        <table class="w-full text-left border-collapse border border-slate-200">
-          <tr class="bg-slate-100 font-bold">
-            <th class="p-2 border">Campus</th>
-            <th class="p-2 border">Dates</th>
-            <th class="p-2 border">Studio Room</th>
-          </tr>
-          <tr>
-            <td class="p-2 border">Dallas Regional Medical Center</td>
-            <td class="p-2 border">Dec 2 - Dec 4, 2026</td>
-            <td class="p-2 border">Executive Boardroom</td>
-          </tr>
-          <tr>
-            <td class="p-2 border">Fort Worth Senior Living & Rehab</td>
-            <td class="p-2 border">Dec 5 - Dec 7, 2026</td>
-            <td class="p-2 border">Fireside Hearth Lounge</td>
-          </tr>
-          <tr>
-            <td class="p-2 border">Plano Specialty Hospital</td>
-            <td class="p-2 border">Dec 9 - Dec 11, 2026</td>
-            <td class="p-2 border">Winter Garden Atrium</td>
-          </tr>
-          <tr>
-            <td class="p-2 border">Arlington Emergency Pavilion</td>
-            <td class="p-2 border">Dec 12 - Dec 14, 2026</td>
-            <td class="p-2 border">Santa Suite</td>
-          </tr>
-        </table>
-      </div>
-    </noscript>
-  </section>
-
-  {/* Package Calculator Section */}
-  <section class="py-16 bg-slate-100 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-          Transparent Pricing
-        </span>
-        <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-          Photo Packages & Greeting Card Calculator
-        </h2>
-        <p class="text-sm text-slate-600 mt-2">
-          Calculate package prices, print sets, and employee appreciation discounts before your session.
-        </p>
-      </div>
-
-      <PackageCalculator client:visible />
-    </div>
-  </section>
-
-  {/* Wardrobe & Style Guide Teaser */}
-  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-    <div class="text-center max-w-2xl mx-auto mb-10">
-      <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-        Studio Aesthetics
-      </span>
-      <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-        Backdrop & Wardrobe Color Matcher
-      </h2>
-      <p class="text-sm text-slate-600 mt-2">
-        See how festive scrubs, cozy knits, or formal holiday velvet coordinate with our physical studio sets.
-      </p>
-    </div>
-
-    <WardrobeMatcher client:visible />
-  </section>
-
-  {/* Preparation Checklist Section */}
-  <section class="py-16 bg-slate-100 px-4 sm:px-6 lg:px-8 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center max-w-2xl mx-auto mb-10">
-        <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-          Smooth Sessions
-        </span>
-        <h2 class="text-2xl sm:text-4xl font-bold font-heading text-slate-900 mt-1">
-          Session Preparation Checklist
-        </h2>
-        <p class="text-sm text-slate-600 mt-2">
-          Ensure badges are clipped, sanitized props are ready, and transfer accessibility is coordinated.
-        </p>
-      </div>
-
-      <PrepChecklist client:visible />
-    </div>
-  </section>
-
-  {/* FAQ Accordion Section */}
-  <section class="py-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
-    <div class="text-center mb-10">
-      <span class="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-        Common Questions
-      </span>
-      <h2 class="text-2xl sm:text-3xl font-bold font-heading text-slate-900 mt-1">
+    {/* 3-Question Simple FAQ */}
+    <div class="mt-14 max-w-3xl mx-auto border-t border-slate-200 pt-8">
+      <h3 class="text-center font-bold text-slate-900 text-base font-heading mb-4">
         Frequently Asked Questions
-      </h2>
-    </div>
+      </h3>
 
-    <div class="space-y-4 text-sm text-slate-700">
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h4 class="font-bold text-slate-900 text-base mb-1">
-          Are employee portrait sessions really 100% free?
-        </h4>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Yes! Every active Foursquare Healthcare clinical shift worker, nursing professional, and hospital employee receives a 15-minute express sitting and 3 high-resolution digital image files with full personal print release at zero cost, subsidized by the Foursquare Healthcare Employee Appreciation Fund.
-        </p>
-      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-600">
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <strong class="text-slate-900 block mb-1">How long are sessions?</strong>
+          <span>Slots are 15 minutes back-to-back. Please arrive 5 minutes early at the studio room so we can keep all families on time.</span>
+        </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h4 class="font-bold text-slate-900 text-base mb-1">
-          How do you accommodate senior living residents in wheelchairs?
-        </h4>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Our studio rooms at the Fort Worth Senior Living & Rehab center feature zero-threshold wide entries (36"+), level staging floors, gentle transfer assist benches, and non-reflective portrait lighting to ensure residents are comfortable, dignified, and beautifully staged.
-        </p>
-      </div>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <strong class="text-slate-900 block mb-1">How do I reschedule?</strong>
+          <span>Click the "Change / Reschedule" tab above or your reminder text. You can pick any remaining open slot in 10 seconds without calling reception.</span>
+        </div>
 
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h4 class="font-bold text-slate-900 text-base mb-1">
-          Can clinical units book a group photo during shift handoff?
-        </h4>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          Yes! We have dedicated 30-minute unit slots scheduled at 7:00 AM, 12:00 PM, and 7:00 PM specifically to accommodate day/night shift crossovers so whole ICU, ER, Med/Surg, and Rehab departments can take group photos together.
-        </p>
-      </div>
-
-      <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-        <h4 class="font-bold text-slate-900 text-base mb-1">
-          What infection control protocols are followed for Santa Claus?
-        </h4>
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-          In full accordance with Texas Health and Human Services (HHSC) and CDC guidelines, Santa’s suit is professionally dry-cleaned daily and steamed between sessions. Hand sanitizing stations are active, and medical-grade HEPA air filters run continuously in all studio suites.
-        </p>
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
+          <strong class="text-slate-900 block mb-1">Are wheelchairs accommodated?</strong>
+          <span>Yes! All studio sets have level ground entry, and our Activity Coordinator will prep wheelchair ramp access for your room.</span>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </Layout>

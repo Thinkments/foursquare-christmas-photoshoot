@@ -1,101 +1,42 @@
 ---
-import CommandPalette from './CommandPalette.tsx';
 ---
 
-<header class="sticky top-0 z-40 w-full bg-holiday-pine/95 backdrop-blur-md border-b border-holiday-gold/30 shadow-lg text-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-center justify-between h-20">
+<header class="sticky top-0 z-40 w-full bg-holiday-pine/95 backdrop-blur-md border-b border-holiday-gold/30 shadow-md text-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center justify-between h-16">
       
       {/* Brand & Crest */}
-      <a href="/" class="flex items-center gap-3.5 group">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-holiday-pinedark to-holiday-pinelight border border-holiday-gold/60 flex items-center justify-center shadow-md group-hover:scale-105 transition">
-          <svg class="w-6 h-6 text-holiday-gold" viewBox="0 0 100 100" fill="currentColor">
+      <a href="/" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-holiday-pinedark to-holiday-pinelight border border-holiday-gold/60 flex items-center justify-center shadow-md">
+          <svg class="w-5 h-5 text-holiday-gold" viewBox="0 0 100 100" fill="currentColor">
             <polygon points="50,15 35,35 43,35 28,55 38,55 20,78 80,78 62,55 72,55 57,35 65,35" fill="#D4AF37" />
             <circle cx="50" cy="53" r="7" fill="#C41E3A" />
             <polygon points="50,8 52,14 58,14 53,18 55,24 50,20 45,24 47,18 42,14 48,14" fill="#FFF" />
           </svg>
         </div>
         <div>
-          <span class="block font-heading font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-holiday-gold transition">
+          <span class="block font-heading font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-holiday-gold transition">
             FOURSQUARE HEALTHCARE
           </span>
-          <span class="block text-[11px] font-semibold tracking-wider text-holiday-gold uppercase">
-            Annual Christmas Portrait Experience
+          <span class="block text-[10px] font-semibold tracking-wider text-holiday-gold uppercase">
+            Resident Christmas Photo Shoot
           </span>
         </div>
       </a>
 
-      {/* Desktop Navigation Links */}
-      <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-200">
-        <div class="relative group py-2">
-          <button class="flex items-center gap-1 hover:text-holiday-gold transition">
-            <span>Sessions</span>
-            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div class="absolute left-0 top-full hidden group-hover:block w-64 bg-slate-900 border border-holiday-gold/30 rounded-2xl p-2 shadow-2xl z-50">
-            <a href="/services/staff-portraits" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Staff & Shift Express</span>
-              <span class="block text-[11px] text-slate-400">15-min shift handoff slots</span>
-            </a>
-            <a href="/services/resident-family" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Resident & Multi-Gen Family</span>
-              <span class="block text-[11px] text-slate-400">Peaceful ADA-accessible staging</span>
-            </a>
-            <a href="/services/santa-experience" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Santa Claus Visit</span>
-              <span class="block text-[11px] text-slate-400">For staff children & visiting families</span>
-            </a>
-            <a href="/services/department-teams" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Unit & Team Group Photos</span>
-              <span class="block text-[11px] text-slate-400">Clinical unit holiday greeting cards</span>
-            </a>
-          </div>
-        </div>
-
-        <div class="relative group py-2">
-          <button class="flex items-center gap-1 hover:text-holiday-gold transition">
-            <span>DFW Studios</span>
-            <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-          </button>
-          <div class="absolute left-0 top-full hidden group-hover:block w-64 bg-slate-900 border border-holiday-gold/30 rounded-2xl p-2 shadow-2xl z-50">
-            <a href="/locations/dallas-regional" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Dallas Regional Medical Center</span>
-              <span class="block text-[11px] text-slate-400">Mesquite / Dallas Campus</span>
-            </a>
-            <a href="/locations/fort-worth-senior-living" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Fort Worth Senior Living & Rehab</span>
-              <span class="block text-[11px] text-slate-400">W 7th St Grand Hearth</span>
-            </a>
-            <a href="/locations/plano-specialty" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Plano Specialty Hospital</span>
-              <span class="block text-[11px] text-slate-400">Winter Garden Atrium</span>
-            </a>
-            <a href="/locations/arlington-pavilion" class="block p-2.5 rounded-xl hover:bg-holiday-pine/80 transition">
-              <span class="block text-xs font-bold text-white">Arlington Emergency Pavilion</span>
-              <span class="block text-[11px] text-slate-400">North Pole Studio Suite</span>
-            </a>
-          </div>
-        </div>
-
-        <a href="/reschedule" class="text-holiday-gold font-semibold hover:text-white transition">Reschedule Slot</a>
-        <a href="/coordinator" class="hover:text-holiday-gold transition">Coordinator Roster</a>
-        <a href="/calculator" class="hover:text-holiday-gold transition">Package Calculator</a>
-        <a href="/style-guide" class="hover:text-holiday-gold transition">Style Guide</a>
-        <a href="/prep-checklist" class="hover:text-holiday-gold transition">Prep Checklist</a>
-      </nav>
-
-      {/* Right Action Area */}
-      <div class="flex items-center gap-3">
-        {/* Command Palette Island */}
-        <CommandPalette client:load />
-
-        {/* Book Now Button */}
+      {/* Clean Quick Links */}
+      <div class="flex items-center gap-3 text-xs font-semibold">
+        <a href="/" class="text-slate-200 hover:text-white transition hidden sm:inline">
+          Book Session
+        </a>
+        <a href="/reschedule" class="text-holiday-gold hover:text-white transition">
+          Reschedule Slot
+        </a>
         <a
-          href="/schedule"
-          class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 bg-holiday-red hover:bg-holiday-reddark text-white font-heading font-extrabold text-xs sm:text-sm rounded-xl shadow-lg transition transform hover:scale-105 border border-holiday-gold/40"
+          href="/coordinator"
+          class="px-3 py-1.5 bg-slate-900/80 hover:bg-slate-900 text-white rounded-lg border border-slate-700 transition"
         >
-          <span>Schedule Photo Shoot</span>
-          <svg class="w-4 h-4 text-holiday-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          Staff Roster
         </a>
       </div>
 
