@@ -18,19 +18,19 @@ export interface BookingRecord {
   createdAt: string;
 }
 
-// Initial realistic default bookings across the day
+// Initial realistic default bookings across the day (10-minute slots)
 const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b1',
-    ref: '4SQ-7821',
-    campusId: 'fort-worth-senior-living',
-    campusName: 'Fort Worth Senior Living & Rehab',
-    date: '2026-12-05',
-    timeSlot: '09:00 AM',
+    ref: 'AML-101',
+    campusId: 'ashton-medical-lodge',
+    campusName: 'Ashton Medical Lodge',
+    date: 'Wednesday, December 2, 2026',
+    timeSlot: '10:00 AM',
     residentName: 'Harold Jenkins',
     roomNumber: 'Room 204B',
     familyContactName: 'Linda Jenkins (Daughter)',
-    familyPhone: '(817) 555-0192',
+    familyPhone: '(432) 555-0192',
     familyEmail: 'linda.jenkins@email.com',
     mobilityNeeds: 'Motorized wheelchair - needs zero-threshold ramp',
     status: 'Checked In',
@@ -38,15 +38,15 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   },
   {
     id: 'b2',
-    ref: '4SQ-4491',
-    campusId: 'fort-worth-senior-living',
-    campusName: 'Fort Worth Senior Living & Rehab',
-    date: '2026-12-05',
-    timeSlot: '09:15 AM',
+    ref: 'AML-102',
+    campusId: 'ashton-medical-lodge',
+    campusName: 'Ashton Medical Lodge',
+    date: 'Wednesday, December 2, 2026',
+    timeSlot: '10:10 AM',
     residentName: 'Evelyn Carter',
     roomNumber: 'Room 112A',
     familyContactName: 'David Carter (Son)',
-    familyPhone: '(817) 555-3841',
+    familyPhone: '(432) 555-3841',
     familyEmail: 'd.carter@email.com',
     mobilityNeeds: 'Transfer assist bench requested',
     status: 'Shooting',
@@ -54,15 +54,15 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   },
   {
     id: 'b3',
-    ref: '4SQ-9012',
-    campusId: 'fort-worth-senior-living',
-    campusName: 'Fort Worth Senior Living & Rehab',
-    date: '2026-12-05',
-    timeSlot: '09:30 AM',
+    ref: 'AML-103',
+    campusId: 'ashton-medical-lodge',
+    campusName: 'Ashton Medical Lodge',
+    date: 'Wednesday, December 2, 2026',
+    timeSlot: '10:20 AM',
     residentName: 'Robert Vance',
     roomNumber: 'Room 305C',
     familyContactName: 'Angela Vance (Spouse)',
-    familyPhone: '(214) 555-9012',
+    familyPhone: '(432) 555-9012',
     familyEmail: 'avance@email.com',
     mobilityNeeds: 'Low-stimulation sensory lighting',
     status: 'Pending',
@@ -70,41 +70,25 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   },
   {
     id: 'b4',
-    ref: '4SQ-3320',
-    campusId: 'fort-worth-senior-living',
-    campusName: 'Fort Worth Senior Living & Rehab',
-    date: '2026-12-05',
-    timeSlot: '09:45 AM',
+    ref: 'AML-104',
+    campusId: 'ashton-medical-lodge',
+    campusName: 'Ashton Medical Lodge',
+    date: 'Wednesday, December 2, 2026',
+    timeSlot: '10:30 AM',
     residentName: 'Mary Higgins',
     roomNumber: 'Room 108B',
     familyContactName: 'Patricia Higgins (Daughter)',
-    familyPhone: '(817) 555-6671',
+    familyPhone: '(432) 555-6671',
     familyEmail: 'phiggins@email.com',
     mobilityNeeds: 'Walker user, needs seated posing chair',
     status: 'Pending',
     createdAt: '2026-09-07T09:20:00Z',
   },
-  {
-    id: 'b5',
-    ref: '4SQ-8129',
-    campusId: 'dallas-regional',
-    campusName: 'Dallas Regional Medical Center & Rehab',
-    date: '2026-12-02',
-    timeSlot: '10:00 AM',
-    residentName: 'James Robinson',
-    roomNumber: 'Rehab Suite 410',
-    familyContactName: 'Marcus Robinson (Son)',
-    familyPhone: '(214) 555-8821',
-    familyEmail: 'marcus.robinson@email.com',
-    mobilityNeeds: 'Wheelchair ramp access',
-    status: 'Pending',
-    createdAt: '2026-09-07T09:35:00Z',
-  },
 ];
 
 export default function CoordinatorRoster() {
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
-  const [selectedCampus, setSelectedCampus] = useState<string>('fort-worth-senior-living');
+  const [selectedCampus, setSelectedCampus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
@@ -165,7 +149,7 @@ export default function CoordinatorRoster() {
               Activity Coordinator & Photographer Dashboard
             </h2>
             <p className="text-xs text-slate-600 mt-1">
-              Replaces the paper sign-up sheet at the reception desk. Check residents in, alert transport staff, and keep 15-minute photo sets on schedule.
+              Replaces the paper sign-up sheet at the reception desk. Check residents in, alert transport staff, and keep 10-minute photo sets on schedule.
             </p>
           </div>
 
@@ -242,7 +226,7 @@ export default function CoordinatorRoster() {
         <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="font-heading font-bold text-sm text-holiday-gold">
-              Today's 15-Minute Scheduled Run-Sheet
+              Today's 10-Minute Scheduled Run-Sheet
             </span>
             <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full border border-slate-700">
               {filteredBookings.length} Slots Scheduled

@@ -12,24 +12,17 @@ export default function ReschedulePortal() {
   const [rescheduledSuccess, setRescheduledSuccess] = useState(false);
   const [cancelledSuccess, setCancelledSuccess] = useState(false);
 
-  // Available slots for rescheduling
+  // Available 10-minute slots for rescheduling (Ashton Medical Lodge, Dec 2)
   const AVAILABLE_SLOTS = [
-    '09:00 AM',
-    '09:15 AM',
-    '09:30 AM',
-    '09:45 AM',
-    '10:00 AM',
-    '10:15 AM',
-    '10:30 AM',
-    '10:45 AM',
-    '11:00 AM',
-    '11:15 AM',
-    '11:30 AM',
-    '01:00 PM',
-    '01:15 PM',
-    '01:30 PM',
-    '01:45 PM',
-    '02:00 PM',
+    '10:00 AM', '10:10 AM', '10:20 AM', '10:30 AM', '10:40 AM', '10:50 AM',
+    '11:00 AM', '11:10 AM', '11:20 AM', '11:30 AM', '11:40 AM', '11:50 AM',
+    '12:00 PM', '12:10 PM', '12:20 PM', '12:30 PM', '12:40 PM', '12:50 PM',
+    '01:45 PM', '01:55 PM',
+    '02:05 PM', '02:15 PM', '02:25 PM', '02:35 PM', '02:45 PM', '02:55 PM',
+    '03:05 PM', '03:15 PM', '03:25 PM', '03:35 PM', '03:45 PM', '03:55 PM',
+    '04:05 PM', '04:15 PM', '04:25 PM', '04:35 PM', '04:45 PM', '04:55 PM',
+    '05:05 PM', '05:15 PM', '05:25 PM', '05:35 PM', '05:45 PM', '05:55 PM',
+    '06:05 PM', '06:15 PM', '06:25 PM', '06:35 PM', '06:45 PM', '06:55 PM',
   ];
 
   // Auto-fill from URL query param if present
@@ -235,7 +228,7 @@ export default function ReschedulePortal() {
           ) : (
             <div>
               <h4 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3">
-                Switch to an Available 15-Minute Slot
+                Switch to an Available 10-Minute Slot
               </h4>
               <p className="text-xs text-slate-600 mb-4">
                 Select from the remaining open slots below. Once selected, your previous slot will immediately be released for another family.
