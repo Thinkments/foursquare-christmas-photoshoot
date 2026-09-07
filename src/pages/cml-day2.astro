@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import FacilityScheduler from '../components/FacilityScheduler.tsx';
+import { FOURSQUARE_FACILITIES } from '../data/facilities';
+
+const facility = FOURSQUARE_FACILITIES.cml;
+const day2Date = 'Tuesday, November 10, 2026';
+---
+
+<Layout
+  title={`${facility.name} (CML Day 2) Christmas Photo Shoot Scheduler | 11/10`}
+  description={`Book your 10-minute holiday portrait with your resident loved one at ${facility.name} on Tuesday, Nov 10, 2026. 10:00 AM - 7:00 PM rapid sessions with 1-click self-service rescheduling.`}
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark via-holiday-pine to-holiday-pinedark text-white pt-8 pb-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-3xl mx-auto">
+      <div class="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full border border-holiday-gold/40 mb-2">
+        <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+          🎄 CML • Day 2: Tuesday, Nov 10, 2026
+        </span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
+        {facility.name} (Day 2)
+      </h1>
+
+      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-xl mx-auto leading-relaxed">
+        Reserve your 10-minute holiday portrait session for Tuesday, November 10th in the {facility.loungeName}.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <FacilityScheduler client:load facilityCode="cml" forcedDate={day2Date} />
+  </div>
+</Layout>

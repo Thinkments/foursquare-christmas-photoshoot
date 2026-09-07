@@ -1,6 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
-import { Calendar, Clock, MapPin, CheckCircle, AlertCircle, ArrowRight, RefreshCw, XCircle, Phone, ShieldCheck } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  CheckCircle,
+  AlertCircle,
+  ArrowRight,
+  RefreshCw,
+  XCircle,
+  Phone,
+  ShieldCheck,
+  Link2,
+  Copy,
+  Check,
+  ExternalLink,
+  MessageSquare,
+} from 'lucide-react';
 import type { BookingRecord } from './CoordinatorRoster';
 
 export default function ReschedulePortal() {
@@ -11,6 +27,24 @@ export default function ReschedulePortal() {
   const [newSelectedSlot, setNewSelectedSlot] = useState('');
   const [rescheduledSuccess, setRescheduledSuccess] = useState(false);
   const [cancelledSuccess, setCancelledSuccess] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // Helper to generate the exact 1-click reschedule link
+  const getRescheduleUrl = (refCode: string) => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/reschedule?ref=${encodeURIComponent(refCode)}`;
+    }
+    return `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(refCode)}`;
+  };
+
+  const handleCopyLink = (refCode: string) => {
+    const url = getRescheduleUrl(refCode);
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
 
   // Available 10-minute slots for rescheduling (Ashton Medical Lodge, Dec 2)
   const AVAILABLE_SLOTS = [
@@ -43,6 +77,41 @@ export default function ReschedulePortal() {
     setRescheduledSuccess(false);
     setCancelledSuccess(false);
 
+    // 1. Check Ashton Medical Lodge storage first
+    try {
+      const ashton = localStorage.getItem('4sq_ashton_bookings_10min');
+      if (ashton) {
+        const list = JSON.parse(ashton);
+        const match = list.find(
+          (b: any) =>
+            b.ref.toLowerCase() === refCode.trim().toLowerCase() ||
+            (b.residentName && b.residentName.toLowerCase().includes(refCode.trim().toLowerCase())) ||
+            (b.familyPhone && b.familyPhone.replace(/\D/g, '') === refCode.replace(/\D/g, ''))
+        );
+        if (match) {
+          setCurrentBooking({
+            id: match.id,
+            ref: match.ref,
+            campusId: 'ashton-medical-lodge',
+            campusName: match.facility || 'Ashton Medical Lodge',
+            date: match.date || 'Wednesday, December 2, 2026',
+            timeSlot: match.timeSlot,
+            residentName: match.residentName,
+            roomNumber: match.roomNumber,
+            familyContactName: match.familyContact,
+            familyPhone: match.familyPhone,
+            familyEmail: match.familyEmail,
+            mobilityNeeds: match.needsWheelchair ? 'Wheelchair ramp access requested' : 'Standard mobility',
+            status: match.status === 'Checked In' ? 'Checked In' : 'Pending',
+            createdAt: new Date().toISOString(),
+          });
+          setIsSearching(false);
+          return;
+        }
+      }
+    } catch {}
+
+    // 2. Check general bookings
     try {
       const stored = localStorage.getItem('4sq_master_bookings');
       if (stored) {
@@ -60,19 +129,19 @@ export default function ReschedulePortal() {
       }
     } catch {}
 
-    // Fallback default simulation match
-    if (refCode.toUpperCase().includes('4SQ') || refCode.length >= 4) {
+    // 3. Fallback default simulation match for testing
+    if (refCode.toUpperCase().includes('AML') || refCode.toUpperCase().includes('4SQ') || refCode.length >= 4) {
       setCurrentBooking({
         id: 'sim-1',
         ref: refCode.toUpperCase(),
-        campusId: 'fort-worth-senior-living',
-        campusName: 'Fort Worth Senior Living & Rehab',
-        date: '2026-12-05',
-        timeSlot: '09:00 AM',
+        campusId: 'ashton-medical-lodge',
+        campusName: 'Ashton Medical Lodge',
+        date: 'Wednesday, December 2, 2026',
+        timeSlot: '10:00 AM',
         residentName: 'Harold Jenkins',
         roomNumber: 'Room 204B',
         familyContactName: 'Linda Jenkins (Daughter)',
-        familyPhone: '(817) 555-0192',
+        familyPhone: '(432) 555-0192',
         familyEmail: 'linda.jenkins@email.com',
         mobilityNeeds: 'Motorized wheelchair ramp access',
         status: 'Pending',
@@ -96,12 +165,26 @@ export default function ReschedulePortal() {
     setRescheduledSuccess(true);
 
     try {
+      // Sync Ashton storage
+      const ashton = localStorage.getItem('4sq_ashton_bookings_10min');
+      if (ashton) {
+        const list = JSON.parse(ashton);
+        const updatedList = list.map((b: any) =>
+          b.ref.toLowerCase() === currentBooking.ref.toLowerCase()
+            ? { ...b, timeSlot: newSelectedSlot }
+            : b
+        );
+        localStorage.setItem('4sq_ashton_bookings_10min', JSON.stringify(updatedList));
+      }
+
+      // Sync master storage
       const stored = localStorage.getItem('4sq_master_bookings');
       if (stored) {
         const list: BookingRecord[] = JSON.parse(stored);
         const updatedList = list.map((b) => (b.id === currentBooking.id ? updatedBooking : b));
         localStorage.setItem('4sq_master_bookings', JSON.stringify(updatedList));
       }
+
       confetti({
         particleCount: 80,
         spread: 60,
@@ -115,6 +198,12 @@ export default function ReschedulePortal() {
     if (!currentBooking) return;
     setCancelledSuccess(true);
     try {
+      const ashton = localStorage.getItem('4sq_ashton_bookings_10min');
+      if (ashton) {
+        const list = JSON.parse(ashton);
+        const filtered = list.filter((b: any) => b.ref.toLowerCase() !== currentBooking.ref.toLowerCase());
+        localStorage.setItem('4sq_ashton_bookings_10min', JSON.stringify(filtered));
+      }
       const stored = localStorage.getItem('4sq_master_bookings');
       if (stored) {
         const list: BookingRecord[] = JSON.parse(stored);

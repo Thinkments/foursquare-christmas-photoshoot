@@ -1,66 +1,159 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import SimpleHolidayScheduler from '../components/SimpleHolidayScheduler.tsx';
+import FacilityScheduler from '../components/FacilityScheduler.tsx';
+import { FACILITY_LIST } from '../data/facilities';
 ---
 
 <Layout
-  title="Ashton Medical Lodge Christmas Photo Shoot Scheduler | Dec 2, 2026"
-  description="Book your 10-minute Christmas portrait with your resident loved one at Ashton Medical Lodge on Dec 2nd. Automated SMS reminders and 1-click self-service rescheduling."
+  title="Foursquare Healthcare Christmas Photo Shoot Scheduler | 13 Facility Dates"
+  description="Official Christmas portrait scheduler across all 13 Foursquare Healthcare facility shoot dates (11/5 - 12/9). 10-minute rapid slots, 12pm dept head group photo block, and 1-click self-service rescheduling."
 >
-  {/* Simple & Elegant Festive Header */}
+  {/* Header */}
   <div class="bg-gradient-to-b from-holiday-pinedark via-holiday-pine to-holiday-pinedark text-white pt-10 pb-14 px-4 text-center border-b border-holiday-gold/30">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto">
       <span class="inline-block text-xs uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-3.5 py-1 rounded-full border border-holiday-gold/40 mb-3">
-        🎄 Ashton Medical Lodge • Dec 2, 2026
+        🎄 Official Foursquare Healthcare Holiday Tour • Nov 5 – Dec 9, 2026
       </span>
 
       <h1 class="text-3xl sm:text-5xl font-extrabold font-heading text-white tracking-tight">
         Resident Family Photo Shoot Scheduler
       </h1>
 
-      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-xl mx-auto leading-relaxed">
-        Book your 10-minute holiday portrait with your resident loved one at Ashton Medical Lodge on Wednesday, December 2nd. Replaces the receptionist paper sign-up sheet.
+      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-2xl mx-auto leading-relaxed">
+        Select your facility below to book a 10-minute holiday portrait with your resident loved one. Replaces the receptionist paper sign-up clipboard across all campuses.
       </p>
 
-      {/* 3 Simple Feature Highlights */}
-      <div class="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-slate-300">
-        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
-          <span class="text-holiday-gold font-bold">✓</span> 10-Minute Rapid Slots
+      {/* Operational Rules Bar */}
+      <div class="flex flex-wrap items-center justify-center gap-3 mt-6 text-xs text-slate-300">
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 10-Minute Rapid Sessions (10A – 7P)
         </div>
-        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
-          <span class="text-holiday-gold font-bold">✓</span> Automated SMS & Email Reminders
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 12:00 PM Dept Head Photo Locked
         </div>
-        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1 rounded-full border border-white/10">
-          <span class="text-holiday-gold font-bold">✓</span> 1-Click Self-Service Rescheduling
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 1:00 – 1:45 PM Studio Lunch Reset
+        </div>
+        <div class="flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+          <span class="text-holiday-gold font-bold">✓</span> 1-Click SMS Reschedule Link
         </div>
       </div>
     </div>
   </div>
 
-  {/* Main Scheduler Area */}
-  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-    <SimpleHolidayScheduler client:load />
+  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    
+    {/* 13 Facility Quick Directory Grid */}
+    <div class="mb-12">
+      <div class="text-center mb-6">
+        <span class="text-xs uppercase font-extrabold text-holiday-red tracking-widest">
+          13 Individual Facility Pages
+        </span>
+        <h2 class="text-xl sm:text-2xl font-bold font-heading text-slate-900 mt-1">
+          Select Your Facility Schedule
+        </h2>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Click any facility below to open its dedicated 10-minute scheduler and day-of staff roster:
+        </p>
+      </div>
 
-    {/* 3-Question Simple FAQ */}
-    <div class="mt-14 max-w-3xl mx-auto border-t border-slate-200 pt-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+        {FACILITY_LIST.map((fac) => (
+          <a
+            href={`/${fac.code}`}
+            class="group bg-white hover:bg-holiday-pine/5 border border-slate-200 hover:border-holiday-pine/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-xs font-extrabold text-white bg-holiday-pine px-2 py-0.5 rounded-lg">
+                  {fac.abbr}
+                </span>
+                <span class="text-xs font-bold text-holiday-red bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full">
+                  {fac.shortDate}
+                </span>
+              </div>
+              <h3 class="font-heading font-bold text-slate-900 text-sm group-hover:text-holiday-pine transition">
+                {fac.name}
+              </h3>
+              <p class="text-[11px] text-slate-500 mt-0.5">{fac.city}</p>
+            </div>
+
+            <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span class="text-slate-400">{fac.dayOfWeek}</span>
+              <span class="text-holiday-pine font-bold group-hover:translate-x-0.5 transition inline-flex items-center">
+                Book Slot &rarr;
+              </span>
+            </div>
+          </a>
+        ))}
+
+        {/* CML Day 2 Card */}
+        <a
+          href="/cml-day2"
+          class="group bg-white hover:bg-holiday-pine/5 border border-slate-200 hover:border-holiday-pine/40 rounded-2xl p-4 shadow-sm hover:shadow-md transition flex flex-col justify-between"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-mono text-xs font-extrabold text-white bg-holiday-pine px-2 py-0.5 rounded-lg">
+                CML (Day 2)
+              </span>
+              <span class="text-xs font-bold text-holiday-red bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full">
+                11/10
+              </span>
+            </div>
+            <h3 class="font-heading font-bold text-slate-900 text-sm group-hover:text-holiday-pine transition">
+              Cheyenne Medical Lodge (Day 2)
+            </h3>
+            <p class="text-[11px] text-slate-500 mt-0.5">Colorado City, TX</p>
+          </div>
+
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+            <span class="text-slate-400">Tuesday</span>
+            <span class="text-holiday-pine font-bold group-hover:translate-x-0.5 transition inline-flex items-center">
+              Book Slot &rarr;
+            </span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    {/* Featured / Active Facility Scheduler */}
+    <div class="border-t border-slate-200 pt-10">
+      <div class="text-center mb-6">
+        <span class="text-xs uppercase font-extrabold text-holiday-pine tracking-wider">
+          Featured Facility Console
+        </span>
+        <h2 class="text-2xl font-bold font-heading text-slate-900 mt-1">
+          Ashton Medical Lodge (AML • Dec 2)
+        </h2>
+        <p class="text-xs text-slate-500">
+          Or navigate to any other facility above for their dedicated shoot console.
+        </p>
+      </div>
+
+      <FacilityScheduler client:load facilityCode="aml" />
+    </div>
+
+    {/* Operational FAQ */}
+    <div class="mt-14 max-w-4xl mx-auto border-t border-slate-200 pt-8">
       <h3 class="text-center font-bold text-slate-900 text-base font-heading mb-4">
-        Frequently Asked Questions
+        Tour Guidelines & Schedule Rules
       </h3>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-600">
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <strong class="text-slate-900 block mb-1">How long are photo sessions?</strong>
-          <span>Sessions are scheduled in 10-minute back-to-back increments on Dec 2nd. Please arrive 5 minutes early in the Fireside Lounge.</span>
+          <strong class="text-slate-900 block mb-1">10-Minute Rapid Sessions</strong>
+          <span>Sessions run 10:00 AM to 7:00 PM in 10-minute back-to-back increments. Please have residents in the lounge 5 minutes before their time.</span>
         </div>
 
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <strong class="text-slate-900 block mb-1">How do I change or reschedule?</strong>
-          <span>Click the "Reschedule Slot" tab above or your reminder text. You can switch to any remaining open 10-minute slot in seconds.</span>
+          <strong class="text-slate-900 block mb-1">12:00 PM & Lunch Breaks</strong>
+          <span>12:00 PM is reserved for facility Department Head group photos. Photographer lunch break and backdrop reset is scheduled from 1:00 PM to 1:45 PM.</span>
         </div>
 
         <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <strong class="text-slate-900 block mb-1">Are wheelchairs accommodated?</strong>
-          <span>Yes! The Fireside Lounge has level entry, and our Activity Coordinator will ensure ramp and transfer assistance is ready for your loved one.</span>
+          <strong class="text-slate-900 block mb-1">Self-Service Rescheduling</strong>
+          <span>Every confirmation includes a 1-click private reschedule link. Families can change slots without calling the reception desk.</span>
         </div>
       </div>
     </div>
