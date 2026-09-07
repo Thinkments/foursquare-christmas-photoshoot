@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ReschedulePortal from '../components/ReschedulePortal.tsx';
+---
+
+<Layout
+  title="Reschedule or Manage Appointment | Foursquare Christmas 2026"
+  description="Self-service portal for resident families to reschedule or cancel their Christmas photo shoot time slot in seconds without calling the reception desk."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-12 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Family Self-Service Management
+      </span>
+      <h1 class="text-3xl sm:text-5xl font-extrabold font-heading mt-2">
+        Manage or Reschedule Your Shoot Slot
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-xl mx-auto">
+        Switch your 15-minute photo shoot appointment to any remaining open slot instantly. Updates our facility activity coordinator and photographer live.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <ReschedulePortal client:load />
+  </div>
+</Layout>

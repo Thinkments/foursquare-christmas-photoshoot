@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CoordinatorRoster from '../components/CoordinatorRoster.tsx';
+---
+
+<Layout
+  title="Activity Coordinator & Photographer Roster | Foursquare Christmas 2026"
+  description="Live day-of-shoot digital run sheet and printable schedule for Foursquare facility Activity Coordinators and photographers. Resident rooms, wheelchair alerts, and live check-in."
+>
+  <div class="bg-gradient-to-b from-holiday-pinedark to-holiday-pine text-white py-10 px-4 text-center border-b border-holiday-gold/30">
+    <div class="max-w-4xl mx-auto">
+      <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
+        Staff & Photographer Operations Portal
+      </span>
+      <h1 class="text-2xl sm:text-4xl font-extrabold font-heading mt-1">
+        Activity Coordinator & Photographer Live Roster
+      </h1>
+      <p class="text-xs sm:text-sm text-slate-200 mt-1 max-w-xl mx-auto">
+        Track resident room numbers, wheelchair assistance needs, and photo shoot progression in real time. Replaces reception paper sheets.
+      </p>
+    </div>
+  </div>
+
+  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <CoordinatorRoster client:load />
+  </div>
+</Layout>

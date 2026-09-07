@@ -3,6 +3,8 @@ import type { APIRoute } from 'astro';
 export const GET: APIRoute = async () => {
   const urls = [
     'https://foursquare-christmas-photoshoot.netlify.app/schedule',
+    'https://foursquare-christmas-photoshoot.netlify.app/reschedule',
+    'https://foursquare-christmas-photoshoot.netlify.app/coordinator',
     'https://foursquare-christmas-photoshoot.netlify.app/calculator',
     'https://foursquare-christmas-photoshoot.netlify.app/style-guide',
     'https://foursquare-christmas-photoshoot.netlify.app/prep-checklist',

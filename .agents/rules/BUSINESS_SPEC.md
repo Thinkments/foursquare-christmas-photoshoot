@@ -2,27 +2,45 @@
 
 ## 🏥 Corporate Overview & Purpose
 **Client:** Foursquare Healthcare (Texas Regional Healthcare Network & Senior Rehabilitation Communities)  
-**Initiative:** Annual Christmas & Holiday Portrait Experience & Shift Scheduling System  
+**Initiative:** Annual Christmas & Holiday Resident Portrait Experience & Shift Scheduler  
 **Parent Organization:** Foursquare Healthcare Network (Dallas–Fort Worth, Texas)  
-**Program Purpose:** Dedicated holiday portrait booking platform serving front-line healthcare workers, physicians, nursing staff (RN/LVN/CNA), senior living and rehabilitation residents, visiting families, and clinical units across North Texas.
+**Program Purpose:** Dedicated holiday portrait booking and automated shift scheduling platform serving residents of Foursquare senior living, rehabilitation, and long-term care communities, their visiting families, and facility clinical staff.
+
+---
+
+## 🎯 The Core Business Problem & Operational Context
+
+### The Previous Legacy System (Sign-Up Sheet at Reception):
+Historically, photo shoot scheduling was handled via a physical paper sign-up sheet placed at the facility receptionist desk:
+1. **15-Minute Rapid Slots:** The hired professional photographer needs to photograph families back-to-back in 15-minute increments.
+2. **High No-Show & Confusion Rate:** Without automated SMS/email reminders, visiting family members frequently forget their scheduled time or get stuck in traffic.
+3. **Manual Rescheduling Bottleneck:** When conflicts arise, family members must call the receptionist, who must manually erase/scratch out paper slots and rewrite names, leading to accidental double-bookings.
+4. **Handoff Breakdown:** On the day of the shoot, the paper sheet often fails to reach the **Activity Coordinator** (who needs to prep residents in their rooms and coordinate wheelchair transport) and the **Photographer** (who needs the live shooting roster).
+
+### The Automated Solution Architecture:
+1. **Automated Notification Engine:** Dispatches instant confirmation, 24-hour reminder, and 2-hour SMS/email alert containing arrival instructions.
+2. **Self-Service 1-Click Rescheduling:** Families can open their reservation pass on mobile, view only currently available open slots, and reschedule instantly without calling the receptionist.
+3. **Activity Coordinator & Photographer Live Day-of Roster:** Real-time digital dashboard and printable run-sheet displaying resident name, room number, family contact, wheelchair/mobility needs, and photo shoot check-in status.
+4. **Family Member Access & Privacy:** Secured booking flow designed for resident families (passcode/room verification), keeping resident information private.
+5. **Platform Flexibility (Custom Engine + Squarespace/Acuity Support):** Production-ready built-in scheduler with local storage and database sync, plus native support for embedding or syncing with Squarespace Scheduling (Acuity Scheduling).
 
 ---
 
 ## 🏛️ E-E-A-T Authority & Healthcare Credentials
-- **Licensing & Regulatory Compliance:** Facilities operate under Texas Health and Human Services Commission (HHSC) licensing standards for General Hospitals, Special Hospitals, and Nursing/Rehabilitation Facilities.
-- **Clinical Safety Protocols:** Infection control compliance (CDC and Texas HHS sanitization standards) for holiday props, sanitized Santa suit protocols, HEPA air purification in studio rooms, and contactless check-in.
-- **Universal Accessibility:** 100% ADA compliant photo studio staging, zero-threshold wheelchair entry, transfer-assist staging benches, and sensory-friendly/low-stimulation session slots for memory care and pediatric visitors.
+- **Licensing & Regulatory Compliance:** Facilities operate under Texas Health and Human Services Commission (HHSC) licensing standards for Skilled Nursing Facilities (SNF), Assisted Living, and Long-Term Rehabilitation.
+- **Clinical Safety Protocols:** Infection control compliance (CDC and Texas HHS sanitization standards) for holiday props, HEPA air purification in studio rooms, and contactless check-in.
+- **Universal Accessibility:** 100% ADA compliant photo studio staging, zero-threshold wheelchair entry, transfer-assist staging benches, and sensory-friendly/low-stimulation session slots for memory care residents.
 - **Deliverables & Guarantees:** 48-hour digital proof delivery, high-resolution print releases, and hospital badge / holiday card formatting for all participating employees and families.
 
 ---
 
 ## 📍 Facility Locations & Studio Hubs
 
-1. **Dallas Regional Medical Center**
+1. **Dallas Regional Medical Center & Rehab**
    - **Campus Address:** 1011 N Galloway Ave, Mesquite / Dallas, TX 75149
    - **Google Place ID:** `ChIJ7V6N26GZToYRFX_L3Z7R1XU`
    - **Studio Staging:** Executive Boardroom & Winter Conservatory (Ground Floor, West Wing)
-   - **Studio Lead:** Director of Clinical Experience & Holiday Coordinator
+   - **Studio Lead:** Director of Life Enrichment & Activity Coordinator
 
 2. **Fort Worth Senior Living & Rehabilitation Center**
    - **Campus Address:** 2800 W 7th St, Fort Worth, TX 76107
@@ -30,34 +48,26 @@
    - **Studio Staging:** Grand Fireside Hearth & Memory Care Garden Lounge
    - **Specialization:** Wheelchair-accessible family portraits & peaceful multi-generational staging
 
-3. **Plano Specialty Hospital Campus**
+3. **Plano Specialty Hospital & Senior Rehab**
    - **Campus Address:** 3801 W 15th St, Plano, TX 75075
    - **Google Place ID:** `ChIJhX1Q0i8UTYYR9kU4lW7uE5U`
    - **Studio Staging:** Medical Arts Pavilion & Winter Garden Atrium
-   - **Specialization:** Express 15-minute scrub & shift change mini-sessions
 
-4. **Arlington Emergency Pavilion & Urgent Care**
+4. **Arlington Emergency Pavilion & Living Center**
    - **Campus Address:** 800 W Randol Mill Rd, Arlington, TX 76012
    - **Google Place ID:** `ChIJzQ1Y7r2UTYYR1vE9m4P2Z8Q`
    - **Studio Staging:** Community Education Suite & North Pole Workshop
-   - **Specialization:** Santa experience for staff kids & 24/7 unit group photos
 
 ---
 
 ## 👥 Audience Personas & Journey Mapping
 
-### Persona 1: Clinical Shift Worker (Nurse Sarah, BSN, RN — Dallas Regional)
-- **Pain Points:** 12-hour rotating shifts (7a-7p or 7p-7a), zero time for off-site photography studios, wants professional family or scrub portraits before/after shift without changing out of scrubs.
-- **Desired Outcome:** Book a 15-minute express slot at 6:45 AM or 6:45 PM, instant confirmation on phone, 48-hour digital delivery for holiday cards.
+### Persona 1: Resident Family Member (Linda, Daughter of Resident Harold — Room 204B)
+- **Journey:** Linda receives an email/SMS link from the facility. She enters Harold's room number, picks a 15-minute slot on Saturday at 10:15 AM, and checks "Wheelchair transfer needed".
+- **Reschedule Flow:** When Linda's daughter's flight is delayed, Linda clicks the "Manage Appointment" link in her SMS, sees Sunday at 11:30 AM is open, and switches slots in 10 seconds. Harold's room notification and the Activity Coordinator's sheet update automatically.
 
-### Persona 2: Resident & Family Coordinator (Margaret & Son David — Fort Worth Rehab)
-- **Pain Points:** Mother uses specialized motorized wheelchair, gets exhausted in loud environments, family wants a dignified Christmas portrait together.
-- **Desired Outcome:** Low-stimulation morning slot with ramp access, patient transfer assistance, and zero rush.
+### Persona 2: Facility Activity Coordinator (Brenda, Life Enrichment Director)
+- **Journey:** On shoot morning, Brenda opens the **Activity Coordinator Roster** on her tablet. She filters by "Today's Schedule" and sees 24 booked slots in order. She knows exactly which residents to help dress and transport to the fireside studio 10 minutes prior to their slot.
 
-### Persona 3: Clinical Unit Manager (Nurse Manager Marcus — Arlington ER)
-- **Pain Points:** Coordinating 25 nurses, techs, and physicians across night/day shifts for an annual unit Christmas greeting card.
-- **Desired Outcome:** Reserve a dedicated 30-minute unit block between shift handoff with multi-pose group staging.
-
-### Persona 4: Employee Parent (Tech Javier — Plano Specialty)
-- **Pain Points:** Crowded mall Santa lines cost $80+ and take hours on valuable days off.
-- **Desired Outcome:** Free/subsidized campus Santa visit for his two toddlers with scheduled zero-wait time and instant digital download.
+### Persona 3: Contract Professional Photographer (Marcus Photography)
+- **Journey:** Marcus arrives at 8:30 AM, sets up his softboxes in the Fireside Hearth, and opens the Photographer Check-In screen. As families arrive, he taps "Checked In" and captures 15-minute back-to-back sets with zero lag or missing families.
