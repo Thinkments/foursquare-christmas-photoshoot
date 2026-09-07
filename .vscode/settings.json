@@ -1,0 +1,17 @@
+{
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "tailwindCSS.includeLanguages": {
+    "astro": "html"
+  }
+}
