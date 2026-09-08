@@ -26,6 +26,7 @@ import {
   LUNCH_BREAK,
   type FacilityConfig,
 } from '../data/facilities';
+import { syncBookingToGoogle } from '../utils/googleSync';
 
 interface Booking {
   id: string;
@@ -228,6 +229,21 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     const updated = [newBooking, ...bookings];
     saveBookings(updated);
     setConfirmedBooking(newBooking);
+
+    // Sync to Google Sheet and dispatch automated SMS text
+    syncBookingToGoogle({
+      facilityCode: facility.code,
+      facilityName: facility.name,
+      date: selectedDate,
+      timeSlot,
+      residentName: residentName.trim(),
+      roomNumber: roomNumber.trim(),
+      familyContact: familyContact.trim(),
+      familyPhone: familyPhone.trim(),
+      familyEmail: familyEmail.trim(),
+      needsWheelchair,
+      ref: newRef,
+    });
 
     try {
       confetti({

@@ -13,6 +13,7 @@ import {
   ExternalLink,
   MessageSquare,
 } from 'lucide-react';
+import { syncBookingToGoogle } from '../utils/googleSync';
 
 interface Booking {
   id: string;
@@ -226,6 +227,21 @@ export default function SimpleHolidayScheduler() {
     const updated = [newBooking, ...bookings];
     saveBookings(updated);
     setConfirmedBooking(newBooking);
+
+    // Sync to Google Sheet and dispatch automated SMS text
+    syncBookingToGoogle({
+      facilityCode: 'aml',
+      facilityName: FACILITY_NAME,
+      date: SHOOT_DATE,
+      timeSlot,
+      residentName: residentName.trim(),
+      roomNumber: roomNumber.trim(),
+      familyContact: familyContact.trim(),
+      familyPhone: familyPhone.trim(),
+      familyEmail: familyEmail.trim(),
+      needsWheelchair,
+      ref: newRef,
+    });
 
     try {
       confetti({
