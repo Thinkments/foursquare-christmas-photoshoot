@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, Printer, CheckCircle, AlertCircle, Search, ShieldCheck, Phone, RefreshCw, ExternalLink, FileSpreadsheet } from 'lucide-react';
+import { Calendar, Clock, MapPin, Printer, CheckCircle, AlertCircle, Search, ShieldCheck, Phone, RefreshCw, ExternalLink, FileSpreadsheet, MessageSquare } from 'lucide-react';
 import { FOURSQUARE_FACILITIES, FACILITY_LIST } from '../data/facilities';
 
 export interface BookingRecord {
@@ -300,9 +300,21 @@ export default function CoordinatorRoster() {
                     {/* Family Contact */}
                     <td className="p-3.5">
                       <span className="font-semibold text-slate-800 block">{b.familyContactName}</span>
-                      <span className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
-                        <Phone className="w-3 h-3 text-slate-400" /> {b.familyPhone}
-                      </span>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[11px] text-slate-500 flex items-center gap-1">
+                          <Phone className="w-3 h-3 text-slate-400" /> {b.familyPhone}
+                        </span>
+                        <a
+                          href={`sms:${b.familyPhone.replace(/\D/g, '')}?&body=${encodeURIComponent(
+                            `🎄 Foursquare Photo Reminder: ${b.residentName}'s session is scheduled for ${b.timeSlot} at ${b.campusName}. Reschedule link: https://foursquare-christmas-photoshoot.netlify.app/reschedule`
+                          )}`}
+                          className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-md transition"
+                          title="1-Click SMS Reminder"
+                        >
+                          <MessageSquare className="w-3 h-3 text-emerald-600" />
+                          <span>Text</span>
+                        </a>
+                      </div>
                     </td>
 
                     {/* Mobility */}
