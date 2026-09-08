@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, Printer, CheckCircle, AlertCircle, Search, ShieldCheck, Phone, RefreshCw } from 'lucide-react';
+import { Calendar, Clock, MapPin, Printer, CheckCircle, AlertCircle, Search, ShieldCheck, Phone, RefreshCw, ExternalLink, FileSpreadsheet } from 'lucide-react';
+import { FOURSQUARE_FACILITIES, FACILITY_LIST } from '../data/facilities';
 
 export interface BookingRecord {
   id: string;
@@ -23,7 +24,7 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b1',
     ref: 'AML-101',
-    campusId: 'ashton-medical-lodge',
+    campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
     timeSlot: '10:00 AM',
@@ -39,7 +40,7 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b2',
     ref: 'AML-102',
-    campusId: 'ashton-medical-lodge',
+    campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
     timeSlot: '10:10 AM',
@@ -55,7 +56,7 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b3',
     ref: 'AML-103',
-    campusId: 'ashton-medical-lodge',
+    campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
     timeSlot: '10:20 AM',
@@ -71,7 +72,7 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b4',
     ref: 'AML-104',
-    campusId: 'ashton-medical-lodge',
+    campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
     timeSlot: '10:30 AM',
@@ -131,6 +132,10 @@ export default function CoordinatorRoster() {
     return matchesCampus && matchesStatus && matchesSearch;
   });
 
+  const activeSheetUrl = selectedCampus !== 'all' && FOURSQUARE_FACILITIES[selectedCampus]?.sheetUrl
+    ? FOURSQUARE_FACILITIES[selectedCampus].sheetUrl
+    : 'https://drive.google.com/drive/folders/1uRdb99V71B6CBGmQhpmyJlIqesLkEWqc';
+
   return (
     <div className="w-full max-w-6xl mx-auto stable-widget-container">
       {/* Top Header Card */}
@@ -153,7 +158,19 @@ export default function CoordinatorRoster() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <a
+              href={activeSheetUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow transition"
+              title="Open Google Sheet in new tab"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-200" />
+              <span>{selectedCampus === 'all' ? 'Open Drive Folder' : 'Open Google Sheet'}</span>
+              <ExternalLink className="w-3.5 h-3.5 text-emerald-200" />
+            </a>
+
             <button
               onClick={handlePrint}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition"
@@ -176,11 +193,12 @@ export default function CoordinatorRoster() {
               onChange={(e) => setSelectedCampus(e.target.value)}
               className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl bg-slate-50"
             >
-              <option value="all">All DFW Campuses</option>
-              <option value="fort-worth-senior-living">Fort Worth Senior Living & Rehab</option>
-              <option value="dallas-regional">Dallas Regional Medical Center & Rehab</option>
-              <option value="plano-specialty">Plano Specialty Hospital Campus</option>
-              <option value="arlington-pavilion">Arlington Emergency Pavilion</option>
+              <option value="all">All 12 Foursquare Facilities</option>
+              {FACILITY_LIST.map((fac) => (
+                <option key={fac.code} value={fac.code}>
+                  {fac.name} ({fac.abbr}) — {fac.shortDate}
+                </option>
+              ))}
             </select>
           </div>
 

@@ -8,6 +8,7 @@ export interface FacilityConfig {
   dayOfWeek: string;
   dates?: { label: string; dateStr: string; shortDate: string }[];
   loungeName: string;
+  sheetUrl?: string;
 }
 
 export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
@@ -20,6 +21,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/5',
     dayOfWeek: 'Thursday',
     loungeName: 'Hillside Fireside Solarium',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4/edit',
   },
   wnr: {
     code: 'wnr',
@@ -30,6 +32,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/6',
     dayOfWeek: 'Friday',
     loungeName: 'Whitney Heritage Community Room',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ/edit',
   },
   cml: {
     code: 'cml',
@@ -44,6 +47,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
       { label: 'Day 2 (Nov 10)', dateStr: 'Tuesday, November 10, 2026', shortDate: '11/10' },
     ],
     loungeName: 'Cheyenne Grand Prairie Staging Room',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos/edit',
   },
   pml: {
     code: 'pml',
@@ -54,6 +58,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/12',
     dayOfWeek: 'Thursday',
     loungeName: 'Princeton Courtyard Pavilion',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU/edit',
   },
   fhr: {
     code: 'fhr',
@@ -64,6 +69,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/13',
     dayOfWeek: 'Friday',
     loungeName: 'Farmersville Evergreen Great Room',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c/edit',
   },
   lml: {
     code: 'lml',
@@ -74,6 +80,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/17',
     dayOfWeek: 'Tuesday',
     loungeName: 'Lexington Magnolia Activity Atrium',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c/edit',
   },
   tray: {
     code: 'tray',
@@ -84,6 +91,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/24',
     dayOfWeek: 'Tuesday',
     loungeName: 'Traymore Highland Park Holiday Studio',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo/edit',
   },
   mml: {
     code: 'mml',
@@ -94,6 +102,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '11/30',
     dayOfWeek: 'Monday',
     loungeName: 'Midland Rose Garden Recreation Room',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE/edit',
   },
   mmr: {
     code: 'mmr',
@@ -104,6 +113,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '12/1',
     dayOfWeek: 'Tuesday',
     loungeName: 'Madison Grand Ballroom Staging Suite',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw/edit',
   },
   aml: {
     code: 'aml',
@@ -114,6 +124,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '12/2',
     dayOfWeek: 'Wednesday',
     loungeName: 'Ashton Main Fireside Staging Lounge',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg/edit',
   },
   sml: {
     code: 'sml',
@@ -124,6 +135,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '12/8',
     dayOfWeek: 'Tuesday',
     loungeName: 'Sheridan Chisholm Trail Gathering Room',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk/edit',
   },
   scwf: {
     code: 'scwf',
@@ -134,6 +146,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '12/9',
     dayOfWeek: 'Wednesday',
     loungeName: 'Wichita Falls Red River Sunroom',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA/edit',
   },
 };
 

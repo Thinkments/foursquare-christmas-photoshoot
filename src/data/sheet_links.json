@@ -1,0 +1,118 @@
+{
+  "driveFolder": {
+    "name": "Foursquare Christmas Photo Tour 2026",
+    "url": "https://drive.google.com/drive/folders/1uRdb99V71B6CBGmQhpmyJlIqesLkEWqc",
+    "sharedWith": "jeremy@thinkments.com",
+    "role": "Editor"
+  },
+  "facilities": {
+    "hml": {
+      "code": "hml",
+      "abbr": "HML",
+      "name": "Hillside Medical Lodge",
+      "city": "Beeville, TX",
+      "shootDate": "Thursday, November 5, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4/edit",
+      "spreadsheetId": "1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4"
+    },
+    "wnr": {
+      "code": "wnr",
+      "abbr": "WNR",
+      "name": "Whitney Nursing & Rehabilitation",
+      "city": "Whitney, TX",
+      "shootDate": "Friday, November 6, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ/edit",
+      "spreadsheetId": "1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ"
+    },
+    "cml": {
+      "code": "cml",
+      "abbr": "CML",
+      "name": "Cheyenne Medical Lodge",
+      "city": "Colorado City, TX",
+      "shootDate": "Monday, November 9 & Tuesday, November 10, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos/edit",
+      "spreadsheetId": "1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos"
+    },
+    "pml": {
+      "code": "pml",
+      "abbr": "PML",
+      "name": "Princeton Medical Lodge",
+      "city": "Princeton, TX",
+      "shootDate": "Thursday, November 12, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU/edit",
+      "spreadsheetId": "1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU"
+    },
+    "fhr": {
+      "code": "fhr",
+      "abbr": "FHR",
+      "name": "Farmersville Health & Rehabilitation",
+      "city": "Farmersville, TX",
+      "shootDate": "Friday, November 13, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c/edit",
+      "spreadsheetId": "1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c"
+    },
+    "lml": {
+      "code": "lml",
+      "abbr": "LML",
+      "name": "Lexington Medical Lodge",
+      "city": "Farmersville, TX",
+      "shootDate": "Tuesday, November 17, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c/edit",
+      "spreadsheetId": "1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c"
+    },
+    "tray": {
+      "code": "tray",
+      "abbr": "TRAY",
+      "name": "Traymore at Park Cities",
+      "city": "Dallas, TX",
+      "shootDate": "Tuesday, November 24, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo/edit",
+      "spreadsheetId": "1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo"
+    },
+    "mml": {
+      "code": "mml",
+      "abbr": "MML",
+      "name": "Midland Medical Lodge",
+      "city": "Midland, TX",
+      "shootDate": "Monday, November 30, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE/edit",
+      "spreadsheetId": "1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE"
+    },
+    "mmr": {
+      "code": "mmr",
+      "abbr": "MMR",
+      "name": "Madison Medical Resort",
+      "city": "Odessa, TX",
+      "shootDate": "Tuesday, December 1, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw/edit",
+      "spreadsheetId": "1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw"
+    },
+    "aml": {
+      "code": "aml",
+      "abbr": "AML",
+      "name": "Ashton Medical Lodge",
+      "city": "Midland, TX",
+      "shootDate": "Wednesday, December 2, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg/edit",
+      "spreadsheetId": "1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg"
+    },
+    "sml": {
+      "code": "sml",
+      "abbr": "SML",
+      "name": "Sheridan Medical Lodge",
+      "city": "Burleson, TX",
+      "shootDate": "Tuesday, December 8, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk/edit",
+      "spreadsheetId": "13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk"
+    },
+    "scwf": {
+      "code": "scwf",
+      "abbr": "SCWF",
+      "name": "Senior Care Wichita Falls",
+      "city": "Wichita Falls, TX",
+      "shootDate": "Wednesday, December 9, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA/edit",
+      "spreadsheetId": "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"
+    }
+  }
+}
