@@ -1,6 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, Printer, CheckCircle, AlertCircle, Search, ShieldCheck, Phone, RefreshCw, ExternalLink, FileSpreadsheet, MessageSquare } from 'lucide-react';
-import { FOURSQUARE_FACILITIES, FACILITY_LIST } from '../data/facilities';
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Printer,
+  CheckCircle,
+  AlertCircle,
+  Search,
+  ShieldCheck,
+  Phone,
+  RefreshCw,
+  ExternalLink,
+  FileSpreadsheet,
+  MessageSquare,
+  Users,
+  Briefcase,
+  UserCheck,
+  Coffee,
+  Check,
+  Link2,
+} from 'lucide-react';
+import {
+  FOURSQUARE_FACILITIES,
+  FACILITY_LIST,
+  DEPARTMENT_HEADS,
+  CALL_STATUSES,
+  type DepartmentHead,
+  type CallStatus,
+} from '../data/facilities';
 
 export interface BookingRecord {
   id: string;
@@ -9,17 +36,23 @@ export interface BookingRecord {
   campusName: string;
   date: string;
   timeSlot: string;
+  bookingType: 'Resident' | 'Staff';
   residentName: string;
   roomNumber: string;
-  familyContactName: string;
+  bed: 'Bed A' | 'Bed B' | 'Private' | 'Staff / Station';
+  guestCount: number;
+  familyContactName: string; // Care Companion or Contact
   familyPhone: string;
   familyEmail: string;
+  departmentHead?: string;
+  callStatus?: CallStatus;
+  callNotes?: string;
   mobilityNeeds: string;
   status: 'Pending' | 'Checked In' | 'Shooting' | 'Completed';
   createdAt: string;
 }
 
-// Initial realistic default bookings across the day (10-minute slots)
+// Initial realistic default bookings with 5-minute slots, Bed A/B, and Care Companions
 const DEFAULT_BOOKINGS: BookingRecord[] = [
   {
     id: 'b1',
@@ -28,11 +61,16 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
     timeSlot: '10:00 AM',
+    bookingType: 'Resident',
     residentName: 'Harold Jenkins',
-    roomNumber: 'Room 204B',
+    roomNumber: '204',
+    bed: 'Bed B',
+    guestCount: 2,
     familyContactName: 'Linda Jenkins (Daughter)',
     familyPhone: '(432) 555-0192',
     familyEmail: 'linda.jenkins@email.com',
+    departmentHead: 'Director of Nursing (DON)',
+    callStatus: 'Spoke - Confirmed',
     mobilityNeeds: 'Motorized wheelchair - needs zero-threshold ramp',
     status: 'Checked In',
     createdAt: '2026-09-07T08:30:00Z',
@@ -43,14 +81,19 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
     campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:10 AM',
+    timeSlot: '10:05 AM',
+    bookingType: 'Resident',
     residentName: 'Evelyn Carter',
-    roomNumber: 'Room 112A',
+    roomNumber: '112',
+    bed: 'Bed A',
+    guestCount: 1,
     familyContactName: 'David Carter (Son)',
     familyPhone: '(432) 555-3841',
     familyEmail: 'd.carter@email.com',
+    departmentHead: 'Social Services Director',
+    callStatus: 'To Call',
     mobilityNeeds: 'Transfer assist bench requested',
-    status: 'Shooting',
+    status: 'Pending',
     createdAt: '2026-09-07T08:45:00Z',
   },
   {
@@ -59,15 +102,20 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
     campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:20 AM',
-    residentName: 'Robert Vance',
-    roomNumber: 'Room 305C',
-    familyContactName: 'Angela Vance (Spouse)',
-    familyPhone: '(432) 555-9012',
-    familyEmail: 'avance@email.com',
-    mobilityNeeds: 'Low-stimulation sensory lighting',
+    timeSlot: '10:10 AM',
+    bookingType: 'Staff',
+    residentName: 'Sarah Miller, RN',
+    roomNumber: 'ICU / Night Shift',
+    bed: 'Staff / Station',
+    guestCount: 0,
+    familyContactName: 'Sarah Miller (Clinical Staff)',
+    familyPhone: '(432) 555-8812',
+    familyEmail: 'smiller@foursquare.com',
+    departmentHead: 'Staff Development Coordinator',
+    callStatus: 'Spoke - Confirmed',
+    mobilityNeeds: 'Standard staff express session',
     status: 'Pending',
-    createdAt: '2026-09-07T09:10:00Z',
+    createdAt: '2026-09-07T09:00:00Z',
   },
   {
     id: 'b4',
@@ -75,15 +123,83 @@ const DEFAULT_BOOKINGS: BookingRecord[] = [
     campusId: 'aml',
     campusName: 'Ashton Medical Lodge',
     date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:30 AM',
+    timeSlot: '10:15 AM',
+    bookingType: 'Resident',
+    residentName: 'Robert Vance',
+    roomNumber: '305',
+    bed: 'Bed A',
+    guestCount: 3,
+    familyContactName: 'Angela Vance (Spouse)',
+    familyPhone: '(432) 555-9012',
+    familyEmail: 'avance@email.com',
+    departmentHead: 'Activities Director',
+    callStatus: 'Left Voicemail',
+    mobilityNeeds: 'Low-stimulation sensory lighting',
+    status: 'Pending',
+    createdAt: '2026-09-07T09:10:00Z',
+  },
+  {
+    id: 'b5',
+    ref: 'AML-105',
+    campusId: 'aml',
+    campusName: 'Ashton Medical Lodge',
+    date: 'Wednesday, December 2, 2026',
+    timeSlot: '10:20 AM',
+    bookingType: 'Resident',
     residentName: 'Mary Higgins',
-    roomNumber: 'Room 108B',
+    roomNumber: '108',
+    bed: 'Bed B',
+    guestCount: 4,
     familyContactName: 'Patricia Higgins (Daughter)',
     familyPhone: '(432) 555-6671',
     familyEmail: 'phiggins@email.com',
-    mobilityNeeds: 'Walker user, needs seated posing chair',
+    departmentHead: 'Dietary & Food Services Manager',
+    callStatus: 'To Call',
+    mobilityNeeds: 'Walker user, needs seated chair',
     status: 'Pending',
     createdAt: '2026-09-07T09:20:00Z',
+  },
+  {
+    id: 'b6',
+    ref: 'CML-201',
+    campusId: 'cml',
+    campusName: 'Cheyenne Medical Lodge',
+    date: 'Monday, November 9, 2026',
+    timeSlot: '10:00 AM',
+    bookingType: 'Resident',
+    residentName: 'Dorothy Miller',
+    roomNumber: '104',
+    bed: 'Bed A',
+    guestCount: 2,
+    familyContactName: 'James Miller (Son)',
+    familyPhone: '(325) 555-7721',
+    familyEmail: 'jmiller@email.com',
+    departmentHead: 'Director of Nursing (DON)',
+    callStatus: 'Spoke - Confirmed',
+    mobilityNeeds: 'Wheelchair ramp assistance',
+    status: 'Scheduled' as any,
+    createdAt: '2026-09-08T10:00:00Z',
+  },
+  {
+    id: 'b7',
+    ref: 'HML-301',
+    campusId: 'hml',
+    campusName: 'Hillside Medical Lodge',
+    date: 'Thursday, November 5, 2026',
+    timeSlot: '10:00 AM',
+    bookingType: 'Resident',
+    residentName: 'Arthur Pendelton',
+    roomNumber: '210',
+    bed: 'Bed A',
+    guestCount: 1,
+    familyContactName: 'Clara Pendelton (Wife)',
+    familyPhone: '(361) 555-4321',
+    familyEmail: 'clara.p@email.com',
+    departmentHead: 'Social Services Director',
+    callStatus: 'To Call',
+    mobilityNeeds: 'Oxygen tank assist',
+    status: 'Scheduled' as any,
+    createdAt: '2026-09-08T10:15:00Z',
   },
 ];
 
@@ -91,29 +207,66 @@ export default function CoordinatorRoster() {
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
   const [selectedCampus, setSelectedCampus] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [deptHeadFilter, setDeptHeadFilter] = useState<string>('all');
+  const [callStatusFilter, setCallStatusFilter] = useState<string>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
   useEffect(() => {
+    // Check URL params for pre-selected campus
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const fac = params.get('facility') || params.get('campus');
+      if (fac && (FOURSQUARE_FACILITIES[fac.toLowerCase()] || fac === 'all')) {
+        setSelectedCampus(fac.toLowerCase());
+      }
+    }
+
     // Load local bookings if existing, merged with default
     try {
-      const stored = localStorage.getItem('4sq_master_bookings');
+      const stored = localStorage.getItem('4sq_master_bookings_v2');
       if (stored) {
         setBookings(JSON.parse(stored));
       } else {
         setBookings(DEFAULT_BOOKINGS);
-        localStorage.setItem('4sq_master_bookings', JSON.stringify(DEFAULT_BOOKINGS));
+        localStorage.setItem('4sq_master_bookings_v2', JSON.stringify(DEFAULT_BOOKINGS));
       }
     } catch {
       setBookings(DEFAULT_BOOKINGS);
     }
   }, []);
 
-  const updateStatus = (id: string, newStatus: BookingRecord['status']) => {
-    const updated = bookings.map((b) => (b.id === id ? { ...b, status: newStatus } : b));
+  const saveBookings = (updated: BookingRecord[]) => {
     setBookings(updated);
     try {
-      localStorage.setItem('4sq_master_bookings', JSON.stringify(updated));
+      localStorage.setItem('4sq_master_bookings_v2', JSON.stringify(updated));
     } catch {}
+  };
+
+  const updateStatus = (id: string, newStatus: BookingRecord['status']) => {
+    const updated = bookings.map((b) => (b.id === id ? { ...b, status: newStatus } : b));
+    saveBookings(updated);
+  };
+
+  const updateDeptHead = (id: string, newDeptHead: string) => {
+    const updated = bookings.map((b) => (b.id === id ? { ...b, departmentHead: newDeptHead } : b));
+    saveBookings(updated);
+  };
+
+  const updateCallStatus = (id: string, newCallStatus: CallStatus) => {
+    const updated = bookings.map((b) => (b.id === id ? { ...b, callStatus: newCallStatus } : b));
+    saveBookings(updated);
+  };
+
+  const handleCopyLink = (refCode: string, campusId: string) => {
+    const url = typeof window !== 'undefined'
+      ? `${window.location.origin}/reschedule?facility=${campusId}&ref=${encodeURIComponent(refCode)}`
+      : `https://foursquare-christmas-photoshoot.netlify.app/reschedule?facility=${campusId}&ref=${encodeURIComponent(refCode)}`;
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+    }
+    setCopiedRef(refCode);
+    setTimeout(() => setCopiedRef(null), 3000);
   };
 
   const handlePrint = () => {
@@ -122,249 +275,390 @@ export default function CoordinatorRoster() {
 
   const filteredBookings = bookings.filter((b) => {
     const matchesCampus = selectedCampus === 'all' || b.campusId === selectedCampus;
-    const matchesStatus = statusFilter === 'all' || b.status === statusFilter;
-    const q = searchQuery.toLowerCase();
+    const matchesType = typeFilter === 'all' || b.bookingType === typeFilter;
+    const matchesDeptHead = deptHeadFilter === 'all' || b.departmentHead === deptHeadFilter;
+    const matchesCallStatus = callStatusFilter === 'all' || b.callStatus === callStatusFilter;
+
+    const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
+      !q ||
       b.residentName.toLowerCase().includes(q) ||
       b.roomNumber.toLowerCase().includes(q) ||
       b.familyContactName.toLowerCase().includes(q) ||
-      b.ref.toLowerCase().includes(q);
-    return matchesCampus && matchesStatus && matchesSearch;
+      b.ref.toLowerCase().includes(q) ||
+      b.familyPhone.includes(q);
+
+    return matchesCampus && matchesType && matchesDeptHead && matchesCallStatus && matchesSearch;
   });
 
-  const activeSheetUrl = selectedCampus !== 'all' && FOURSQUARE_FACILITIES[selectedCampus]?.sheetUrl
-    ? FOURSQUARE_FACILITIES[selectedCampus].sheetUrl
-    : 'https://drive.google.com/drive/folders/1uRdb99V71B6CBGmQhpmyJlIqesLkEWqc';
+  const activeFacility = selectedCampus !== 'all' ? FOURSQUARE_FACILITIES[selectedCampus] : null;
+  const activeSheetUrl = activeFacility?.sheetUrl || 'https://drive.google.com/drive/folders/1uRdb99V71B6CBGmQhpmyJlIqesLkEWqc';
+
+  const callsPending = filteredBookings.filter((b) => b.callStatus === 'To Call').length;
+  const callsConfirmed = filteredBookings.filter((b) => b.callStatus === 'Spoke - Confirmed').length;
+  const staffSessions = filteredBookings.filter((b) => b.bookingType === 'Staff').length;
 
   return (
-    <div className="w-full max-w-6xl mx-auto stable-widget-container">
-      {/* Top Header Card */}
-      <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-xl mb-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+    <div className="w-full max-w-7xl mx-auto">
+      {/* Top Facility Switcher Banner */}
+      <div className="bg-holiday-pine text-white p-5 rounded-3xl shadow-xl border border-holiday-gold/40 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/20 pb-4 mb-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase font-extrabold text-holiday-red tracking-wider">
-                Shoot Day Operational Roster
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full border border-holiday-gold/30">
+                Ongoing Schedule Access
               </span>
-              <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
-                Live Sync Active
+              <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-holiday-gold" /> All 13 Shoot Sessions
               </span>
             </div>
-            <h2 className="text-2xl font-bold font-heading text-slate-900 mt-1">
-              Activity Coordinator & Photographer Dashboard
-            </h2>
-            <p className="text-xs text-slate-600 mt-1">
-              Replaces the paper sign-up sheet at the reception desk. Check residents in, alert transport staff, and keep 10-minute photo sets on schedule.
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
+              Facility Schedules & Care Companion Call Management
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-200 mt-1 max-w-2xl">
+              Ongoing access for the corporate coordinator and department heads to call care companions, confirm 5-minute photo slots, verify guest counts (max 4), and manage staff express sessions.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2 shrink-0">
+            {activeFacility && (
+              <a
+                href={`/${activeFacility.code}`}
+                className="px-3 py-2 bg-holiday-red hover:bg-holiday-reddark text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5"
+              >
+                <Calendar className="w-3.5 h-3.5" />
+                <span>Open {activeFacility.abbr} Booking Page</span>
+              </a>
+            )}
             <a
               href={activeSheetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow transition"
-              title="Open Google Sheet in new tab"
+              className="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5"
             >
-              <FileSpreadsheet className="w-4 h-4 text-emerald-200" />
-              <span>{selectedCampus === 'all' ? 'Open Drive Folder' : 'Open Google Sheet'}</span>
-              <ExternalLink className="w-3.5 h-3.5 text-emerald-200" />
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <span>{activeFacility ? `${activeFacility.abbr} Google Sheet` : 'All Facility Sheets'}</span>
             </a>
-
             <button
+              type="button"
               onClick={handlePrint}
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition"
+              className="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-holiday-gold font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5"
             >
-              <Printer className="w-4 h-4 text-holiday-gold" />
-              <span>Print Day-of Run Sheet</span>
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Roster</span>
             </button>
           </div>
         </div>
 
-        {/* Filter Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Campus Filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Facility Campus
-            </label>
-            <select
-              value={selectedCampus}
-              onChange={(e) => setSelectedCampus(e.target.value)}
-              className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl bg-slate-50"
+        {/* 13 Facility Quick Switcher Tabs */}
+        <div>
+          <span className="text-[11px] font-bold text-holiday-gold uppercase tracking-wider block mb-2">
+            Switch Facility Schedule:
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            <button
+              type="button"
+              onClick={() => setSelectedCampus('all')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${
+                selectedCampus === 'all'
+                  ? 'bg-holiday-red text-white shadow'
+                  : 'bg-white/10 text-slate-200 hover:bg-white/20'
+              }`}
             >
-              <option value="all">All 12 Foursquare Facilities</option>
-              {FACILITY_LIST.map((fac) => (
-                <option key={fac.code} value={fac.code}>
-                  {fac.name} ({fac.abbr}) — {fac.shortDate}
-                </option>
-              ))}
-            </select>
-          </div>
+              <span>All Facilities</span>
+              <span className="text-[10px] opacity-80">({bookings.length})</span>
+            </button>
 
-          {/* Status Filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Session Status
-            </label>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full text-xs font-semibold px-3 py-2 border border-slate-300 rounded-xl bg-slate-50"
-            >
-              <option value="all">All Statuses</option>
-              <option value="Pending">Pending Arrival</option>
-              <option value="Checked In">Checked In (In Waiting Area)</option>
-              <option value="Shooting">Currently in Studio</option>
-              <option value="Completed">Completed</option>
-            </select>
-          </div>
-
-          {/* Search */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Search Resident / Room / Ref
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search resident name or room..."
-                className="w-full text-xs px-3 py-2 pl-8 border border-slate-300 rounded-xl bg-slate-50"
-              />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
-            </div>
+            {FACILITY_LIST.map((fac) => {
+              const facCount = bookings.filter((b) => b.campusId === fac.code).length;
+              return (
+                <button
+                  key={fac.code}
+                  type="button"
+                  onClick={() => setSelectedCampus(fac.code)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 ${
+                    selectedCampus === fac.code
+                      ? 'bg-holiday-red text-white shadow border border-white/40'
+                      : 'bg-white/10 text-slate-200 hover:bg-white/20'
+                  }`}
+                >
+                  <span>{fac.abbr}</span>
+                  <span className="font-mono text-[10px] text-holiday-gold opacity-90">{fac.shortDate}</span>
+                  {facCount > 0 && (
+                    <span className="text-[9px] bg-white/20 px-1.5 py-0.2 rounded-full font-extrabold">{facCount}</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* Roster Table */}
+      {/* Metrics Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm text-center">
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Sessions Displayed</span>
+          <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{filteredBookings.length}</p>
+          <span className="text-[11px] text-slate-500">5-min rapid slots</span>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl shadow-sm text-center">
+          <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">Care Companion Calls Pending</span>
+          <p className="text-2xl font-extrabold text-amber-900 mt-0.5">{callsPending}</p>
+          <span className="text-[11px] text-amber-700">Needs Dept Head Outreach</span>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl shadow-sm text-center">
+          <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">Calls Spoke / Confirmed</span>
+          <p className="text-2xl font-extrabold text-emerald-900 mt-0.5">{callsConfirmed}</p>
+          <span className="text-[11px] text-emerald-700">Care Companion Ready</span>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 p-4 rounded-2xl shadow-sm text-center">
+          <span className="text-[10px] font-bold text-blue-800 uppercase tracking-wider block">Staff Express Sessions</span>
+          <p className="text-2xl font-extrabold text-blue-900 mt-0.5">{staffSessions}</p>
+          <span className="text-[11px] text-blue-700">Included in full schedule</span>
+        </div>
+      </div>
+
+      {/* Control & Filter Dashboard */}
+      <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-xl mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Search */}
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search resident, room, phone, ref..."
+              className="w-full pl-9 pr-3 py-2 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
+            />
+          </div>
+
+          {/* Type Filter */}
+          <div>
+            <select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="w-full py-2 px-3 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine font-semibold"
+            >
+              <option value="all">All Booking Types (Residents & Staff)</option>
+              <option value="Resident">Residents Only (Bed A & Bed B)</option>
+              <option value="Staff">Staff Only (Express Shift Sessions)</option>
+            </select>
+          </div>
+
+          {/* Department Head Filter */}
+          <div>
+            <select
+              value={deptHeadFilter}
+              onChange={(e) => setDeptHeadFilter(e.target.value)}
+              className="w-full py-2 px-3 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine font-medium"
+            >
+              <option value="all">All Department Heads Assigned</option>
+              {DEPARTMENT_HEADS.map((dh) => (
+                <option key={dh} value={dh}>{dh}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Call Status Filter */}
+          <div>
+            <select
+              value={callStatusFilter}
+              onChange={(e) => setCallStatusFilter(e.target.value)}
+              className="w-full py-2 px-3 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine font-semibold"
+            >
+              <option value="all">All Care Companion Call Statuses</option>
+              {CALL_STATUSES.map((cs) => (
+                <option key={cs} value={cs}>{cs}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Roster & Schedule Table */}
       <div className="bg-white border border-slate-200 rounded-3xl shadow-xl overflow-hidden">
-        <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="font-heading font-bold text-sm text-holiday-gold">
-              Today's 10-Minute Scheduled Run-Sheet
+        <div className="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-holiday-pine" />
+            <span className="font-bold text-xs text-slate-800">
+              {activeFacility ? `${activeFacility.name} — Full 5-Minute Schedule` : 'All Facilities Master Schedule'}
             </span>
-            <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full border border-slate-700">
-              {filteredBookings.length} Slots Scheduled
+            <span className="text-[11px] text-slate-500">
+              (5-min rapid increments • 10-min hourly resets)
             </span>
           </div>
-          <span className="text-xs text-slate-400">Photographer: Marcus Holiday Studio</span>
+          <div className="text-xs text-slate-500">
+            Showing <strong>{filteredBookings.length}</strong> scheduled sessions
+          </div>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="bg-slate-50 text-slate-700 font-bold border-b border-slate-200 uppercase tracking-wider text-[11px]">
-                <th className="p-3.5">Time Slot</th>
-                <th className="p-3.5">Resident & Room</th>
-                <th className="p-3.5">Family Contact Lead</th>
-                <th className="p-3.5">Mobility & Accessibility</th>
-                <th className="p-3.5">Pass Ref</th>
-                <th className="p-3.5 text-right">Shoot Status</th>
+              <tr className="bg-slate-100 text-slate-600 font-bold uppercase tracking-wider text-[10px] border-b">
+                <th className="p-3.5">Facility / Time</th>
+                <th className="p-3.5">Type</th>
+                <th className="p-3.5">Resident / Staff & Room</th>
+                <th className="p-3.5">Guests (Max 4)</th>
+                <th className="p-3.5">Care Companion Contact</th>
+                <th className="p-3.5">Assigned Dept Head</th>
+                <th className="p-3.5">Call Status</th>
+                <th className="p-3.5 text-center">Reschedule Link</th>
+                <th className="p-3.5 text-right">Photo Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
-              {filteredBookings.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-slate-400">
-                    No scheduled sessions match the current filter.
+              {filteredBookings.map((b) => (
+                <tr key={b.id} className="hover:bg-slate-50 transition">
+                  {/* Facility & Time Slot */}
+                  <td className="p-3.5 whitespace-nowrap">
+                    <span className="text-[10px] font-mono font-extrabold bg-holiday-pine/10 text-holiday-pine px-1.5 py-0.5 rounded mr-1.5 uppercase">
+                      {b.campusId}
+                    </span>
+                    <strong className="text-xs text-slate-900">{b.timeSlot}</strong>
+                    <span className="block text-[10px] text-slate-400">{b.date}</span>
+                  </td>
+
+                  {/* Type Badge */}
+                  <td className="p-3.5 whitespace-nowrap">
+                    {b.bookingType === 'Staff' ? (
+                      <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                        <Briefcase className="w-3 h-3" /> Staff
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                        <Users className="w-3 h-3" /> Resident
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Resident / Room / Bed */}
+                  <td className="p-3.5">
+                    <strong className="text-slate-900 text-xs block">{b.residentName}</strong>
+                    {b.bookingType === 'Resident' ? (
+                      <span className="text-[11px] font-bold text-holiday-pine">
+                        Room {b.roomNumber} ({b.bed})
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-slate-500 font-medium">{b.roomNumber}</span>
+                    )}
+                    {b.mobilityNeeds && (
+                      <span className="block text-[10px] text-amber-700 font-semibold mt-0.5">
+                        ♿ {b.mobilityNeeds}
+                      </span>
+                    )}
+                  </td>
+
+                  {/* Guests Dropdown Count */}
+                  <td className="p-3.5 whitespace-nowrap">
+                    <span className="font-semibold text-slate-800 bg-slate-100 px-2 py-1 rounded-lg text-xs">
+                      👥 {b.guestCount} {b.guestCount === 1 ? 'Guest' : 'Guests'}
+                    </span>
+                  </td>
+
+                  {/* Care Companion & Phone */}
+                  <td className="p-3.5 text-xs">
+                    <div className="font-semibold text-slate-900">{b.familyContactName}</div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <a
+                        href={`tel:${b.familyPhone}`}
+                        className="text-[11px] text-blue-700 hover:underline font-bold flex items-center gap-0.5"
+                        title="Click to dial Care Companion"
+                      >
+                        <Phone className="w-3 h-3" /> {b.familyPhone}
+                      </a>
+                    </div>
+                  </td>
+
+                  {/* Department Head Assignment Dropdown */}
+                  <td className="p-3.5">
+                    <select
+                      value={b.departmentHead || DEPARTMENT_HEADS[0]}
+                      onChange={(e) => updateDeptHead(b.id, e.target.value)}
+                      className="text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1 font-medium w-full max-w-[170px]"
+                    >
+                      {DEPARTMENT_HEADS.map((dh) => (
+                        <option key={dh} value={dh}>{dh}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  {/* Care Companion Call Status */}
+                  <td className="p-3.5">
+                    <select
+                      value={b.callStatus || 'To Call'}
+                      onChange={(e) => updateCallStatus(b.id, e.target.value as any)}
+                      className={`text-[11px] font-bold px-2 py-1 rounded-lg border ${
+                        b.callStatus === 'Spoke - Confirmed'
+                          ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                          : b.callStatus === 'Left Voicemail'
+                          ? 'bg-amber-50 text-amber-900 border-amber-300'
+                          : b.callStatus === 'Needs Reschedule'
+                          ? 'bg-rose-50 text-rose-900 border-rose-300'
+                          : 'bg-slate-50 text-slate-700 border-slate-300'
+                      }`}
+                    >
+                      {CALL_STATUSES.map((cs) => (
+                        <option key={cs} value={cs}>{cs}</option>
+                      ))}
+                    </select>
+                  </td>
+
+                  {/* 1-Click Copy Link */}
+                  <td className="p-3.5 text-center whitespace-nowrap">
+                    <button
+                      type="button"
+                      onClick={() => handleCopyLink(b.ref, b.campusId)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 hover:bg-holiday-pine hover:text-holiday-gold text-slate-700 font-bold text-[11px] rounded-lg border border-slate-200 transition"
+                      title={`Copy 1-click reschedule link for ${b.residentName}`}
+                    >
+                      {copiedRef === b.ref ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-700">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Link2 className="w-3.5 h-3.5 text-slate-500" />
+                          <span>Copy Link</span>
+                        </>
+                      )}
+                    </button>
+                  </td>
+
+                  {/* Photo Session Status */}
+                  <td className="p-3.5 text-right whitespace-nowrap">
+                    <select
+                      value={b.status}
+                      onChange={(e) => updateStatus(b.id, e.target.value as any)}
+                      className={`text-[11px] font-bold px-2 py-1 rounded-lg border ${
+                        b.status === 'Checked In'
+                          ? 'bg-amber-50 text-amber-900 border-amber-300'
+                          : b.status === 'Shooting'
+                          ? 'bg-purple-50 text-purple-900 border-purple-300'
+                          : b.status === 'Completed'
+                          ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                          : 'bg-slate-50 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Checked In">Checked In</option>
+                      <option value="Shooting">Shooting</option>
+                      <option value="Completed">Completed</option>
+                    </select>
                   </td>
                 </tr>
-              ) : (
-                filteredBookings.map((b) => (
-                  <tr
-                    key={b.id}
-                    className={`hover:bg-slate-50 transition ${
-                      b.status === 'Shooting' ? 'bg-holiday-pine/5 font-semibold' : ''
-                    }`}
-                  >
-                    {/* Time Slot */}
-                    <td className="p-3.5 font-bold text-slate-900 whitespace-nowrap">
-                      <div className="flex items-center gap-1.5 text-sm text-holiday-pine">
-                        <Clock className="w-4 h-4 text-holiday-gold" />
-                        <span>{b.timeSlot}</span>
-                      </div>
-                      <span className="text-[10px] text-slate-400 block">{b.date}</span>
-                    </td>
-
-                    {/* Resident & Room */}
-                    <td className="p-3.5">
-                      <span className="font-bold text-slate-900 text-sm block">{b.residentName}</span>
-                      <span className="inline-block px-2 py-0.5 rounded text-[11px] font-extrabold bg-blue-50 text-blue-800 border border-blue-200 mt-0.5">
-                        {b.roomNumber}
-                      </span>
-                    </td>
-
-                    {/* Family Contact */}
-                    <td className="p-3.5">
-                      <span className="font-semibold text-slate-800 block">{b.familyContactName}</span>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[11px] text-slate-500 flex items-center gap-1">
-                          <Phone className="w-3 h-3 text-slate-400" /> {b.familyPhone}
-                        </span>
-                        <a
-                          href={`sms:${b.familyPhone.replace(/\D/g, '')}?&body=${encodeURIComponent(
-                            `🎄 Foursquare Photo Reminder: ${b.residentName}'s session is scheduled for ${b.timeSlot} at ${b.campusName}. Reschedule link: https://foursquare-christmas-photoshoot.netlify.app/reschedule`
-                          )}`}
-                          className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded-md transition"
-                          title="1-Click SMS Reminder"
-                        >
-                          <MessageSquare className="w-3 h-3 text-emerald-600" />
-                          <span>Text</span>
-                        </a>
-                      </div>
-                    </td>
-
-                    {/* Mobility */}
-                    <td className="p-3.5">
-                      <div className="flex items-start gap-1 text-[11px] text-slate-600 max-w-xs">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
-                        <span>{b.mobilityNeeds}</span>
-                      </div>
-                    </td>
-
-                    {/* Ref */}
-                    <td className="p-3.5 font-mono text-[11px] text-slate-500">
-                      {b.ref}
-                    </td>
-
-                    {/* Status Toggle Buttons */}
-                    <td className="p-3.5 text-right whitespace-nowrap">
-                      <select
-                        value={b.status}
-                        onChange={(e) => updateStatus(b.id, e.target.value as any)}
-                        className={`text-xs font-bold px-2.5 py-1.5 rounded-xl border ${
-                          b.status === 'Checked In'
-                            ? 'bg-amber-100 text-amber-900 border-amber-300'
-                            : b.status === 'Shooting'
-                            ? 'bg-purple-100 text-purple-900 border-purple-300'
-                            : b.status === 'Completed'
-                            ? 'bg-emerald-100 text-emerald-900 border-emerald-300'
-                            : 'bg-slate-100 text-slate-700 border-slate-300'
-                        }`}
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Checked In">Checked In</option>
-                        <option value="Shooting">Shooting Now</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>
 
-        {/* Footer instructions */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>
-            <strong>Activity Coordinator Note:</strong> Please verify resident wheelchair transport 10 minutes prior to scheduled slot.
-          </span>
-          <span className="text-holiday-pine font-semibold">Foursquare Healthcare Life Enrichment Roster</span>
-        </div>
+        {filteredBookings.length === 0 && (
+          <div className="p-10 text-center text-xs text-slate-500">
+            No bookings found matching the selected campus and filter criteria.
+          </div>
+        )}
       </div>
     </div>
   );

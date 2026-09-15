@@ -10,11 +10,16 @@ export interface BookingPayload {
   facilityName?: string;
   date: string;
   timeSlot: string;
+  bookingType?: 'Resident' | 'Staff';
   residentName: string;
   roomNumber: string;
+  bed?: 'Bed A' | 'Bed B' | 'Private' | 'N/A';
+  guestCount?: number;
   familyContact: string;
   familyPhone: string;
   familyEmail: string;
+  departmentHead?: string;
+  callStatus?: string;
   needsWheelchair?: boolean;
   ref: string;
   carrier?: string;

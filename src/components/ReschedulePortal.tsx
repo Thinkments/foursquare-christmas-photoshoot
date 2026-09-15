@@ -18,6 +18,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import type { BookingRecord } from './CoordinatorRoster';
+import { ALL_BOOKABLE_SLOTS } from '../data/facilities';
 
 export default function ReschedulePortal() {
   const [refInput, setRefInput] = useState('');
@@ -46,18 +47,8 @@ export default function ReschedulePortal() {
     setTimeout(() => setCopied(false), 3000);
   };
 
-  // Available 10-minute slots for rescheduling (Ashton Medical Lodge, Dec 2)
-  const AVAILABLE_SLOTS = [
-    '10:00 AM', '10:10 AM', '10:20 AM', '10:30 AM', '10:40 AM', '10:50 AM',
-    '11:00 AM', '11:10 AM', '11:20 AM', '11:30 AM', '11:40 AM', '11:50 AM',
-    '12:00 PM', '12:10 PM', '12:20 PM', '12:30 PM', '12:40 PM', '12:50 PM',
-    '01:45 PM', '01:55 PM',
-    '02:05 PM', '02:15 PM', '02:25 PM', '02:35 PM', '02:45 PM', '02:55 PM',
-    '03:05 PM', '03:15 PM', '03:25 PM', '03:35 PM', '03:45 PM', '03:55 PM',
-    '04:05 PM', '04:15 PM', '04:25 PM', '04:35 PM', '04:45 PM', '04:55 PM',
-    '05:05 PM', '05:15 PM', '05:25 PM', '05:35 PM', '05:45 PM', '05:55 PM',
-    '06:05 PM', '06:15 PM', '06:25 PM', '06:35 PM', '06:45 PM', '06:55 PM',
-  ];
+  // Available 5-minute slots for rescheduling (with 10-min hourly break cutout)
+  const AVAILABLE_SLOTS = ALL_BOOKABLE_SLOTS;
 
   // Auto-fill from URL query param if present
   useEffect(() => {
