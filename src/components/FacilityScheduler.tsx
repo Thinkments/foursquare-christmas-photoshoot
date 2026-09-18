@@ -5,23 +5,16 @@ import {
   Clock,
   CheckCircle2,
   RefreshCw,
-  Printer,
-  AlertCircle,
   Link2,
   Copy,
   Check,
-  ExternalLink,
   MessageSquare,
-  Coffee,
   MapPin,
   Users,
-  UserCheck,
-  PhoneCall,
   AlertTriangle,
-  ShieldCheck,
   Briefcase,
   Phone,
-  FileSpreadsheet,
+  Sparkles,
 } from 'lucide-react';
 import {
   FOURSQUARE_FACILITIES,
@@ -29,7 +22,6 @@ import {
   MORNING_HOURLY_BLOCKS,
   AFTERNOON_HOURLY_BLOCKS,
   ALL_BOOKABLE_SLOTS,
-  LUNCH_BREAK,
   DEPARTMENT_HEADS,
   CALL_STATUSES,
   type DepartmentHead,
@@ -72,7 +64,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   const initialDate = forcedDate || (facility.dates ? facility.dates[0].dateStr : facility.shootDate);
   const [selectedDate, setSelectedDate] = useState<string>(initialDate);
 
-  const [activeTab, setActiveTab] = useState<'book' | 'reschedule' | 'coordinator'>('book');
+  const [activeTab, setActiveTab] = useState<'book' | 'reschedule'>('book');
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
@@ -81,7 +73,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   const [timeSlot, setTimeSlot] = useState<string>('10:00 AM');
   const [residentName, setResidentName] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
-  const [bed, setBed] = useState<'Bed A' | 'Bed B' | 'Private' | 'Staff / Station'>('Bed A');
+  const [bed, setBed] = useState<'Bed A' | 'Bed B' | 'Private' | 'Staff / Station'>('Private');
   const [guestCount, setGuestCount] = useState<number>(0);
   const [familyContact, setFamilyContact] = useState('');
   const [familyPhone, setFamilyPhone] = useState('');
@@ -90,11 +82,6 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   const [needsWheelchair, setNeedsWheelchair] = useState(false);
   const [roomError, setRoomError] = useState<string | null>(null);
   const [confirmedBooking, setConfirmedBooking] = useState<Booking | null>(null);
-
-  // Roster Filter State
-  const [deptHeadFilter, setDeptHeadFilter] = useState<string>('all');
-  const [callStatusFilter, setCallStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
 
   // Reschedule State
   const [lookupQuery, setLookupQuery] = useState('');
@@ -107,8 +94,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   // Helper to normalize room numbers (e.g., "Room 204B" -> "204B", "rm 102" -> "102")
   const normalizeRoom = (val: string) => val.trim().replace(/^(room|rm|unit|#)\s*/i, '').toUpperCase();
 
-  // Helper to detect if a resident room + bed is already booked on this date
-  const checkDuplicateResident = (room: string, bedVal: string, date: string, excludeId?: string) => {
+  // Helper to detect if a resident room is already booked on this date (limit 1 slot per resident)
+  const checkDuplicateResident = (room: string, date: string, excludeId?: string) => {
     const cleanRoom = normalizeRoom(room);
     if (!cleanRoom) return null;
     return bookings.find(
@@ -116,8 +103,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
         b.date === date &&
         b.id !== excludeId &&
         b.bookingType === 'Resident' &&
-        normalizeRoom(b.roomNumber) === cleanRoom &&
-        (b.bed === bedVal || b.bed === 'Private' || bedVal === 'Private')
+        normalizeRoom(b.roomNumber) === cleanRoom
     );
   };
 
@@ -281,13 +267,13 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   // Booked slots for currently selected date
   const bookedSlots = bookings.filter((b) => b.date === selectedDate).map((b) => b.timeSlot);
 
-  // Validate room/bed on blur or change
+  // Validate room on blur or change
   const handleRoomBlur = () => {
     if (bookingType === 'Resident' && roomNumber.trim()) {
-      const existing = checkDuplicateResident(roomNumber, bed, selectedDate);
+      const existing = checkDuplicateResident(roomNumber, selectedDate);
       if (existing) {
         setRoomError(
-          `Room ${normalizeRoom(roomNumber)} (${bed}) is already reserved at ${existing.timeSlot} for ${existing.residentName}. Each resident is limited to 1 time slot. To change times, please use the Reschedule portal.`
+          `Room ${normalizeRoom(roomNumber)} is already reserved at ${existing.timeSlot} for ${existing.residentName}. Only 1 timeslot is permitted per resident. To change times, please use the Reschedule portal.`
         );
       } else {
         setRoomError(null);
@@ -299,12 +285,12 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   const handleSubmitBooking = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check duplicate resident timeslot limit (1 per resident by Room + Bed A/B)
+    // Check duplicate resident timeslot limit (1 per resident by Room Number)
     if (bookingType === 'Resident') {
-      const duplicate = checkDuplicateResident(roomNumber, bed, selectedDate);
+      const duplicate = checkDuplicateResident(roomNumber, selectedDate);
       if (duplicate) {
         setRoomError(
-          `Cannot double-book: Room ${normalizeRoom(roomNumber)} (${bed}) is already booked for ${duplicate.residentName} at ${duplicate.timeSlot}. Each resident is limited to 1 time slot. Please choose another room/bed or use the Reschedule tab.`
+          `Cannot double-book: Room ${normalizeRoom(roomNumber)} is already booked for ${duplicate.residentName} at ${duplicate.timeSlot}. Only 1 timeslot is permitted per resident. Please choose another room or use the Reschedule tab.`
         );
         return;
       }
@@ -417,21 +403,39 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     setRescheduleMessage('Reservation cancelled. That 5-minute slot is now open for another family or staff member.');
   };
 
-  // Filtered roster bookings for Coordinator Tab
-  const filteredBookings = bookings.filter((b) => {
-    if (b.date !== selectedDate) return false;
-    if (typeFilter !== 'all' && b.bookingType !== typeFilter) return false;
-    if (deptHeadFilter !== 'all' && b.departmentHead !== deptHeadFilter) return false;
-    if (callStatusFilter !== 'all' && b.callStatus !== callStatusFilter) return false;
-    return true;
-  });
-
-  const callsPendingCount = bookings.filter((b) => b.date === selectedDate && b.callStatus === 'To Call').length;
-  const callsConfirmedCount = bookings.filter((b) => b.date === selectedDate && b.callStatus === 'Spoke - Confirmed').length;
-
   return (
     <div className="w-full max-w-5xl mx-auto">
-      {/* Facility Header Badge & Operational Notice */}
+      {/* Christmas Photoshoot Description & Guidelines Banner */}
+      <div className="bg-gradient-to-r from-holiday-pinedark via-holiday-pine to-holiday-pinedark border-2 border-holiday-gold/60 rounded-3xl p-5 sm:p-6 text-white mb-6 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-holiday-gold/20 border border-holiday-gold/50 flex items-center justify-center shrink-0 shadow">
+            <Sparkles className="w-6 h-6 text-holiday-gold" />
+          </div>
+          <div className="flex-1">
+            <span className="text-[11px] font-extrabold uppercase tracking-widest text-holiday-gold bg-black/30 px-3 py-1 rounded-full border border-holiday-gold/30 inline-block mb-1.5">
+              🎄 Christmas Photoshoot 2026
+            </span>
+            <h3 className="text-lg sm:text-xl font-bold font-heading text-white">
+              Official Christmas Photoshoot Reservations
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">
+              This reservation portal is for the official Christmas photoshoot. Please note that <strong>only 1 timeslot is permitted per resident</strong>, and there is a <strong>maximum of 4 guests per photo group</strong>.
+            </p>
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+              <div className="flex items-center gap-2.5 bg-black/25 px-3.5 py-2 rounded-xl border border-white/10">
+                <CheckCircle2 className="w-4 h-4 text-holiday-gold shrink-0" />
+                <span><strong>1 Timeslot Per Resident:</strong> Only 1 timeslot is permitted per resident.</span>
+              </div>
+              <div className="flex items-center gap-2.5 bg-black/25 px-3.5 py-2 rounded-xl border border-white/10">
+                <Users className="w-4 h-4 text-holiday-gold shrink-0" />
+                <span><strong>Maximum 4 Guests:</strong> Maximum of 4 guests per photo group.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Facility Header Badge */}
       <div className="bg-holiday-pine text-white p-5 sm:p-6 rounded-3xl shadow-lg border border-holiday-gold/40 mb-6 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
           <div>
@@ -453,12 +457,12 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
           <div className="bg-slate-900/85 border border-holiday-gold/30 p-3.5 rounded-2xl text-xs text-slate-200 shrink-0 shadow-inner">
             <p className="font-bold text-holiday-gold mb-1 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> 5-Min Rapid Slot System:
+              <Clock className="w-3.5 h-3.5" /> Christmas Photoshoot:
             </p>
-            <p>• <strong>5-Minute Slots</strong> (:00 through :45 each hr)</p>
-            <p>• <strong>10-Min End-of-Hour Buffer</strong> (:50–:00 reset)</p>
-            <p>• <strong>Staff Included</strong> in the full master schedule</p>
-            <p>• <strong>Limit 1 slot per resident</strong> (Bed A / Bed B)</p>
+            <p>• <strong>5-Minute Slots</strong> (10:00 AM – 7:00 PM)</p>
+            <p>• <strong>Limit 1 timeslot</strong> permitted per resident</p>
+            <p>• <strong>Maximum 4 guests</strong> per photo group</p>
+            <p>• <strong>Staff & resident</strong> sessions included</p>
           </div>
         </div>
 
@@ -487,8 +491,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
         )}
       </div>
 
-      {/* 3-Tab Console */}
-      <div className="flex bg-slate-200/90 p-1.5 rounded-2xl mb-8 max-w-2xl mx-auto border border-slate-300 shadow-inner">
+      {/* 2-Tab Console (Book & Reschedule) */}
+      <div className="flex bg-slate-200/90 p-1.5 rounded-2xl mb-8 max-w-xl mx-auto border border-slate-300 shadow-inner">
         <button
           type="button"
           onClick={() => {
@@ -519,19 +523,6 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
         >
           <RefreshCw className="w-4 h-4 text-holiday-gold" />
           <span>Reschedule Slot</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('coordinator')}
-          className={`flex-1 py-3 px-3 text-xs sm:text-sm font-bold rounded-xl transition flex items-center justify-center gap-2 ${
-            activeTab === 'coordinator'
-              ? 'bg-slate-900 text-white shadow-md'
-              : 'text-slate-700 hover:text-slate-900'
-          }`}
-        >
-          <PhoneCall className="w-4 h-4 text-holiday-gold" />
-          <span>Care Companion Calls & Roster</span>
         </button>
       </div>
 
@@ -570,7 +561,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                     <strong>Name:</strong> {confirmedBooking.residentName}{' '}
                     {confirmedBooking.bookingType === 'Resident' && (
                       <span className="text-holiday-gold font-bold">
-                        (Room {confirmedBooking.roomNumber} - {confirmedBooking.bed})
+                        (Room {confirmedBooking.roomNumber})
                       </span>
                     )}
                   </p>
@@ -678,7 +669,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                     <h3 className="text-base sm:text-lg font-bold text-slate-900 font-heading flex items-center gap-2">
                       <span>1. Pick Your 5-Minute Time Slot</span>
                       <span className="text-[11px] bg-holiday-pine/10 text-holiday-pine font-extrabold px-2.5 py-0.5 rounded-full">
-                        5-Min Slots • 10-Min Hourly Reset
+                        5-Min Slots
                       </span>
                     </h3>
                     <p className="text-xs text-slate-500">{facility.name} • {selectedDate}</p>
@@ -730,37 +721,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                           );
                         })}
                       </div>
-
-                      {/* 10-Minute End-of-Hour Cutout Badge */}
-                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500">
-                        <span className="flex items-center gap-1 font-semibold text-slate-600">
-                          <Coffee className="w-3 h-3 text-amber-600" />
-                          <span>{block.bufferLabel}</span>
-                        </span>
-                        <span className="text-[10px] bg-slate-200/60 px-2 py-0.5 rounded text-slate-600 font-semibold">
-                          10 Min Cutout (No Sessions)
-                        </span>
-                      </div>
                     </div>
                   ))}
-                </div>
-
-                {/* Photographer Lunch Break Block */}
-                <div className="my-5 p-3.5 bg-amber-50/90 border border-amber-200 rounded-2xl flex items-center justify-between text-xs text-amber-900">
-                  <div className="flex items-center gap-2.5">
-                    <Coffee className="w-5 h-5 text-amber-700 shrink-0" />
-                    <div>
-                      <strong className="block text-xs uppercase tracking-wider">
-                        {LUNCH_BREAK.label}
-                      </strong>
-                      <span className="text-[11px] text-amber-800">
-                        Photographer lunch and studio equipment reset. Sessions resume promptly at 2:00 PM.
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] bg-amber-200 text-amber-900 font-bold px-2.5 py-1 rounded-full shrink-0">
-                    Studio Paused
-                  </span>
                 </div>
 
                 {/* Afternoon Hourly Blocks */}
@@ -803,17 +765,6 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                             </button>
                           );
                         })}
-                      </div>
-
-                      {/* 10-Minute End-of-Hour Cutout Badge */}
-                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500">
-                        <span className="flex items-center gap-1 font-semibold text-slate-600">
-                          <Coffee className="w-3 h-3 text-amber-600" />
-                          <span>{block.bufferLabel}</span>
-                        </span>
-                        <span className="text-[10px] bg-slate-200/60 px-2 py-0.5 rounded text-slate-600 font-semibold">
-                          10 Min Cutout (No Sessions)
-                        </span>
                       </div>
                     </div>
                   ))}
@@ -895,37 +846,20 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                   {bookingType === 'Resident' ? (
                     <div>
                       <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Room Number * (Names aren't reliable; limit 1 slot per room/bed)
+                        Room Number *
                       </label>
-                      <div className="grid grid-cols-2 gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={roomNumber}
-                          onChange={(e) => {
-                            setRoomNumber(e.target.value);
-                            setRoomError(null);
-                          }}
-                          onBlur={handleRoomBlur}
-                          placeholder="e.g. 204 or 112"
-                          className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
-                        />
-                        <select
-                          value={bed}
-                          onChange={(e) => {
-                            setBed(e.target.value as any);
-                            setRoomError(null);
-                          }}
-                          className="w-full px-3 py-2.5 text-xs font-bold border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine bg-white"
-                        >
-                          <option value="Bed A">Bed A</option>
-                          <option value="Bed B">Bed B</option>
-                          <option value="Private">Private Room</option>
-                        </select>
-                      </div>
-                      <span className="text-[10px] text-slate-500 mt-1 block">
-                        Limit: 1 slot per resident. Shared rooms use Bed A & Bed B.
-                      </span>
+                      <input
+                        type="text"
+                        required
+                        value={roomNumber}
+                        onChange={(e) => {
+                          setRoomNumber(e.target.value);
+                          setRoomError(null);
+                        }}
+                        onBlur={handleRoomBlur}
+                        placeholder="e.g. 204"
+                        className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
+                      />
                     </div>
                   ) : (
                     <div>
@@ -981,7 +915,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 mb-1">
                       Cell Phone (For SMS Reminders) *
@@ -992,7 +926,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                       value={familyPhone}
                       onChange={(e) => setFamilyPhone(e.target.value)}
                       placeholder="(432) 555-0192"
-                      className="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
+                      className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
                     />
                   </div>
 
@@ -1006,23 +940,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                       value={familyEmail}
                       onChange={(e) => setFamilyEmail(e.target.value)}
                       placeholder="contact@email.com"
-                      className="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
+                      className="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine"
                     />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">
-                      Department Head Call Assignee
-                    </label>
-                    <select
-                      value={departmentHead}
-                      onChange={(e) => setDepartmentHead(e.target.value)}
-                      className="w-full px-3 py-2.5 text-xs border border-slate-300 rounded-xl focus:ring-2 focus:ring-holiday-pine bg-white font-medium"
-                    >
-                      {DEPARTMENT_HEADS.map((dh) => (
-                        <option key={dh} value={dh}>{dh}</option>
-                      ))}
-                    </select>
                   </div>
                 </div>
 
@@ -1102,7 +1021,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                     Current Scheduled Slot ({matchedBooking.bookingType})
                   </span>
                   <h4 className="text-base font-bold text-slate-900 mt-1">
-                    {matchedBooking.residentName} {matchedBooking.bookingType === 'Resident' && `(Room ${matchedBooking.roomNumber} - ${matchedBooking.bed})`}
+                    {matchedBooking.residentName} {matchedBooking.bookingType === 'Resident' && `(Room ${matchedBooking.roomNumber})`}
                   </h4>
                   <p className="text-xs text-slate-500">
                     Contact: {matchedBooking.familyContact} • {matchedBooking.familyPhone} • {matchedBooking.guestCount} Guests
@@ -1195,272 +1114,6 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                   Confirm Switch to {rescheduleSlot || '...'}
                 </button>
               </div>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* TAB 3: COORDINATOR & DEPARTMENT HEAD CARE COMPANION CALL ROSTER */}
-      {activeTab === 'coordinator' && (
-        <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-xs uppercase font-extrabold text-holiday-pine tracking-wider">
-                  {facility.name} • {selectedDate}
-                </span>
-                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
-                  Live Sync
-                </span>
-                <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">
-                  Staff & Residents
-                </span>
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold font-heading text-slate-900 mt-1">
-                Department Head Care Companion Call Management
-              </h3>
-              <p className="text-xs text-slate-500">
-                Department heads can call their assigned care companions to confirm their 5-minute photo shoot times, guest counts, and mobility needs.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {facility.sheetUrl && (
-                <a
-                  href={facility.sheetUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow transition"
-                >
-                  <FileSpreadsheet className="w-3.5 h-3.5" />
-                  <span>Open Sheet</span>
-                </a>
-              )}
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow transition shrink-0"
-              >
-                <Printer className="w-3.5 h-3.5 text-holiday-gold" />
-                <span>Print Schedule</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Quick Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-            <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-center">
-              <span className="text-[10px] font-bold text-slate-500 uppercase">Total Scheduled</span>
-              <p className="text-xl font-extrabold text-slate-900">{bookings.filter((b) => b.date === selectedDate).length}</p>
-            </div>
-            <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-center">
-              <span className="text-[10px] font-bold text-amber-800 uppercase">Calls Pending</span>
-              <p className="text-xl font-extrabold text-amber-900">{callsPendingCount}</p>
-            </div>
-            <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center">
-              <span className="text-[10px] font-bold text-emerald-800 uppercase">Spoke - Confirmed</span>
-              <p className="text-xl font-extrabold text-emerald-900">{callsConfirmedCount}</p>
-            </div>
-            <div className="bg-blue-50 border border-blue-200 p-3 rounded-xl text-center">
-              <span className="text-[10px] font-bold text-blue-800 uppercase">Staff Included</span>
-              <p className="text-xl font-extrabold text-blue-900">
-                {bookings.filter((b) => b.date === selectedDate && b.bookingType === 'Staff').length}
-              </p>
-            </div>
-          </div>
-
-          {/* Filters Bar */}
-          <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 mb-5 flex flex-wrap items-center gap-3 text-xs">
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-slate-700">Type:</span>
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-semibold"
-              >
-                <option value="all">All Sessions</option>
-                <option value="Resident">Residents Only</option>
-                <option value="Staff">Staff Only</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-slate-700">Dept Head:</span>
-              <select
-                value={deptHeadFilter}
-                onChange={(e) => setDeptHeadFilter(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-semibold"
-              >
-                <option value="all">All Department Heads</option>
-                {DEPARTMENT_HEADS.map((dh) => (
-                  <option key={dh} value={dh}>{dh}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-slate-700">Call Status:</span>
-              <select
-                value={callStatusFilter}
-                onChange={(e) => setCallStatusFilter(e.target.value)}
-                className="bg-white border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-semibold"
-              >
-                <option value="all">All Call Statuses</option>
-                {CALL_STATUSES.map((cs) => (
-                  <option key={cs} value={cs}>{cs}</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="ml-auto text-slate-500 font-medium">
-              Showing <strong>{filteredBookings.length}</strong> matching sessions
-            </div>
-          </div>
-
-          {/* Full Schedule Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-slate-50 text-slate-600 font-bold uppercase tracking-wider text-[10px] border-b">
-                  <th className="p-3">Time</th>
-                  <th className="p-3">Type</th>
-                  <th className="p-3">Resident / Staff & Room</th>
-                  <th className="p-3">Guests</th>
-                  <th className="p-3">Care Companion & Phone</th>
-                  <th className="p-3">Assigned Dept Head</th>
-                  <th className="p-3">Call Status</th>
-                  <th className="p-3 text-right">Photo Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
-                {filteredBookings.map((b) => (
-                  <tr key={b.id} className="hover:bg-slate-50">
-                    <td className="p-3 font-bold text-holiday-pine whitespace-nowrap">
-                      {b.timeSlot}
-                      <span className="block text-[10px] text-slate-400 font-normal">5-Min Slot</span>
-                    </td>
-                    <td className="p-3 whitespace-nowrap">
-                      {b.bookingType === 'Staff' ? (
-                        <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-                          <Briefcase className="w-3 h-3" /> Staff
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-                          <Users className="w-3 h-3" /> Resident
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-3">
-                      <strong className="text-slate-900 text-xs block">{b.residentName}</strong>
-                      {b.bookingType === 'Resident' ? (
-                        <span className="text-[11px] font-bold text-holiday-pine">
-                          Room {b.roomNumber} ({b.bed})
-                        </span>
-                      ) : (
-                        <span className="text-[11px] text-slate-500">{b.roomNumber}</span>
-                      )}
-                      {b.needsWheelchair && (
-                        <span className="block text-[10px] text-amber-700 font-bold">
-                          ♿ Ramp Assist
-                        </span>
-                      )}
-                    </td>
-                    <td className="p-3 whitespace-nowrap">
-                      <span className="text-xs font-semibold text-slate-700">
-                        {b.guestCount} {b.guestCount === 1 ? 'Guest' : 'Guests'}
-                      </span>
-                    </td>
-                    <td className="p-3 text-xs">
-                      <div className="font-semibold text-slate-900">{b.familyContact}</div>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <a
-                          href={`tel:${b.familyPhone}`}
-                          className="text-[11px] text-blue-700 hover:underline font-bold flex items-center gap-0.5"
-                          title="Call Care Companion"
-                        >
-                          <Phone className="w-3 h-3" /> {b.familyPhone}
-                        </a>
-                        <button
-                          type="button"
-                          onClick={() => handleCopyLink(b.ref)}
-                          className="text-[10px] text-slate-500 hover:text-slate-800 flex items-center gap-0.5 font-semibold"
-                          title="Copy Reschedule Link"
-                        >
-                          <Link2 className="w-3 h-3" /> Link
-                        </button>
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <select
-                        value={b.departmentHead || DEPARTMENT_HEADS[0]}
-                        onChange={(e) => {
-                          const updated = bookings.map((item) =>
-                            item.id === b.id ? { ...item, departmentHead: e.target.value } : item
-                          );
-                          saveBookings(updated);
-                        }}
-                        className="text-[11px] bg-white border border-slate-200 rounded-lg px-2 py-1 font-medium w-full max-w-[150px]"
-                      >
-                        {DEPARTMENT_HEADS.map((dh) => (
-                          <option key={dh} value={dh}>{dh}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="p-3">
-                      <select
-                        value={b.callStatus || 'To Call'}
-                        onChange={(e) => {
-                          const updated = bookings.map((item) =>
-                            item.id === b.id ? { ...item, callStatus: e.target.value as any } : item
-                          );
-                          saveBookings(updated);
-                        }}
-                        className={`text-[11px] font-bold px-2 py-1 rounded-lg border ${
-                          b.callStatus === 'Spoke - Confirmed'
-                            ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
-                            : b.callStatus === 'Left Voicemail'
-                            ? 'bg-amber-50 text-amber-900 border-amber-300'
-                            : b.callStatus === 'Needs Reschedule'
-                            ? 'bg-rose-50 text-rose-900 border-rose-300'
-                            : 'bg-slate-50 text-slate-700 border-slate-300'
-                        }`}
-                      >
-                        {CALL_STATUSES.map((cs) => (
-                          <option key={cs} value={cs}>{cs}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="p-3 text-right">
-                      <select
-                        value={b.status}
-                        onChange={(e) => {
-                          const updated = bookings.map((item) =>
-                            item.id === b.id ? { ...item, status: e.target.value as any } : item
-                          );
-                          saveBookings(updated);
-                        }}
-                        className={`text-[11px] font-bold px-2 py-1 rounded-lg border ${
-                          b.status === 'Checked In'
-                            ? 'bg-amber-50 text-amber-900 border-amber-300'
-                            : b.status === 'Complete'
-                            ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
-                            : 'bg-slate-50 text-slate-700 border-slate-200'
-                        }`}
-                      >
-                        <option value="Scheduled">Scheduled</option>
-                        <option value="Checked In">Checked In</option>
-                        <option value="Complete">Completed</option>
-                      </select>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {filteredBookings.length === 0 && (
-            <div className="p-8 text-center text-xs text-slate-500">
-              No photo sessions match the selected filters on this date.
             </div>
           )}
         </div>

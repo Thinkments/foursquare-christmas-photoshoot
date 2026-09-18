@@ -28,14 +28,6 @@ const SEARCH_ITEMS: SearchItem[] = [
     icon: Calendar,
   },
   {
-    id: 'coordinator',
-    title: 'Activity Coordinator & Photographer Run-Sheet',
-    category: 'Guide',
-    description: 'Live day-of check-in roster, resident room numbers, and wheelchair transport list.',
-    url: '/coordinator',
-    icon: CheckSquare,
-  },
-  {
     id: 'calculator',
     title: 'Holiday Package & Print Calculator',
     category: 'Tool',

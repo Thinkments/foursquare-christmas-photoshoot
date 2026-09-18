@@ -424,25 +424,6 @@ export default function ReschedulePortal() {
               "Hi Linda! Reminder: Your Christmas photo with Harold (Room 204B) at Foursquare Fort Worth is scheduled for Saturday at 09:00 AM in the Fireside Hearth. Need to change? Click here to reschedule in 10 seconds: foursquare-christmas-photoshoot.netlify.app/reschedule?ref=4SQ-7821"
             </div>
           </div>
-
-          {/* Activity Coordinator Roster Card */}
-          <div className="bg-slate-950/80 p-4 rounded-2xl border border-slate-800">
-            <div className="flex items-center gap-2 text-holiday-gold font-bold mb-2">
-              <ShieldCheck className="w-4 h-4" />
-              <span>Real-Time Activity Coordinator Sync</span>
-            </div>
-            <p className="text-slate-300 leading-relaxed">
-              When a family reschedules or books, the **Activity Coordinator & Photographer Run-Sheet** updates instantly. The transport team is automatically routed to the right room at the right time.
-            </p>
-            <div className="mt-3">
-              <a
-                href="/coordinator"
-                class="text-holiday-gold hover:underline font-bold text-[11px]"
-              >
-                View Live Activity Coordinator Run-Sheet →
-              </a>
-            </div>
-          </div>
         </div>
       </div>
     </div>

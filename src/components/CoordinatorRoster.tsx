@@ -306,17 +306,17 @@ export default function CoordinatorRoster() {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full border border-holiday-gold/30">
-                Ongoing Schedule Access
+                Neely's Coordinator Console
               </span>
               <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-holiday-gold" /> All 13 Shoot Sessions
+                <ShieldCheck className="w-3.5 h-3.5 text-holiday-gold" /> All Facility Schedules Throughout the Month
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
-              Facility Schedules & Care Companion Call Management
+              Master Facility Schedules & Status Overview
             </h1>
             <p className="text-xs sm:text-sm text-slate-200 mt-1 max-w-2xl">
-              Ongoing access for the corporate coordinator and department heads to call care companions, confirm 5-minute photo slots, verify guest counts (max 4), and manage staff express sessions.
+              Backend administrative access to monitor facility booking statuses, care companion outreach, department assignments, and resident slots across all campuses throughout the month.
             </p>
           </div>
 
