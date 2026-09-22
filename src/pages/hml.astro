@@ -10,31 +10,7 @@ const facility = FOURSQUARE_FACILITIES.hml;
   title={`${facility.name} (${facility.abbr}) Christmas Photo Shoot Scheduler | ${facility.shortDate}`}
   description={`Book your 5-minute holiday portrait with your resident loved one at ${facility.name} on ${facility.shootDate}. 10:00 AM - 7:00 PM rapid sessions with 1-click self-service rescheduling.`}
 >
-  <div class="bg-gradient-to-b from-holiday-pinedark via-holiday-pine to-holiday-pinedark text-white pt-8 pb-12 px-4 text-center border-b border-holiday-gold/30">
-    <div class="max-w-3xl mx-auto">
-      <div class="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1 rounded-full border border-holiday-gold/40 mb-2">
-        <span class="text-xs uppercase font-extrabold text-holiday-gold tracking-widest">
-          🎄 {facility.abbr} • {facility.shortDate} ({facility.dayOfWeek})
-        </span>
-      </div>
-
-      <h1 class="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
-        {facility.name} Photo Shoot
-      </h1>
-
-      <p class="text-xs sm:text-sm text-slate-200 mt-2 max-w-xl mx-auto leading-relaxed">
-        Reserve your 5-minute holiday portrait session with your loved one in the {facility.loungeName}. Please note that only 1 timeslot is permitted per resident, and there is a maximum of 4 guests per photo group.
-      </p>
-
-      <div class="flex flex-wrap items-center justify-center gap-4 mt-5 text-xs text-slate-300">
-        <span class="bg-white/5 px-3 py-1 rounded-full border border-white/10">✓ Christmas Photoshoot</span>
-        <span class="bg-white/5 px-3 py-1 rounded-full border border-white/10">✓ 1 Timeslot Per Resident</span>
-        <span class="bg-white/5 px-3 py-1 rounded-full border border-white/10">✓ Max 4 Guests Per Group</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+  <div class="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
     <FacilityScheduler client:load facilityCode="hml" />
   </div>
 </Layout>

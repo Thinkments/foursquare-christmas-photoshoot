@@ -405,64 +405,46 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
   return (
     <div className="w-full max-w-5xl mx-auto">
-      {/* Christmas Photoshoot Description & Guidelines Banner */}
+      {/* Consolidated Christmas Photoshoot & Facility Header */}
       <div className="bg-gradient-to-r from-holiday-pinedark via-holiday-pine to-holiday-pinedark border-2 border-holiday-gold/60 rounded-3xl p-5 sm:p-6 text-white mb-6 shadow-xl relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-holiday-gold/20 border border-holiday-gold/50 flex items-center justify-center shrink-0 shadow">
-            <Sparkles className="w-6 h-6 text-holiday-gold" />
-          </div>
-          <div className="flex-1">
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-holiday-gold bg-black/30 px-3 py-1 rounded-full border border-holiday-gold/30 inline-block mb-1.5">
-              🎄 Christmas Photoshoot 2026
-            </span>
-            <h3 className="text-lg sm:text-xl font-bold font-heading text-white">
-              Official Christmas Photoshoot Reservations
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed">
-              This reservation portal is for the official Christmas photoshoot. Please note that <strong>only 1 timeslot is permitted per resident</strong>, and there is a <strong>maximum of 4 guests per photo group</strong>.
-            </p>
-            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-              <div className="flex items-center gap-2.5 bg-black/25 px-3.5 py-2 rounded-xl border border-white/10">
-                <CheckCircle2 className="w-4 h-4 text-holiday-gold shrink-0" />
-                <span><strong>1 Timeslot Per Resident:</strong> Only 1 timeslot is permitted per resident.</span>
-              </div>
-              <div className="flex items-center gap-2.5 bg-black/25 px-3.5 py-2 rounded-xl border border-white/10">
-                <Users className="w-4 h-4 text-holiday-gold shrink-0" />
-                <span><strong>Maximum 4 Guests:</strong> Maximum of 4 guests per photo group.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Facility Header Badge */}
-      <div className="bg-holiday-pine text-white p-5 sm:p-6 rounded-3xl shadow-lg border border-holiday-gold/40 mb-6 relative overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1">
-              <span className="text-xs uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full border border-holiday-gold/30">
-                {facility.abbr} • Foursquare Healthcare
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+          <div className="space-y-1.5 max-w-xl">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-[11px] uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full border border-holiday-gold/30 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-holiday-gold" /> Christmas Photoshoot 2026 • {facility.abbr}
               </span>
               <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
                 <MapPin className="w-3 h-3 text-holiday-gold" /> {facility.city}
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
+
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
               {facility.name}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-200 mt-1">
+
+            <p className="text-xs sm:text-sm text-slate-200">
               📅 <strong>{facility.shootDate}</strong> • {facility.loungeName}
+            </p>
+
+            <p className="text-xs text-slate-300 pt-0.5 leading-relaxed">
+              Rapid 5-minute holiday portraits for residents and staff. Please note that <strong>only 1 timeslot is permitted per resident</strong>, and there is a <strong>maximum of 4 guests per group</strong>.
             </p>
           </div>
 
-          <div className="bg-slate-900/85 border border-holiday-gold/30 p-3.5 rounded-2xl text-xs text-slate-200 shrink-0 shadow-inner">
-            <p className="font-bold text-holiday-gold mb-1 flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5" /> Christmas Photoshoot:
-            </p>
-            <p>• <strong>5-Minute Slots</strong> (10:00 AM – 7:00 PM)</p>
-            <p>• <strong>Limit 1 timeslot</strong> permitted per resident</p>
-            <p>• <strong>Maximum 4 guests</strong> per photo group</p>
-            <p>• <strong>Staff & resident</strong> sessions included</p>
+          {/* Key Guidelines Chips */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-2 shrink-0 text-xs">
+            <div className="flex items-center gap-2.5 bg-black/30 border border-holiday-gold/40 px-3.5 py-2 rounded-xl text-slate-200 shadow-sm">
+              <CheckCircle2 className="w-4 h-4 text-holiday-gold shrink-0" />
+              <span><strong>1 Timeslot</strong> per resident</span>
+            </div>
+            <div className="flex items-center gap-2.5 bg-black/30 border border-holiday-gold/40 px-3.5 py-2 rounded-xl text-slate-200 shadow-sm">
+              <Users className="w-4 h-4 text-holiday-gold shrink-0" />
+              <span><strong>Max 4 Guests</strong> per group</span>
+            </div>
+            <div className="flex items-center gap-2.5 bg-black/30 border border-white/15 px-3.5 py-2 rounded-xl text-slate-300 shadow-sm">
+              <Clock className="w-4 h-4 text-holiday-gold shrink-0" />
+              <span><strong>5-Min Slots</strong> (10 AM – 7 PM)</span>
+            </div>
           </div>
         </div>
 
