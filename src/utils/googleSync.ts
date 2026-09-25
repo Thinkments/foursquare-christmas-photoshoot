@@ -8,6 +8,10 @@ export const GOOGLE_WEBHOOK_URL =
 export interface BookingPayload {
   facilityCode: string;
   facilityName?: string;
+  facilityAbbr?: string;
+  facilityAddress?: string;
+  facilityCity?: string;
+  loungeName?: string;
   date: string;
   timeSlot: string;
   bookingType?: 'Resident' | 'Staff';
@@ -23,6 +27,7 @@ export interface BookingPayload {
   needsWheelchair?: boolean;
   ref: string;
   carrier?: string;
+  rescheduleUrl?: string;
 }
 
 export async function syncBookingToGoogle(payload: BookingPayload): Promise<boolean> {

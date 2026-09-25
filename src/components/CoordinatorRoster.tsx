@@ -52,156 +52,8 @@ export interface BookingRecord {
   createdAt: string;
 }
 
-// Initial realistic default bookings with 5-minute slots, Bed A/B, and Care Companions
-const DEFAULT_BOOKINGS: BookingRecord[] = [
-  {
-    id: 'b1',
-    ref: 'AML-101',
-    campusId: 'aml',
-    campusName: 'Ashton Medical Lodge',
-    date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:00 AM',
-    bookingType: 'Resident',
-    residentName: 'Harold Jenkins',
-    roomNumber: '204',
-    bed: 'Bed B',
-    guestCount: 2,
-    familyContactName: 'Linda Jenkins (Daughter)',
-    familyPhone: '(432) 555-0192',
-    familyEmail: 'linda.jenkins@email.com',
-    departmentHead: 'Director of Nursing (DON)',
-    callStatus: 'Spoke - Confirmed',
-    mobilityNeeds: 'Motorized wheelchair - needs zero-threshold ramp',
-    status: 'Checked In',
-    createdAt: '2026-09-07T08:30:00Z',
-  },
-  {
-    id: 'b2',
-    ref: 'AML-102',
-    campusId: 'aml',
-    campusName: 'Ashton Medical Lodge',
-    date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:05 AM',
-    bookingType: 'Resident',
-    residentName: 'Evelyn Carter',
-    roomNumber: '112',
-    bed: 'Bed A',
-    guestCount: 1,
-    familyContactName: 'David Carter (Son)',
-    familyPhone: '(432) 555-3841',
-    familyEmail: 'd.carter@email.com',
-    departmentHead: 'Social Services Director',
-    callStatus: 'To Call',
-    mobilityNeeds: 'Transfer assist bench requested',
-    status: 'Pending',
-    createdAt: '2026-09-07T08:45:00Z',
-  },
-  {
-    id: 'b3',
-    ref: 'AML-103',
-    campusId: 'aml',
-    campusName: 'Ashton Medical Lodge',
-    date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:10 AM',
-    bookingType: 'Staff',
-    residentName: 'Sarah Miller, RN',
-    roomNumber: 'ICU / Night Shift',
-    bed: 'Staff / Station',
-    guestCount: 0,
-    familyContactName: 'Sarah Miller (Clinical Staff)',
-    familyPhone: '(432) 555-8812',
-    familyEmail: 'smiller@foursquare.com',
-    departmentHead: 'Staff Development Coordinator',
-    callStatus: 'Spoke - Confirmed',
-    mobilityNeeds: 'Standard staff express session',
-    status: 'Pending',
-    createdAt: '2026-09-07T09:00:00Z',
-  },
-  {
-    id: 'b4',
-    ref: 'AML-104',
-    campusId: 'aml',
-    campusName: 'Ashton Medical Lodge',
-    date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:15 AM',
-    bookingType: 'Resident',
-    residentName: 'Robert Vance',
-    roomNumber: '305',
-    bed: 'Bed A',
-    guestCount: 3,
-    familyContactName: 'Angela Vance (Spouse)',
-    familyPhone: '(432) 555-9012',
-    familyEmail: 'avance@email.com',
-    departmentHead: 'Activities Director',
-    callStatus: 'Left Voicemail',
-    mobilityNeeds: 'Low-stimulation sensory lighting',
-    status: 'Pending',
-    createdAt: '2026-09-07T09:10:00Z',
-  },
-  {
-    id: 'b5',
-    ref: 'AML-105',
-    campusId: 'aml',
-    campusName: 'Ashton Medical Lodge',
-    date: 'Wednesday, December 2, 2026',
-    timeSlot: '10:20 AM',
-    bookingType: 'Resident',
-    residentName: 'Mary Higgins',
-    roomNumber: '108',
-    bed: 'Bed B',
-    guestCount: 4,
-    familyContactName: 'Patricia Higgins (Daughter)',
-    familyPhone: '(432) 555-6671',
-    familyEmail: 'phiggins@email.com',
-    departmentHead: 'Dietary & Food Services Manager',
-    callStatus: 'To Call',
-    mobilityNeeds: 'Walker user, needs seated chair',
-    status: 'Pending',
-    createdAt: '2026-09-07T09:20:00Z',
-  },
-  {
-    id: 'b6',
-    ref: 'CML-201',
-    campusId: 'cml',
-    campusName: 'Cheyenne Medical Lodge',
-    date: 'Monday, November 9, 2026',
-    timeSlot: '10:00 AM',
-    bookingType: 'Resident',
-    residentName: 'Dorothy Miller',
-    roomNumber: '104',
-    bed: 'Bed A',
-    guestCount: 2,
-    familyContactName: 'James Miller (Son)',
-    familyPhone: '(325) 555-7721',
-    familyEmail: 'jmiller@email.com',
-    departmentHead: 'Director of Nursing (DON)',
-    callStatus: 'Spoke - Confirmed',
-    mobilityNeeds: 'Wheelchair ramp assistance',
-    status: 'Scheduled' as any,
-    createdAt: '2026-09-08T10:00:00Z',
-  },
-  {
-    id: 'b7',
-    ref: 'HML-301',
-    campusId: 'hml',
-    campusName: 'Hillside Medical Lodge',
-    date: 'Thursday, November 5, 2026',
-    timeSlot: '10:00 AM',
-    bookingType: 'Resident',
-    residentName: 'Arthur Pendelton',
-    roomNumber: '210',
-    bed: 'Bed A',
-    guestCount: 1,
-    familyContactName: 'Clara Pendelton (Wife)',
-    familyPhone: '(361) 555-4321',
-    familyEmail: 'clara.p@email.com',
-    departmentHead: 'Social Services Director',
-    callStatus: 'To Call',
-    mobilityNeeds: 'Oxygen tank assist',
-    status: 'Scheduled' as any,
-    createdAt: '2026-09-08T10:15:00Z',
-  },
-];
+// Production initial bookings: 100% clean
+const DEFAULT_BOOKINGS: BookingRecord[] = [];
 
 export default function CoordinatorRoster() {
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
@@ -222,24 +74,26 @@ export default function CoordinatorRoster() {
       }
     }
 
-    // Load local bookings if existing, merged with default
+    // Load local bookings if existing
     try {
-      const stored = localStorage.getItem('4sq_master_bookings_v2');
+      localStorage.removeItem('4sq_master_bookings_v2');
+      localStorage.removeItem('4sq_master_bookings');
+      const stored = localStorage.getItem('4sq_master_bookings_prod');
       if (stored) {
         setBookings(JSON.parse(stored));
       } else {
-        setBookings(DEFAULT_BOOKINGS);
-        localStorage.setItem('4sq_master_bookings_v2', JSON.stringify(DEFAULT_BOOKINGS));
+        setBookings([]);
+        localStorage.setItem('4sq_master_bookings_prod', JSON.stringify([]));
       }
     } catch {
-      setBookings(DEFAULT_BOOKINGS);
+      setBookings([]);
     }
   }, []);
 
   const saveBookings = (updated: BookingRecord[]) => {
     setBookings(updated);
     try {
-      localStorage.setItem('4sq_master_bookings_v2', JSON.stringify(updated));
+      localStorage.setItem('4sq_master_bookings_prod', JSON.stringify(updated));
     } catch {}
   };
 

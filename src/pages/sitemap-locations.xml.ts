@@ -1,11 +1,10 @@
 import type { APIRoute } from 'astro';
+import { FACILITY_LIST } from '../data/facilities';
 
 export const GET: APIRoute = async () => {
   const urls = [
-    'https://foursquare-christmas-photoshoot.netlify.app/locations/dallas-regional',
-    'https://foursquare-christmas-photoshoot.netlify.app/locations/fort-worth-senior-living',
-    'https://foursquare-christmas-photoshoot.netlify.app/locations/plano-specialty',
-    'https://foursquare-christmas-photoshoot.netlify.app/locations/arlington-pavilion',
+    ...FACILITY_LIST.map((f) => `https://foursquare-christmas-photoshoot.netlify.app/${f.code}`),
+    'https://foursquare-christmas-photoshoot.netlify.app/cml-day2',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -14,7 +13,7 @@ ${urls
   .map(
     (url) => `  <url>
     <loc>${url}</loc>
-    <lastmod>2026-09-07T10:30:00-06:00</lastmod>
+    <lastmod>2026-09-24T12:00:00-06:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`

@@ -89,7 +89,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   const [rescheduleSlot, setRescheduleSlot] = useState('');
   const [rescheduleMessage, setRescheduleMessage] = useState('');
 
-  const storageKey = `4sq_bookings_v2_${facility.code}`;
+  // Production storage key
+  const storageKey = `4sq_bookings_prod_v3_${facility.code}`;
 
   // Helper to normalize room numbers (e.g., "Room 204B" -> "204B", "rm 102" -> "102")
   const normalizeRoom = (val: string) => val.trim().replace(/^(room|rm|unit|#)\s*/i, '').toUpperCase();
@@ -107,93 +108,8 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     );
   };
 
-  // Seed bookings for realistic demo
-  const getInitialBookings = (): Booking[] => [
-    {
-      id: `${facility.code}-1`,
-      ref: `${facility.abbr}-101`,
-      facilityCode: facility.code,
-      facilityName: facility.name,
-      date: selectedDate,
-      timeSlot: '10:00 AM',
-      bookingType: 'Resident',
-      residentName: 'Harold Jenkins',
-      roomNumber: '204',
-      bed: 'Bed B',
-      guestCount: 2,
-      familyContact: 'Linda Jenkins (Daughter)',
-      familyPhone: '(432) 555-0192',
-      familyEmail: 'linda.jenkins@email.com',
-      departmentHead: 'Director of Nursing (DON)',
-      callStatus: 'Spoke - Confirmed',
-      needsWheelchair: true,
-      status: 'Checked In',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: `${facility.code}-2`,
-      ref: `${facility.abbr}-102`,
-      facilityCode: facility.code,
-      facilityName: facility.name,
-      date: selectedDate,
-      timeSlot: '10:05 AM',
-      bookingType: 'Resident',
-      residentName: 'Evelyn Carter',
-      roomNumber: '112',
-      bed: 'Bed A',
-      guestCount: 1,
-      familyContact: 'David Carter (Son)',
-      familyPhone: '(432) 555-3841',
-      familyEmail: 'david.c@email.com',
-      departmentHead: 'Social Services Director',
-      callStatus: 'To Call',
-      needsWheelchair: false,
-      status: 'Scheduled',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: `${facility.code}-3`,
-      ref: `${facility.abbr}-103`,
-      facilityCode: facility.code,
-      facilityName: facility.name,
-      date: selectedDate,
-      timeSlot: '10:10 AM',
-      bookingType: 'Staff',
-      residentName: 'Sarah Miller, RN',
-      roomNumber: 'Station 2',
-      bed: 'Staff / Station',
-      guestCount: 0,
-      familyContact: 'Sarah Miller (Shift Nurse)',
-      familyPhone: '(432) 555-8812',
-      familyEmail: 'smiller@foursquare.com',
-      departmentHead: 'Staff Development Coordinator',
-      callStatus: 'Spoke - Confirmed',
-      needsWheelchair: false,
-      status: 'Scheduled',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: `${facility.code}-4`,
-      ref: `${facility.abbr}-104`,
-      facilityCode: facility.code,
-      facilityName: facility.name,
-      date: selectedDate,
-      timeSlot: '10:15 AM',
-      bookingType: 'Resident',
-      residentName: 'Robert Vance',
-      roomNumber: '305',
-      bed: 'Bed A',
-      guestCount: 3,
-      familyContact: 'Angela Vance (Spouse)',
-      familyPhone: '(432) 555-9012',
-      familyEmail: 'avance@email.com',
-      departmentHead: 'Activities Director',
-      callStatus: 'Left Voicemail',
-      needsWheelchair: false,
-      status: 'Scheduled',
-      createdAt: new Date().toISOString(),
-    },
-  ];
+  // Production initial bookings: 100% clean, all timeslots open
+  const getInitialBookings = (): Booking[] => [];
 
   // Helper to generate the exact 1-click reschedule link
   const getRescheduleUrl = (refCode: string) => {
@@ -217,15 +133,27 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   useEffect(() => {
     let list: Booking[] = [];
     try {
+      // Clear legacy demo keys if present
+      localStorage.removeItem(`4sq_bookings_v2_${facility.code}`);
+      localStorage.removeItem(`4sq_bookings_${facility.code}`);
+      localStorage.removeItem(`4sq_ashton_bookings_10min`);
+
       const saved = localStorage.getItem(storageKey);
       if (saved) {
         list = JSON.parse(saved);
+        // Filter out any leftover demo mock residents
+        list = list.filter((b) => 
+          b.residentName !== 'Harold Jenkins' && 
+          b.residentName !== 'Evelyn Carter' && 
+          b.residentName !== 'Sarah Miller, RN' && 
+          b.residentName !== 'Robert Vance'
+        );
       } else {
-        list = getInitialBookings();
+        list = [];
         localStorage.setItem(storageKey, JSON.stringify(list));
       }
     } catch {
-      list = getInitialBookings();
+      list = [];
     }
     setBookings(list);
 
@@ -327,10 +255,18 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     saveBookings(updated);
     setConfirmedBooking(newBooking);
 
-    // Sync to Google Sheet and dispatch automated SMS text
+    // Sync to Google Sheet and dispatch facility-specific automated SMS text
+    const rescheduleUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/reschedule?ref=${encodeURIComponent(newRef)}`
+      : `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(newRef)}`;
+
     syncBookingToGoogle({
       facilityCode: facility.code,
       facilityName: facility.name,
+      facilityAbbr: facility.abbr,
+      facilityAddress: facility.address,
+      facilityCity: facility.city,
+      loungeName: facility.loungeName,
       date: selectedDate,
       timeSlot,
       bookingType,
@@ -345,6 +281,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
       callStatus: 'To Call',
       needsWheelchair,
       ref: newRef,
+      rescheduleUrl,
     });
 
     try {
@@ -421,6 +358,11 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
             <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
               {facility.name}
             </h2>
+
+            <p className="text-xs sm:text-sm text-holiday-gold font-medium flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-holiday-gold shrink-0" />
+              <span>{facility.address}</span>
+            </p>
 
             <p className="text-xs sm:text-sm text-slate-200">
               📅 <strong>{facility.shootDate}</strong> • {facility.loungeName}
@@ -600,12 +542,13 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                 </div>
               </div>
 
-              {/* Simulated SMS Alert Preview */}
+              {/* SMS Alert Confirmation Banner */}
               <div className="max-w-md mx-auto bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-left mb-6 text-xs text-emerald-950 flex gap-3 items-start">
                 <MessageSquare className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-bold text-[11px] uppercase tracking-wider text-emerald-800">
-                    Automated SMS Confirmation (Simulated to {confirmedBooking.familyPhone}):
+                  <p className="font-bold text-[11px] uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    Automated SMS Confirmation Dispatched to {confirmedBooking.familyPhone}:
                   </p>
                   <p className="text-emerald-900 mt-1 text-[11px] leading-relaxed italic">
                     "🎄 {facility.name}: Photo shoot confirmed for {confirmedBooking.residentName} on {confirmedBooking.date} at {confirmedBooking.timeSlot} ({confirmedBooking.guestCount} guests). Reschedule anytime: {getRescheduleUrl(confirmedBooking.ref)}"

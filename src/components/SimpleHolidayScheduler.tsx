@@ -55,71 +55,14 @@ const AFTERNOON_SLOTS = [
 
 const ALL_SLOTS = [...MORNING_SLOTS, ...AFTERNOON_SLOTS];
 
-const INITIAL_BOOKINGS: Booking[] = [
-  {
-    id: 'ashton-1',
-    ref: 'AML-101',
-    facility: FACILITY_NAME,
-    date: SHOOT_DATE,
-    timeSlot: '10:00 AM',
-    residentName: 'Harold Jenkins',
-    roomNumber: 'Room 204B',
-    familyContact: 'Linda Jenkins (Daughter)',
-    familyPhone: '(432) 555-0192',
-    familyEmail: 'linda.jenkins@email.com',
-    needsWheelchair: true,
-    status: 'Checked In',
-  },
-  {
-    id: 'ashton-2',
-    ref: 'AML-102',
-    facility: FACILITY_NAME,
-    date: SHOOT_DATE,
-    timeSlot: '10:10 AM',
-    residentName: 'Evelyn Carter',
-    roomNumber: 'Room 112A',
-    familyContact: 'David Carter (Son)',
-    familyPhone: '(432) 555-3841',
-    familyEmail: 'david.c@email.com',
-    needsWheelchair: false,
-    status: 'Scheduled',
-  },
-  {
-    id: 'ashton-3',
-    ref: 'AML-103',
-    facility: FACILITY_NAME,
-    date: SHOOT_DATE,
-    timeSlot: '10:20 AM',
-    residentName: 'Mary Higgins',
-    roomNumber: 'Room 108B',
-    familyContact: 'Patricia Higgins (Daughter)',
-    familyPhone: '(432) 555-6671',
-    familyEmail: 'phiggins@email.com',
-    needsWheelchair: true,
-    status: 'Scheduled',
-  },
-  {
-    id: 'ashton-4',
-    ref: 'AML-104',
-    facility: FACILITY_NAME,
-    date: SHOOT_DATE,
-    timeSlot: '01:45 PM',
-    residentName: 'James Robinson',
-    roomNumber: 'Room 315',
-    familyContact: 'Marcus Robinson (Son)',
-    familyPhone: '(432) 555-8812',
-    familyEmail: 'marcus.r@email.com',
-    needsWheelchair: false,
-    status: 'Scheduled',
-  },
-];
+const INITIAL_BOOKINGS: Booking[] = [];
 
 export default function SimpleHolidayScheduler() {
   const [activeTab, setActiveTab] = useState<'book' | 'reschedule' | 'coordinator'>('book');
-  const [bookings, setBookings] = useState<Booking[]>(INITIAL_BOOKINGS);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
   // Form State
-  const [timeSlot, setTimeSlot] = useState(ALL_SLOTS[3]); // 10:30 AM
+  const [timeSlot, setTimeSlot] = useState(ALL_SLOTS[0]); // 10:00 AM
   const [residentName, setResidentName] = useState('');
   const [roomNumber, setRoomNumber] = useState('');
   const [familyContact, setFamilyContact] = useState('');
@@ -157,16 +100,20 @@ export default function SimpleHolidayScheduler() {
 
   // Local storage sync & URL param auto-lookup
   useEffect(() => {
-    let currentList = INITIAL_BOOKINGS;
+    let currentList: Booking[] = [];
     try {
-      const saved = localStorage.getItem('4sq_ashton_bookings_10min');
+      localStorage.removeItem('4sq_ashton_bookings_10min');
+      const saved = localStorage.getItem('4sq_ashton_bookings_prod');
       if (saved) {
         currentList = JSON.parse(saved);
         setBookings(currentList);
       } else {
-        localStorage.setItem('4sq_ashton_bookings_10min', JSON.stringify(INITIAL_BOOKINGS));
+        localStorage.setItem('4sq_ashton_bookings_prod', JSON.stringify([]));
+        setBookings([]);
       }
-    } catch {}
+    } catch {
+      setBookings([]);
+    }
 
     // Check for ?ref=... or ?tab=... in URL
     if (typeof window !== 'undefined') {
@@ -229,9 +176,17 @@ export default function SimpleHolidayScheduler() {
     setConfirmedBooking(newBooking);
 
     // Sync to Google Sheet and dispatch automated SMS text
+    const rescheduleUrl = typeof window !== 'undefined'
+      ? `${window.location.origin}/reschedule?ref=${encodeURIComponent(newRef)}`
+      : `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(newRef)}`;
+
     syncBookingToGoogle({
       facilityCode: 'aml',
-      facilityName: FACILITY_NAME,
+      facilityName: 'Ashton Medical Lodge',
+      facilityAbbr: 'AML',
+      facilityAddress: '801 S Loop 250 W, Midland, TX 79703',
+      facilityCity: 'Midland, TX',
+      loungeName: 'Ashton Main Fireside Staging Lounge',
       date: SHOOT_DATE,
       timeSlot,
       residentName: residentName.trim(),
@@ -241,6 +196,7 @@ export default function SimpleHolidayScheduler() {
       familyEmail: familyEmail.trim(),
       needsWheelchair,
       ref: newRef,
+      rescheduleUrl,
     });
 
     try {
@@ -467,12 +423,13 @@ export default function SimpleHolidayScheduler() {
                 </div>
               </div>
 
-              {/* Simulated SMS Alert Preview */}
+              {/* SMS Alert Confirmation Banner */}
               <div className="max-w-md mx-auto bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-left mb-6 text-xs text-emerald-950 flex gap-3 items-start">
                 <MessageSquare className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-bold text-[11px] uppercase tracking-wider text-emerald-800">
-                    Automated SMS Confirmation (Simulated to {confirmedBooking.familyPhone}):
+                  <p className="font-bold text-[11px] uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    Automated SMS Confirmation Dispatched to {confirmedBooking.familyPhone}:
                   </p>
                   <p className="text-emerald-900 mt-1 text-[11px] leading-relaxed italic">
                     "🎄 Ashton Medical Lodge: Photo shoot confirmed for {confirmedBooking.residentName} on Dec 2 at {confirmedBooking.timeSlot}. To reschedule without calling reception, use your private link: {getRescheduleUrl(confirmedBooking.ref)}"

@@ -1,33 +1,140 @@
 /**
  * ============================================================================
  * 🎄 FOURSQUARE HEALTHCARE 2026 CHRISTMAS PHOTO TOUR
- * Project: Foursquare facility photoshoot sms appscript
+ * Project: Foursquare facility photoshoot SMS & Google Sheets sync
  * 
- * NOTE: This script strictly uses the EXISTING 12 spreadsheets.
- * It does NOT create any new spreadsheets.
+ * Features:
+ * 1. Facility-Specific Automated SMS Confirmation Text Dispatch
+ * 2. Twilio REST API Integration (Primary - Native SMS to all mobile carriers)
+ * 3. Multi-carrier Email-to-SMS Gateway (Fallback)
+ * 4. Live Google Sheets Roster Sync across all 12 facilities
  * ============================================================================
  */
 
-// Mapping of the 12 existing facility Google Sheets
-const FACILITY_SHEET_IDS = {
-  "hml": "1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4", // Hillside Medical Lodge
-  "wnr": "1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ", // Whitney Nursing & Rehab
-  "cml": "1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos", // Cheyenne Medical Lodge
-  "pml": "1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU", // Princeton Medical Lodge
-  "fhr": "1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c", // Farmersville Health & Rehab
-  "lml": "1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c", // Lexington Medical Lodge
-  "tray": "1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo", // Traymore at Park Cities
-  "mml": "1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE", // Midland Medical Lodge
-  "mmr": "1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw", // Madison Medical Resort
-  "aml": "1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg", // Ashton Medical Lodge
-  "sml": "13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk", // Sheridan Medical Lodge
-  "scwf": "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"  // Senior Care Wichita Falls
+// ============================================================================
+// 1. TWILIO CREDENTIALS & PHONE NUMBER (Foursquare Healthcare Subaccount)
+// ============================================================================
+const TWILIO_CONFIG = {
+  accountSid: "YOUR_TWILIO_ACCOUNT_SID",
+  authToken: "YOUR_TWILIO_AUTH_TOKEN",
+  fromNumber: "+18176860300"
 };
 
-// Carrier SMS Gateways
+// ============================================================================
+// 2. FACILITY DIRECTORY & METADATA
+// ============================================================================
+const FACILITIES_CONFIG = {
+  "hml": {
+    name: "Hillside Medical Lodge",
+    abbr: "HML",
+    address: "300 S Highway 36 Byp N, Gatesville, TX 76528",
+    lounge: "Hillside Fireside Solarium",
+    shootDate: "Thursday, Nov 5, 2026",
+    sheetId: "1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4"
+  },
+  "wnr": {
+    name: "Whitney Nursing & Rehabilitation",
+    abbr: "WNR",
+    address: "101 S San Marcos St, Whitney, TX 76692",
+    lounge: "Whitney Heritage Community Room",
+    shootDate: "Friday, Nov 6, 2026",
+    sheetId: "1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ"
+  },
+  "cml": {
+    name: "Cheyenne Medical Lodge",
+    abbr: "CML",
+    address: "750 Hwy 352, Mesquite, TX 75149",
+    lounge: "Cheyenne Grand Prairie Staging Room",
+    shootDate: "Nov 9 & 10, 2026",
+    sheetId: "1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos"
+  },
+  "pml": {
+    name: "Princeton Medical Lodge",
+    abbr: "PML",
+    address: "1401 W Princeton Dr, Princeton, TX 75407",
+    lounge: "Princeton Courtyard Pavilion",
+    shootDate: "Thursday, Nov 12, 2026",
+    sheetId: "1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU"
+  },
+  "fhr": {
+    name: "Farmersville Health & Rehabilitation",
+    abbr: "FHR",
+    address: "205 Beech St, Farmersville, TX 75442",
+    lounge: "Farmersville Evergreen Great Room",
+    shootDate: "Friday, Nov 13, 2026",
+    sheetId: "1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c"
+  },
+  "lml": {
+    name: "Lexington Medical Lodge",
+    abbr: "LML",
+    address: "2000 W Audie Murphy Pkwy, Farmersville, TX 75442",
+    lounge: "Lexington Magnolia Activity Atrium",
+    shootDate: "Tuesday, Nov 17, 2026",
+    sheetId: "1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c"
+  },
+  "tray": {
+    name: "Traymore at Park Cities",
+    abbr: "T@PC",
+    address: "4315 Hopkins Ave, Dallas, TX 75209",
+    lounge: "Traymore Highland Park Holiday Studio",
+    shootDate: "Tuesday, Nov 24, 2026",
+    sheetId: "1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo"
+  },
+  "mml": {
+    name: "Midland Medical Lodge",
+    abbr: "MML",
+    address: "3000 Mockingbird, Midland, TX 79705",
+    lounge: "Midland Rose Garden Recreation Room",
+    shootDate: "Monday, Nov 30, 2026",
+    sheetId: "1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE"
+  },
+  "mmr": {
+    name: "Madison Medical Resort",
+    abbr: "MMR",
+    address: "5001 Office Park, Odessa, TX 79762",
+    lounge: "Madison Grand Ballroom Staging Suite",
+    shootDate: "Tuesday, Dec 1, 2026",
+    sheetId: "1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw"
+  },
+  "aml": {
+    name: "Ashton Medical Lodge",
+    abbr: "AML",
+    address: "801 S Loop 250 W, Midland, TX 79703",
+    lounge: "Ashton Main Fireside Staging Lounge",
+    shootDate: "Wednesday, Dec 2, 2026",
+    sheetId: "1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg"
+  },
+  "sml": {
+    name: "Sheridan Medical Lodge",
+    abbr: "SML",
+    address: "1119 S Red River Expy, Burkburnett, TX 76354",
+    lounge: "Sheridan Chisholm Trail Gathering Room",
+    shootDate: "Tuesday, Dec 8, 2026",
+    sheetId: "13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk"
+  },
+  "scwf": {
+    name: "Senior Care Wichita Falls",
+    abbr: "SCWF",
+    address: "910 Midwestern Pkwy, Wichita Falls, TX 76302",
+    lounge: "Wichita Falls Red River Sunroom",
+    shootDate: "Wednesday, Dec 9, 2026",
+    sheetId: "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"
+  },
+  "cp": {
+    name: "Crown Point Health Suites",
+    abbr: "CP",
+    address: "6640 Iola Ave, Lubbock, TX 79424",
+    lounge: "Crown Point Staging Lounge",
+    shootDate: "Thursday, Dec 10, 2026",
+    sheetId: ""
+  }
+};
+
+// Carrier SMS Gateways for fallback
 const CARRIER_GATEWAYS = {
   "verizon": "@vtext.com",
-  "att": "@txt.att.net",
+  "att": "@mms.att.net",
+  "att_txt": "@txt.att.net",
   "tmobile": "@tmomail.net",
   "sprint": "@messaging.sprintpcs.com",
   "cricket": "@mms.cricketwireless.net",
@@ -49,10 +156,61 @@ function cleanPhoneNumber(phone) {
   return digits.length === 10 ? digits : "";
 }
 
-function dispatchSms(phoneNumber, carrier, messageText) {
+/**
+ * Sends SMS via Twilio REST API (with automatic fallback to carrier email-to-sms)
+ */
+function sendSmsNotification(phoneNumber, messageText, carrier) {
   const cleanPhone = cleanPhoneNumber(phoneNumber);
-  if (!cleanPhone) return false;
+  if (!cleanPhone) {
+    Logger.log("❌ Invalid phone number: " + phoneNumber);
+    return false;
+  }
 
+  // 1. Check if Twilio is configured
+  const isTwilioConfigured = 
+    TWILIO_CONFIG.accountSid && 
+    !TWILIO_CONFIG.accountSid.includes("YOUR_") &&
+    TWILIO_CONFIG.authToken && 
+    !TWILIO_CONFIG.authToken.includes("YOUR_") &&
+    TWILIO_CONFIG.fromNumber && 
+    !TWILIO_CONFIG.fromNumber.includes("YOUR_");
+
+  if (isTwilioConfigured) {
+    try {
+      const formattedTo = cleanPhone.startsWith("+") ? cleanPhone : ("+1" + cleanPhone);
+      const url = "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_CONFIG.accountSid + "/Messages.json";
+
+      const payload = {
+        "To": formattedTo,
+        "From": TWILIO_CONFIG.fromNumber,
+        "Body": messageText
+      };
+
+      const options = {
+        "method": "post",
+        "headers": {
+          "Authorization": "Basic " + Utilities.base64Encode(TWILIO_CONFIG.accountSid + ":" + TWILIO_CONFIG.authToken)
+        },
+        "payload": payload,
+        "muteHttpExceptions": true
+      };
+
+      const response = UrlFetchApp.fetch(url, options);
+      const code = response.getResponseCode();
+      Logger.log("✓ Twilio Status [" + code + "]: " + response.getContentText());
+      if (code === 200 || code === 201) {
+        return true;
+      }
+    } catch (err) {
+      Logger.log("⚠️ Twilio failed (" + err.message + "), falling back to email-to-sms...");
+    }
+  }
+
+  // 2. Fallback to Email-to-SMS
+  return dispatchEmailToSms(cleanPhone, carrier, messageText);
+}
+
+function dispatchEmailToSms(cleanPhone, carrier, messageText) {
   const normalizedCarrier = String(carrier || "").toLowerCase().replace(/[^a-z]/g, "");
   const targetGateway = CARRIER_GATEWAYS[normalizedCarrier];
 
@@ -60,10 +218,11 @@ function dispatchSms(phoneNumber, carrier, messageText) {
   if (targetGateway) {
     recipients.push(cleanPhone + targetGateway);
   } else {
-    // Broadcast to top carriers
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["verizon"]);
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["att"]);
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["tmobile"]);
+    recipients.push(cleanPhone + "@vtext.com");
+    recipients.push(cleanPhone + "@mms.att.net");
+    recipients.push(cleanPhone + "@txt.att.net");
+    recipients.push(cleanPhone + "@tmomail.net");
+    recipients.push(cleanPhone + "@mms.cricketwireless.net");
   }
 
   recipients.forEach(function(recipientAddress) {
@@ -73,7 +232,7 @@ function dispatchSms(phoneNumber, carrier, messageText) {
         subject: "",
         body: messageText
       });
-      Logger.log("✓ SMS sent to: " + recipientAddress);
+      Logger.log("✓ Email-to-SMS sent to: " + recipientAddress);
     } catch (e) {
       Logger.log("⚠️ Error sending to " + recipientAddress + ": " + e.message);
     }
@@ -97,7 +256,16 @@ function doPost(e) {
     }
 
     const facilityCode = String(data.facilityCode || "aml").toLowerCase();
-    const sheetId = FACILITY_SHEET_IDS[facilityCode] || FACILITY_SHEET_IDS["aml"];
+    const fac = FACILITIES_CONFIG[facilityCode] || {
+      name: data.facilityName || "Foursquare Healthcare",
+      abbr: data.facilityAbbr || "4SQ",
+      address: data.facilityAddress || "",
+      lounge: data.loungeName || "Holiday Studio Lounge",
+      shootDate: data.date || "",
+      sheetId: ""
+    };
+
+    const sheetId = fac.sheetId || "";
     const timeSlot = data.timeSlot || "";
     const residentName = data.residentName || "";
     const roomNumber = data.roomNumber || "";
@@ -105,10 +273,12 @@ function doPost(e) {
     const familyPhone = data.familyPhone || "";
     const familyEmail = data.familyEmail || "";
     const mobilityNeeds = data.needsWheelchair ? "Wheelchair assistance requested" : (data.mobilityNeeds || "Standard seating");
-    const ref = data.ref || ("REF-" + Math.floor(100 + Math.random() * 900));
+    const ref = data.ref || ("4SQ-" + Math.floor(1000 + Math.random() * 9000));
     const carrier = data.carrier || "";
+    const dateStr = data.date || fac.shootDate;
+    const rescheduleUrl = data.rescheduleUrl || ("https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=" + encodeURIComponent(ref));
 
-    // 1. Write to the EXISTING Google Sheet
+    // 1. Write to the Facility Google Sheet
     if (sheetId) {
       const ss = SpreadsheetApp.openById(sheetId);
       const ws = ss.getActiveSheet();
@@ -138,14 +308,24 @@ function doPost(e) {
       ws.getRange(targetRow, 8).setValue(familyEmail);
       ws.getRange(targetRow, 9).setValue(mobilityNeeds);
       ws.getRange(targetRow, 10).setValue("Booked via Online Portal");
-      ws.getRange(targetRow, 11).setValue("https://foursquare-christmas-photoshoot.netlify.app/reschedule");
+      ws.getRange(targetRow, 11).setValue(rescheduleUrl);
       ws.getRange(targetRow, 12).setValue("📲 Web Confirmed: " + timestamp);
     }
 
-    // 2. Dispatch SMS confirmation text
+    // 2. Dispatch Facility-Specific SMS confirmation text
     if (familyPhone) {
-      const smsMessage = "🎄 Foursquare Photo Confirmed! " + residentName + " is scheduled for " + timeSlot + ". Need to change time? Reschedule anytime here: https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-      dispatchSms(familyPhone, carrier, smsMessage);
+      const residentDisplay = residentName ? (residentName + (roomNumber ? " (" + roomNumber + ")" : "")) : "Your Session";
+      
+      const smsMessage = "🎄 Foursquare Photo Confirmed!\n" +
+        "Resident: " + residentDisplay + "\n" +
+        "Facility: " + fac.name + " (" + fac.abbr + ")\n" +
+        "Address: " + fac.address + "\n" +
+        "Date/Time: " + (dateStr ? (dateStr + " at ") : "") + timeSlot + "\n" +
+        "Studio: " + fac.lounge + "\n" +
+        "Pass Ref: " + ref + "\n" +
+        "Reschedule anytime: " + rescheduleUrl;
+
+      sendSmsNotification(familyPhone, smsMessage, carrier);
     }
 
     return ContentService.createTextOutput(JSON.stringify({ status: "success", ref: ref }))
@@ -157,8 +337,19 @@ function doPost(e) {
   }
 }
 
-function testMyPhone() {
-  const phone = "9403151023";
-  const message = "🎄 Foursquare Christmas Photo Tour: Test SMS confirmation! https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-  dispatchSms(phone, "", message);
+/**
+ * Test function to verify facility-specific SMS dispatch
+ */
+function testFacilitySmsDispatch() {
+  const TEST_RECIPIENT = "9403151023"; // Replace with test phone number
+  const sampleMessage = "🎄 Foursquare Photo Confirmed!\n" +
+    "Resident: Harold Jenkins (Room 204B)\n" +
+    "Facility: Ashton Medical Lodge (AML)\n" +
+    "Address: 801 S Loop 250 W, Midland, TX 79703\n" +
+    "Date/Time: Wednesday, Dec 2 at 10:15 AM\n" +
+    "Studio: Ashton Main Fireside Staging Lounge\n" +
+    "Pass Ref: 4SQ-7821\n" +
+    "Reschedule anytime: https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=4SQ-7821";
+
+  sendSmsNotification(TEST_RECIPIENT, sampleMessage, "");
 }

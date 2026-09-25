@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { Calendar, Clock, MapPin, CheckCircle, Sparkles, Accessibility, ArrowRight, ArrowLeft, Download, ShieldCheck, Phone, Home, User, RefreshCw } from 'lucide-react';
 import type { BookingRecord } from './CoordinatorRoster';
+import { FACILITY_LIST, ALL_BOOKABLE_SLOTS } from '../data/facilities';
 
 interface Campus {
   id: string;
@@ -12,74 +13,21 @@ interface Campus {
   dates: string[];
 }
 
-const CAMPUSES: Campus[] = [
-  {
-    id: 'fort-worth-senior-living',
-    name: 'Fort Worth Senior Living & Rehab Center',
-    city: 'Fort Worth, TX',
-    address: '2800 W 7th St, Fort Worth, TX 76107',
-    studioRoom: 'Fireside Grand Hearth Lounge (Ground Level)',
-    dates: ['2026-12-05', '2026-12-06', '2026-12-07'],
-  },
-  {
-    id: 'dallas-regional',
-    name: 'Dallas Regional Medical Center & Rehab',
-    city: 'Mesquite / Dallas, TX',
-    address: '1011 N Galloway Ave, Mesquite, TX 75149',
-    studioRoom: 'Executive Boardroom & Winter Conservatory (1st Floor West Wing)',
-    dates: ['2026-12-02', '2026-12-03', '2026-12-04'],
-  },
-  {
-    id: 'plano-specialty',
-    name: 'Plano Specialty Hospital Campus',
-    city: 'Plano, TX',
-    address: '3801 W 15th St, Plano, TX 75075',
-    studioRoom: 'Winter Garden Atrium & Medical Arts Pavilion',
-    dates: ['2026-12-09', '2026-12-10', '2026-12-11'],
-  },
-  {
-    id: 'arlington-pavilion',
-    name: 'Arlington Emergency Pavilion & Living Center',
-    city: 'Arlington, TX',
-    address: '800 W Randol Mill Rd, Arlington, TX 76012',
-    studioRoom: 'Community Education Center & Santa Workshop Suite',
-    dates: ['2026-12-12', '2026-12-13', '2026-12-14'],
-  },
-];
-
-// Back-to-back 15 minute slot schedule
-const TIME_SLOTS_15MIN = [
-  '09:00 AM',
-  '09:15 AM',
-  '09:30 AM',
-  '09:45 AM',
-  '10:00 AM',
-  '10:15 AM',
-  '10:30 AM',
-  '10:45 AM',
-  '11:00 AM',
-  '11:15 AM',
-  '11:30 AM',
-  '11:45 AM',
-  '01:00 PM',
-  '01:15 PM',
-  '01:30 PM',
-  '01:45 PM',
-  '02:00 PM',
-  '02:15 PM',
-  '02:30 PM',
-  '02:45 PM',
-  '03:00 PM',
-  '03:15 PM',
-];
+const CAMPUSES: Campus[] = FACILITY_LIST.map((f) => ({
+  id: f.code,
+  name: `${f.name} (${f.abbr})`,
+  city: f.city,
+  address: f.address,
+  studioRoom: f.loungeName,
+  dates: f.dates ? f.dates.map((d) => d.dateStr) : [f.shootDate],
+}));
 
 export default function SchedulerWizard() {
   const [step, setStep] = useState(1);
   const [selectedCampus, setSelectedCampus] = useState<Campus>(CAMPUSES[0]);
   const [selectedDate, setSelectedDate] = useState<string>(CAMPUSES[0].dates[0]);
-  const [selectedSlot, setSelectedSlot] = useState<string>(TIME_SLOTS_15MIN[0]);
+  const [selectedSlot, setSelectedSlot] = useState<string>(ALL_BOOKABLE_SLOTS[0]);
 
-  // Form details tailored specifically for Resident Families & Shift Staff
   const [formData, setFormData] = useState({
     residentName: '',
     roomNumber: '',
@@ -127,13 +75,12 @@ export default function SchedulerWizard() {
       createdAt: new Date().toISOString(),
     };
 
-    // Save to master bookings list in localStorage for Activity Coordinator & Reschedule portals
     try {
-      const existing = localStorage.getItem('4sq_master_bookings');
+      const existing = localStorage.getItem('4sq_master_bookings_prod');
       const list = existing ? JSON.parse(existing) : [];
       list.unshift(newRecord);
-      localStorage.setItem('4sq_master_bookings', JSON.stringify(list));
-      localStorage.setItem('4sq_xmas_booking', JSON.stringify(newRecord));
+      localStorage.setItem('4sq_master_bookings_prod', JSON.stringify(list));
+      localStorage.setItem('4sq_xmas_booking_prod', JSON.stringify(newRecord));
     } catch {}
 
     try {
@@ -175,7 +122,7 @@ END:VCALENDAR`;
       <div className="flex items-center justify-between mb-8 px-2 sm:px-6">
         {[
           { num: 1, label: 'Facility' },
-          { num: 2, label: '15-Min Slot' },
+          { num: 2, label: '5-Min Slot' },
           { num: 3, label: 'Resident & Family' },
         ].map((s) => (
           <div key={s.num} className="flex items-center gap-2">
@@ -215,7 +162,7 @@ END:VCALENDAR`;
             Christmas Portrait Pass Issued
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-2 leading-relaxed">
-            Your 15-minute photo session with <strong className="text-slate-900">{formData.residentName || 'your loved one'}</strong> is locked in. The Activity Coordinator will coordinate with the nursing floor to ensure your resident is ready 10 minutes prior to your time.
+            Your 5-minute photo session with <strong className="text-slate-900">{formData.residentName || 'your loved one'}</strong> is locked in. The Activity Coordinator will coordinate with the nursing floor to ensure your resident is ready 10 minutes prior to your time.
           </p>
 
           {/* Ticket Card */}
@@ -226,7 +173,7 @@ END:VCALENDAR`;
                 <p className="text-2xl font-mono font-bold text-white tracking-widest">{bookingRef}</p>
               </div>
               <span className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-holiday-red text-white">
-                15-Min Slot
+                5-Min Slot
               </span>
             </div>
 
@@ -238,7 +185,10 @@ END:VCALENDAR`;
                 <strong className="text-white">Family Contact:</strong> {formData.familyContactName} ({formData.familyPhone})
               </p>
               <p>
-                <strong className="text-white">Campus:</strong> {selectedCampus.name}
+                <strong className="text-white">Facility:</strong> {selectedCampus.name}
+              </p>
+              <p>
+                <strong className="text-white">Address:</strong> {selectedCampus.address}
               </p>
               <p>
                 <strong className="text-white">Studio Location:</strong> {selectedCampus.studioRoom}
@@ -292,37 +242,37 @@ END:VCALENDAR`;
                   Select Your Resident's Healthcare Community
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600">
-                  Choose the facility where your family member resides or receives rehabilitation care.
+                  Choose the facility where your family member resides or receives care across our 13 Texas locations.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[480px] overflow-y-auto pr-1">
                 {CAMPUSES.map((c) => {
                   const isSelected = selectedCampus.id === c.id;
                   return (
                     <div
                       key={c.id}
                       onClick={() => setSelectedCampus(c)}
-                      className={`p-5 rounded-2xl cursor-pointer border-2 transition-all duration-150 ${
+                      className={`p-4 rounded-2xl cursor-pointer border-2 transition-all duration-150 ${
                         isSelected
                           ? 'border-holiday-pine bg-holiday-pine/5 shadow-md ring-2 ring-holiday-pine/20'
                           : 'border-slate-200 hover:border-holiday-pine/50 hover:bg-slate-50'
                       }`}
                     >
                       <div className="flex items-start justify-between">
-                        <div className="p-2 rounded-xl bg-holiday-pine/10 text-holiday-pine mb-3">
-                          <MapPin className="w-5 h-5 text-holiday-pine" />
+                        <div className="p-2 rounded-xl bg-holiday-pine/10 text-holiday-pine mb-2">
+                          <MapPin className="w-4 h-4 text-holiday-pine" />
                         </div>
                         {isSelected && (
-                          <span className="flex items-center gap-1 text-xs font-bold text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
-                            <CheckCircle className="w-3.5 h-3.5" /> Selected
+                          <span className="flex items-center gap-1 text-[11px] font-bold text-holiday-pine bg-holiday-pine/10 px-2.5 py-0.5 rounded-full">
+                            <CheckCircle className="w-3 h-3" /> Selected
                           </span>
                         )}
                       </div>
-                      <h4 className="text-base font-bold text-slate-900">{c.name}</h4>
+                      <h4 className="text-sm font-bold text-slate-900">{c.name}</h4>
                       <p className="text-xs text-slate-500 mt-0.5">{c.address}</p>
-                      <div className="mt-3 pt-3 border-t border-slate-100 text-xs text-slate-600">
-                        <span className="font-semibold text-holiday-pine">Studio Location:</span> {c.studioRoom}
+                      <div className="mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-600 flex justify-between">
+                        <span><strong className="text-holiday-pine">Shoot:</strong> {c.dates[0]}</span>
                       </div>
                     </div>
                   );
@@ -335,32 +285,32 @@ END:VCALENDAR`;
                   onClick={() => setStep(2)}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-holiday-pine hover:bg-holiday-pinelight text-white font-bold text-sm rounded-xl shadow-lg transition"
                 >
-                  <span>Continue to 15-Min Slots</span>
+                  <span>Continue to 5-Min Slots</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 2: Date & 15-Minute Slot Selection */}
+          {/* STEP 2: Date & 5-Minute Slot Selection */}
           {step === 2 && (
             <div>
               <div className="mb-6">
                 <span className="text-xs uppercase font-extrabold text-holiday-red tracking-wider">Step 2 of 3</span>
                 <h3 className="text-xl sm:text-2xl font-bold font-heading text-slate-900 mt-1">
-                  Select Shoot Date & 15-Minute Slot
+                  Select Shoot Date & 5-Minute Slot
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600">
-                  {selectedCampus.name} • 15-minute back-to-back family portrait sessions
+                  {selectedCampus.name} • {selectedCampus.address}
                 </p>
               </div>
 
               {/* Date Selector */}
               <div className="mb-6">
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                  1. Available Shoot Dates
+                  1. Scheduled Shoot Date
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {selectedCampus.dates.map((d) => (
                     <button
                       key={d}
@@ -373,31 +323,31 @@ END:VCALENDAR`;
                       }`}
                     >
                       <Calendar className={`w-4 h-4 mx-auto mb-1 ${selectedDate === d ? 'text-holiday-gold' : 'text-slate-400'}`} />
-                      <span className="block text-sm font-bold">{d}</span>
-                      <span className="text-[11px] opacity-80">Studio Open</span>
+                      <span className="block text-xs font-bold">{d}</span>
+                      <span className="text-[11px] opacity-80">Studio Open (10:00 AM – 7:00 PM)</span>
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* 15-Minute Slots Grid */}
+              {/* 5-Minute Slots Grid */}
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                    2. Select Open 15-Minute Time Slot
+                    2. Select Open 5-Minute Time Slot
                   </label>
-                  <span className="text-[11px] text-slate-500">Back-to-back photographer schedule</span>
+                  <span className="text-[11px] text-slate-500">5-minute rapid session</span>
                 </div>
 
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
-                  {TIME_SLOTS_15MIN.map((slot) => {
+                <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-8 gap-2 max-h-[300px] overflow-y-auto pr-1">
+                  {ALL_BOOKABLE_SLOTS.map((slot) => {
                     const isSelected = selectedSlot === slot;
                     return (
                       <button
                         key={slot}
                         type="button"
                         onClick={() => setSelectedSlot(slot)}
-                        className={`p-2.5 rounded-xl border text-xs font-bold transition text-center ${
+                        className={`p-2 rounded-xl border text-[11px] font-bold transition text-center ${
                           isSelected
                             ? 'border-holiday-red bg-holiday-red text-white shadow-md'
                             : 'border-slate-200 bg-slate-50 hover:border-holiday-pine hover:bg-white text-slate-700'
@@ -440,7 +390,7 @@ END:VCALENDAR`;
                   Resident & Family Contact Information
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600">
-                  Essential for our Activity Coordinator to prep and escort your resident to the fireside studio on time.
+                  Essential for our Activity Coordinator to prep and escort your resident to the holiday studio on time.
                 </p>
               </div>
 
@@ -572,7 +522,7 @@ END:VCALENDAR`;
                   className="inline-flex items-center gap-2 px-7 py-3.5 bg-holiday-red hover:bg-holiday-reddark text-white font-extrabold text-sm rounded-xl shadow-xl transition transform hover:scale-[1.02]"
                 >
                   <ShieldCheck className="w-4 h-4 text-holiday-gold" />
-                  <span>Confirm 15-Minute Photo Shoot</span>
+                  <span>Confirm 5-Minute Photo Shoot</span>
                 </button>
               </div>
             </form>

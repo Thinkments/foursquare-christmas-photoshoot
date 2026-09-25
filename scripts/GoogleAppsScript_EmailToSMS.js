@@ -1,27 +1,127 @@
 /**
  * ============================================================================
  * 🎄 FOURSQUARE HEALTHCARE 2026 CHRISTMAS PHOTO TOUR
- * Free Email-to-SMS Gateway Automation (No Twilio Required)
- *
- * HOW IT WORKS:
- * Major US cellular carriers provide free Email-to-SMS gateways.
- * Google Apps Script sends a lightweight email to: [10-digits]@gateway.net
- * The carrier converts it into a native SMS and delivers it to the recipient's phone.
- *
- * CARRIER GATEWAYS SUPPORTED:
- * - Verizon / Visible / Xfinity Mobile: @vtext.com
- * - AT&T / Cricket: @txt.att.net
- * - T-Mobile / Mint Mobile: @tmomail.net
- * - Sprint / Boost: @messaging.sprintpcs.com
- * - Google Fi: @msg.fi.google.com
- * - US Cellular: @email.uscc.net
+ * Facility-Specific SMS & Google Sheets Webhook Script
  * ============================================================================
  */
 
-// Carrier Gateway Dictionary
+const TWILIO_CONFIG = {
+  accountSid: "YOUR_TWILIO_ACCOUNT_SID",
+  authToken: "YOUR_TWILIO_AUTH_TOKEN",
+  fromNumber: "+18176860300"
+};
+
+const FACILITIES_CONFIG = {
+  "hml": {
+    name: "Hillside Medical Lodge",
+    abbr: "HML",
+    address: "300 S Highway 36 Byp N, Gatesville, TX 76528",
+    lounge: "Hillside Fireside Solarium",
+    shootDate: "Thursday, Nov 5, 2026",
+    sheetId: "1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4"
+  },
+  "wnr": {
+    name: "Whitney Nursing & Rehabilitation",
+    abbr: "WNR",
+    address: "101 S San Marcos St, Whitney, TX 76692",
+    lounge: "Whitney Heritage Community Room",
+    shootDate: "Friday, Nov 6, 2026",
+    sheetId: "1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ"
+  },
+  "cml": {
+    name: "Cheyenne Medical Lodge",
+    abbr: "CML",
+    address: "750 Hwy 352, Mesquite, TX 75149",
+    lounge: "Cheyenne Grand Prairie Staging Room",
+    shootDate: "Nov 9 & 10, 2026",
+    sheetId: "1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos"
+  },
+  "pml": {
+    name: "Princeton Medical Lodge",
+    abbr: "PML",
+    address: "1401 W Princeton Dr, Princeton, TX 75407",
+    lounge: "Princeton Courtyard Pavilion",
+    shootDate: "Thursday, Nov 12, 2026",
+    sheetId: "1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU"
+  },
+  "fhr": {
+    name: "Farmersville Health & Rehabilitation",
+    abbr: "FHR",
+    address: "205 Beech St, Farmersville, TX 75442",
+    lounge: "Farmersville Evergreen Great Room",
+    shootDate: "Friday, Nov 13, 2026",
+    sheetId: "1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c"
+  },
+  "lml": {
+    name: "Lexington Medical Lodge",
+    abbr: "LML",
+    address: "2000 W Audie Murphy Pkwy, Farmersville, TX 75442",
+    lounge: "Lexington Magnolia Activity Atrium",
+    shootDate: "Tuesday, Nov 17, 2026",
+    sheetId: "1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c"
+  },
+  "tray": {
+    name: "Traymore at Park Cities",
+    abbr: "T@PC",
+    address: "4315 Hopkins Ave, Dallas, TX 75209",
+    lounge: "Traymore Highland Park Holiday Studio",
+    shootDate: "Tuesday, Nov 24, 2026",
+    sheetId: "1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo"
+  },
+  "mml": {
+    name: "Midland Medical Lodge",
+    abbr: "MML",
+    address: "3000 Mockingbird, Midland, TX 79705",
+    lounge: "Midland Rose Garden Recreation Room",
+    shootDate: "Monday, Nov 30, 2026",
+    sheetId: "1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE"
+  },
+  "mmr": {
+    name: "Madison Medical Resort",
+    abbr: "MMR",
+    address: "5001 Office Park, Odessa, TX 79762",
+    lounge: "Madison Grand Ballroom Staging Suite",
+    shootDate: "Tuesday, Dec 1, 2026",
+    sheetId: "1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw"
+  },
+  "aml": {
+    name: "Ashton Medical Lodge",
+    abbr: "AML",
+    address: "801 S Loop 250 W, Midland, TX 79703",
+    lounge: "Ashton Main Fireside Staging Lounge",
+    shootDate: "Wednesday, Dec 2, 2026",
+    sheetId: "1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg"
+  },
+  "sml": {
+    name: "Sheridan Medical Lodge",
+    abbr: "SML",
+    address: "1119 S Red River Expy, Burkburnett, TX 76354",
+    lounge: "Sheridan Chisholm Trail Gathering Room",
+    shootDate: "Tuesday, Dec 8, 2026",
+    sheetId: "13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk"
+  },
+  "scwf": {
+    name: "Senior Care Wichita Falls",
+    abbr: "SCWF",
+    address: "910 Midwestern Pkwy, Wichita Falls, TX 76302",
+    lounge: "Wichita Falls Red River Sunroom",
+    shootDate: "Wednesday, Dec 9, 2026",
+    sheetId: "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"
+  },
+  "cp": {
+    name: "Crown Point Health Suites",
+    abbr: "CP",
+    address: "6640 Iola Ave, Lubbock, TX 79424",
+    lounge: "Crown Point Staging Lounge",
+    shootDate: "Thursday, Dec 10, 2026",
+    sheetId: ""
+  }
+};
+
 const CARRIER_GATEWAYS = {
   "verizon": "@vtext.com",
-  "att": "@txt.att.net",
+  "att": "@mms.att.net",
+  "att_txt": "@txt.att.net",
   "tmobile": "@tmomail.net",
   "sprint": "@messaging.sprintpcs.com",
   "cricket": "@mms.cricketwireless.net",
@@ -34,9 +134,6 @@ const CARRIER_GATEWAYS = {
   "xfinity": "@vtext.com"
 };
 
-/**
- * Normalizes phone numbers to 10 clean digits (e.g., '(432) 555-0192' -> '4325550192')
- */
 function cleanPhoneNumber(phone) {
   if (!phone) return "";
   const digits = String(phone).replace(/\D/g, "");
@@ -46,185 +143,152 @@ function cleanPhoneNumber(phone) {
   return digits.length === 10 ? digits : "";
 }
 
-/**
- * Core SMS Dispatcher via Carrier Gateways
- * If carrier is provided, sends to that carrier gateway.
- * If carrier is unknown/auto, broadcasts to the Top 3 US networks (Verizon, AT&T, T-Mobile).
- */
-function dispatchSms(phoneNumber, carrier, messageText) {
+function sendSmsNotification(phoneNumber, messageText, carrier) {
   const cleanPhone = cleanPhoneNumber(phoneNumber);
-  if (!cleanPhone) {
-    Logger.log("❌ Invalid phone number: " + phoneNumber);
-    return false;
+  if (!cleanPhone) return false;
+
+  if (TWILIO_CONFIG.accountSid && TWILIO_CONFIG.authToken && TWILIO_CONFIG.fromNumber) {
+    try {
+      const formattedTo = cleanPhone.startsWith("+") ? cleanPhone : ("+1" + cleanPhone);
+      const url = "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_CONFIG.accountSid + "/Messages.json";
+      const payload = {
+        "To": formattedTo,
+        "From": TWILIO_CONFIG.fromNumber,
+        "Body": messageText
+      };
+      const options = {
+        "method": "post",
+        "headers": {
+          "Authorization": "Basic " + Utilities.base64Encode(TWILIO_CONFIG.accountSid + ":" + TWILIO_CONFIG.authToken)
+        },
+        "payload": payload,
+        "muteHttpExceptions": true
+      };
+      const response = UrlFetchApp.fetch(url, options);
+      if (response.getResponseCode() === 200 || response.getResponseCode() === 201) {
+        return true;
+      }
+    } catch (err) {
+      Logger.log("Twilio fallback to email: " + err.message);
+    }
   }
 
+  return dispatchEmailToSms(cleanPhone, carrier, messageText);
+}
+
+function dispatchEmailToSms(cleanPhone, carrier, messageText) {
   const normalizedCarrier = String(carrier || "").toLowerCase().replace(/[^a-z]/g, "");
   const targetGateway = CARRIER_GATEWAYS[normalizedCarrier];
 
   let recipients = [];
   if (targetGateway) {
-    // Specific carrier gateway
     recipients.push(cleanPhone + targetGateway);
   } else {
-    // Auto-dispatch across the top 3 networks (covers 95%+ of US mobile lines)
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["verizon"]);
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["att"]);
-    recipients.push(cleanPhone + CARRIER_GATEWAYS["tmobile"]);
+    recipients.push(cleanPhone + "@vtext.com");
+    recipients.push(cleanPhone + "@mms.att.net");
+    recipients.push(cleanPhone + "@txt.att.net");
+    recipients.push(cleanPhone + "@tmomail.net");
   }
 
   recipients.forEach(function(recipientAddress) {
     try {
       MailApp.sendEmail({
         to: recipientAddress,
-        subject: "", // Keep subject blank or minimal for SMS
+        subject: "",
         body: messageText
       });
-      Logger.log("✓ SMS dispatched to: " + recipientAddress);
-    } catch (e) {
-      Logger.log("⚠️ Failed to dispatch to: " + recipientAddress + " - " + e.message);
-    }
+    } catch (e) {}
   });
 
   return true;
 }
 
-/**
- * TEST FUNCTION:
- * Run this to test texting your own phone number!
- * Replace with your mobile number and run directly in Apps Script.
- */
-function testSendSms() {
-  const TEST_PHONE = "YOUR_PHONE_NUMBER"; // e.g. "4325550192"
-  const TEST_CARRIER = "verizon"; // "verizon", "att", "tmobile", or "" for auto
-  const message = "🎄 Foursquare Photo Test: Your holiday portrait session is confirmed! Reschedule link: https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-
-  Logger.log("Sending test SMS to: " + TEST_PHONE);
-  const success = dispatchSms(TEST_PHONE, TEST_CARRIER, message);
-  Logger.log("Result: " + (success ? "Dispatched successfully!" : "Failed"));
-}
-
-/**
- * Adds Custom Menu to Google Sheets when opened by staff or Jeremy
- */
-function onOpen() {
-  const ui = SpreadsheetApp.getUi();
-  ui.createMenu("🎄 Foursquare SMS")
-    .addItem("📲 Send SMS Reminder (Selected Row)", "sendSmsToSelectedRow")
-    .addItem("📲 Send Confirmation SMS (Selected Row)", "sendConfirmationToSelectedRow")
-    .addSeparator()
-    .addItem("🚀 Send Reminders to ALL Booked Rows", "sendAllDayOfReminders")
-    .addToUi();
-}
-
-/**
- * Sends SMS Reminder for currently highlighted row in the Google Sheet
- */
-function sendSmsToSelectedRow() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  const row = sheet.getActiveCell().getRow();
-  
-  if (row < 5) {
-    SpreadsheetApp.getUi().alert("Please select a booked resident row (Row 5 or lower).");
-    return;
-  }
-
-  const rowValues = sheet.getRange(row, 1, 1, 13).getValues()[0];
-  const slotTime = rowValues[0];
-  const status = rowValues[1];
-  const residentName = rowValues[3];
-  const contactName = rowValues[5] || "Family";
-  const phone = rowValues[6];
-  const carrier = rowValues[7]; // If carrier column exists or blank for auto
-  const facilityTitle = sheet.getRange("A1").getValue();
-
-  if (!residentName || !phone) {
-    SpreadsheetApp.getUi().alert("Row " + row + " is missing Resident Name or Phone Number.");
-    return;
-  }
-
-  const message = "🎄 Hi " + contactName + "! Reminder: Your 10-min Christmas portrait session for " + residentName + " is scheduled for " + slotTime + ". Need to reschedule? Tap: https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-
-  const success = dispatchSms(phone, carrier, message);
-
-  if (success) {
-    const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MM/dd hh:mm a");
-    sheet.getRange(row, 12).setValue("📲 Reminder Sent: " + timestamp);
-    SpreadsheetApp.getUi().alert("✓ SMS Reminder sent to " + contactName + " (" + phone + ")!");
-  } else {
-    SpreadsheetApp.getUi().alert("❌ Could not send SMS. Check phone number format.");
-  }
-}
-
-/**
- * Sends Initial Booking Confirmation SMS for selected row
- */
-function sendConfirmationToSelectedRow() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  const row = sheet.getActiveCell().getRow();
-  
-  if (row < 5) {
-    SpreadsheetApp.getUi().alert("Please select a booked resident row.");
-    return;
-  }
-
-  const rowValues = sheet.getRange(row, 1, 1, 13).getValues()[0];
-  const slotTime = rowValues[0];
-  const residentName = rowValues[3];
-  const contactName = rowValues[5] || "Family";
-  const phone = rowValues[6];
-  const carrier = rowValues[7];
-
-  if (!residentName || !phone) {
-    SpreadsheetApp.getUi().alert("Row " + row + " is missing Resident Name or Phone Number.");
-    return;
-  }
-
-  const message = "🎄 Foursquare Healthcare: Holiday portrait confirmed for " + residentName + " at " + slotTime + "! Self-service reschedule link: https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-
-  const success = dispatchSms(phone, carrier, message);
-
-  if (success) {
-    const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MM/dd hh:mm a");
-    sheet.getRange(row, 12).setValue("📲 Confirmation Sent: " + timestamp);
-    SpreadsheetApp.getUi().alert("✓ Confirmation SMS sent to " + contactName + "!");
-  }
-}
-
-/**
- * Batch Sends SMS Reminders to ALL Booked Rows on the active sheet
- */
-function sendAllDayOfReminders() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  const lastRow = sheet.getLastRow();
-  
-  if (lastRow < 5) {
-    SpreadsheetApp.getUi().alert("No bookings found on this sheet.");
-    return;
-  }
-
-  const range = sheet.getRange(5, 1, lastRow - 4, 12);
-  const values = range.getValues();
-  let count = 0;
-
-  for (let i = 0; i < values.length; i++) {
-    const rowNum = 5 + i;
-    const slotTime = values[i][0];
-    const residentName = values[i][3];
-    const contactName = values[i][5] || "Family";
-    const phone = values[i][6];
-    const carrier = values[i][7];
-    const statusNote = String(values[i][11] || "");
-
-    // Only send if phone exists, slot is booked, and hasn't already sent today
-    if (residentName && phone && !statusNote.includes("Reminder Sent")) {
-      const message = "🎄 Reminder: Your 10-min Christmas portrait session for " + residentName + " is today at " + slotTime + "! Need to change time? https://foursquare-christmas-photoshoot.netlify.app/reschedule";
-      dispatchSms(phone, carrier, message);
-      const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MM/dd hh:mm a");
-      sheet.getRange(rowNum, 12).setValue("📲 Reminder Sent: " + timestamp);
-      count++;
-      Utilities.sleep(500); // 500ms delay to avoid rate limiting
+function doPost(e) {
+  try {
+    let data;
+    if (e && e.postData && e.postData.contents) {
+      data = JSON.parse(e.postData.contents);
+    } else if (e && e.parameter) {
+      data = e.parameter;
+    } else {
+      throw new Error("No payload provided");
     }
-  }
 
-  SpreadsheetApp.getUi().alert("🎉 Sent " + count + " SMS reminders across the facility roster!");
+    const facilityCode = String(data.facilityCode || "aml").toLowerCase();
+    const fac = FACILITIES_CONFIG[facilityCode] || {
+      name: data.facilityName || "Foursquare Healthcare",
+      abbr: data.facilityAbbr || "4SQ",
+      address: data.facilityAddress || "",
+      lounge: data.loungeName || "Holiday Studio Lounge",
+      shootDate: data.date || "",
+      sheetId: ""
+    };
+
+    const sheetId = fac.sheetId || "";
+    const timeSlot = data.timeSlot || "";
+    const residentName = data.residentName || "";
+    const roomNumber = data.roomNumber || "";
+    const familyContact = data.familyContact || "";
+    const familyPhone = data.familyPhone || "";
+    const familyEmail = data.familyEmail || "";
+    const mobilityNeeds = data.needsWheelchair ? "Wheelchair assistance requested" : (data.mobilityNeeds || "Standard seating");
+    const ref = data.ref || ("4SQ-" + Math.floor(1000 + Math.random() * 9000));
+    const carrier = data.carrier || "";
+    const dateStr = data.date || fac.shootDate;
+    const rescheduleUrl = data.rescheduleUrl || ("https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=" + encodeURIComponent(ref));
+
+    if (sheetId) {
+      const ss = SpreadsheetApp.openById(sheetId);
+      const ws = ss.getActiveSheet();
+      const lastRow = ws.getLastRow();
+      let matchedRow = -1;
+
+      if (lastRow >= 5) {
+        const timeColumn = ws.getRange(5, 1, lastRow - 4, 1).getValues();
+        for (let i = 0; i < timeColumn.length; i++) {
+          if (String(timeColumn[i][0]).includes(timeSlot)) {
+            matchedRow = 5 + i;
+            break;
+          }
+        }
+      }
+
+      const targetRow = matchedRow > 0 ? matchedRow : ws.getLastRow() + 1;
+      const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MM/dd hh:mm a");
+
+      ws.getRange(targetRow, 1).setValue(timeSlot);
+      ws.getRange(targetRow, 2).setValue("Confirmed");
+      ws.getRange(targetRow, 3).setValue(ref);
+      ws.getRange(targetRow, 4).setValue(residentName);
+      ws.getRange(targetRow, 5).setValue(roomNumber);
+      ws.getRange(targetRow, 6).setValue(familyContact);
+      ws.getRange(targetRow, 7).setValue(familyPhone);
+      ws.getRange(targetRow, 8).setValue(familyEmail);
+      ws.getRange(targetRow, 9).setValue(mobilityNeeds);
+      ws.getRange(targetRow, 10).setValue("Booked via Online Portal");
+      ws.getRange(targetRow, 11).setValue(rescheduleUrl);
+      ws.getRange(targetRow, 12).setValue("📲 Web Confirmed: " + timestamp);
+    }
+
+    if (familyPhone) {
+      const residentDisplay = residentName ? (residentName + (roomNumber ? " (" + roomNumber + ")" : "")) : "Your Session";
+      
+      const smsMessage = "🎄 Foursquare Photo Confirmed!\n" +
+        "Resident: " + residentDisplay + "\n" +
+        "Facility: " + fac.name + " (" + fac.abbr + ")\n" +
+        "Address: " + fac.address + "\n" +
+        "Date/Time: " + (dateStr ? (dateStr + " at ") : "") + timeSlot + "\n" +
+        "Studio: " + fac.lounge + "\n" +
+        "Pass Ref: " + ref + "\n" +
+        "Reschedule anytime: " + rescheduleUrl;
+
+      sendSmsNotification(familyPhone, smsMessage, carrier);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ status: "success", ref: ref }))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(JSON.stringify({ status: "error", message: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
 }
