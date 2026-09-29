@@ -172,7 +172,7 @@ export default function ReschedulePortal() {
         particleCount: 80,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ['#0B3B24', '#C41E3A', '#D4AF37'],
+        colors: ['#5A0612', '#9E0E21', '#D4AF37', '#FAF1DC'],
       });
     } catch {}
   };
@@ -257,7 +257,7 @@ export default function ReschedulePortal() {
 
             <div className="text-right">
               <span className="text-[10px] uppercase font-bold text-slate-400 block">Current Slot</span>
-              <span className="text-xl font-extrabold font-heading text-holiday-pine">
+              <span className="text-xl font-extrabold font-heading text-holiday-crimson">
                 {currentBooking.timeSlot}
               </span>
               <span className="text-xs text-slate-500 block">{currentBooking.date}</span>
@@ -298,8 +298,8 @@ export default function ReschedulePortal() {
                         isCurrent
                           ? 'border-slate-200 bg-slate-100 text-slate-400 cursor-not-allowed'
                           : isSelected
-                          ? 'border-holiday-red bg-holiday-red text-white shadow-md'
-                          : 'border-slate-200 bg-white hover:border-holiday-pine text-slate-800'
+                          ? 'border-holiday-gold bg-gradient-to-r from-holiday-wine to-holiday-crimson text-white shadow-md scale-105'
+                          : 'border-slate-200 bg-white hover:border-holiday-crimson text-slate-800'
                       }`}
                     >
                       <span>{slot}</span>
@@ -325,7 +325,7 @@ export default function ReschedulePortal() {
                   onClick={handleReschedule}
                   className={`inline-flex items-center gap-2 px-6 py-3 font-bold text-xs rounded-xl shadow-md transition ${
                     newSelectedSlot
-                      ? 'bg-holiday-pine hover:bg-holiday-pinelight text-holiday-gold cursor-pointer'
+                      ? 'bg-gradient-to-r from-holiday-wine to-holiday-crimson hover:brightness-110 text-holiday-goldlight border border-holiday-gold/40 cursor-pointer shadow-md'
                       : 'bg-slate-200 text-slate-400 cursor-not-allowed'
                   }`}
                 >

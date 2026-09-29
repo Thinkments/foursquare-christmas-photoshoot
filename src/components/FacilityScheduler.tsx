@@ -289,7 +289,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
         particleCount: 90,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ['#0B3B24', '#C41E3A', '#D4AF37'],
+        colors: ['#5A0612', '#9E0E21', '#D4AF37', '#FAF1DC'],
       });
     } catch {}
   };
@@ -327,7 +327,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     setRescheduleSlot('');
 
     try {
-      confetti({ particleCount: 70, spread: 60, colors: ['#0B3B24', '#D4AF37'] });
+      confetti({ particleCount: 70, spread: 60, colors: ['#5A0612', '#9E0E21', '#D4AF37', '#FAF1DC'] });
     } catch {}
   };
 
@@ -342,48 +342,61 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
   return (
     <div className="w-full max-w-5xl mx-auto">
-      {/* Consolidated Christmas Photoshoot & Facility Header */}
-      <div className="bg-gradient-to-r from-holiday-pinedark via-holiday-pine to-holiday-pinedark border-2 border-holiday-gold/60 rounded-3xl p-5 sm:p-6 text-white mb-6 shadow-xl relative overflow-hidden">
+      {/* Consolidated Christmas Photoshoot & Facility Header matching the Flyer */}
+      <div className="bg-gradient-to-r from-holiday-velvet via-holiday-wine to-holiday-burgundy border-2 border-holiday-gold/60 rounded-3xl p-5 sm:p-7 text-white mb-6 shadow-2xl relative overflow-hidden">
+        {/* Subtle festive bokeh glow overlays */}
+        <div className="absolute -top-16 -left-16 w-60 h-60 rounded-full bg-holiday-gold/15 blur-3xl pointer-events-none"></div>
+        <div className="absolute -bottom-16 -right-16 w-60 h-60 rounded-full bg-holiday-crimson/25 blur-3xl pointer-events-none"></div>
+
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
           <div className="space-y-1.5 max-w-xl">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[11px] uppercase font-extrabold text-holiday-gold tracking-widest bg-white/10 px-2.5 py-0.5 rounded-full border border-holiday-gold/30 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-holiday-gold" /> Christmas Photoshoot 2026 • {facility.abbr}
+              <span className="text-[11px] uppercase font-extrabold text-holiday-goldlight tracking-widest bg-black/35 px-3 py-0.5 rounded-full border border-holiday-gold/40 flex items-center gap-1.5 shadow-sm">
+                <Sparkles className="w-3.5 h-3.5 text-holiday-gold" /> Christmas Photoshoot • {facility.abbr}
               </span>
-              <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
+              <span className="text-[11px] text-rose-100 font-semibold flex items-center gap-1">
                 <MapPin className="w-3 h-3 text-holiday-gold" /> {facility.city}
               </span>
             </div>
 
-            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight">
+            {/* Flyer Calligraphy Accent */}
+            <div className="font-script text-3xl sm:text-4xl text-holiday-goldlight tracking-wide drop-shadow-sm pt-1">
+              Family Portraits
+            </div>
+
+            <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-white tracking-tight -mt-1">
               {facility.name}
             </h2>
 
-            <p className="text-xs sm:text-sm text-holiday-gold font-medium flex items-center gap-1.5">
+            <p className="font-serif italic text-xs sm:text-sm text-holiday-goldlight/90 font-medium">
+              Capture The Joy Of The Season
+            </p>
+
+            <p className="text-xs sm:text-sm text-holiday-gold font-medium flex items-center gap-1.5 pt-0.5">
               <MapPin className="w-3.5 h-3.5 text-holiday-gold shrink-0" />
               <span>{facility.address}</span>
             </p>
 
-            <p className="text-xs sm:text-sm text-slate-200">
-              📅 <strong>{facility.shootDate}</strong> • {facility.loungeName}
+            <p className="text-xs sm:text-sm text-rose-100 font-medium">
+              📅 <strong className="text-white">{facility.shootDate}</strong> • {facility.loungeName}
             </p>
 
-            <p className="text-xs text-slate-300 pt-0.5 leading-relaxed">
+            <p className="text-xs text-rose-100/90 pt-0.5 leading-relaxed">
               Rapid 5-minute holiday portraits for residents and staff. Please note that <strong>only 1 timeslot is permitted per resident</strong>, and there is a <strong>maximum of 4 guests per group</strong>.
             </p>
           </div>
 
-          {/* Key Guidelines Chips */}
+          {/* Key Guidelines Chips matching Flyer */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-2 shrink-0 text-xs">
-            <div className="flex items-center gap-2.5 bg-black/30 border border-holiday-gold/40 px-3.5 py-2 rounded-xl text-slate-200 shadow-sm">
+            <div className="flex items-center gap-2.5 bg-black/35 border border-holiday-gold/50 px-3.5 py-2 rounded-xl text-holiday-champagne shadow-sm">
               <CheckCircle2 className="w-4 h-4 text-holiday-gold shrink-0" />
               <span><strong>1 Timeslot</strong> per resident</span>
             </div>
-            <div className="flex items-center gap-2.5 bg-black/30 border border-holiday-gold/40 px-3.5 py-2 rounded-xl text-slate-200 shadow-sm">
+            <div className="flex items-center gap-2.5 bg-black/35 border border-holiday-gold/50 px-3.5 py-2 rounded-xl text-holiday-champagne shadow-sm">
               <Users className="w-4 h-4 text-holiday-gold shrink-0" />
               <span><strong>Max 4 Guests</strong> per group</span>
             </div>
-            <div className="flex items-center gap-2.5 bg-black/30 border border-white/15 px-3.5 py-2 rounded-xl text-slate-300 shadow-sm">
+            <div className="flex items-center gap-2.5 bg-black/35 border border-holiday-gold/50 px-3.5 py-2 rounded-xl text-holiday-champagne shadow-sm">
               <Clock className="w-4 h-4 text-holiday-gold shrink-0" />
               <span><strong>5-Min Slots</strong> (10 AM – 7 PM)</span>
             </div>
@@ -416,7 +429,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
       </div>
 
       {/* 2-Tab Console (Book & Reschedule) */}
-      <div className="flex bg-slate-200/90 p-1.5 rounded-2xl mb-8 max-w-xl mx-auto border border-slate-300 shadow-inner">
+      <div className="flex bg-slate-200/90 p-1.5 rounded-2xl mb-8 max-w-xl mx-auto border border-holiday-gold/30 shadow-inner">
         <button
           type="button"
           onClick={() => {
@@ -425,7 +438,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
           }}
           className={`flex-1 py-3 px-3 text-xs sm:text-sm font-bold rounded-xl transition flex items-center justify-center gap-2 ${
             activeTab === 'book'
-              ? 'bg-holiday-pine text-white shadow-md'
+              ? 'bg-gradient-to-r from-holiday-wine to-holiday-crimson text-white shadow-md border border-holiday-gold/40'
               : 'text-slate-700 hover:text-slate-900'
           }`}
         >
@@ -441,7 +454,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
           }}
           className={`flex-1 py-3 px-3 text-xs sm:text-sm font-bold rounded-xl transition flex items-center justify-center gap-2 ${
             activeTab === 'reschedule'
-              ? 'bg-holiday-pine text-white shadow-md'
+              ? 'bg-gradient-to-r from-holiday-wine to-holiday-crimson text-white shadow-md border border-holiday-gold/40'
               : 'text-slate-700 hover:text-slate-900'
           }`}
         >
@@ -470,8 +483,9 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
               </p>
 
               {/* Pass Card */}
-              <div className="my-6 max-w-md mx-auto bg-holiday-pine text-white rounded-2xl p-6 text-left shadow-lg border border-holiday-gold/40">
-                <div className="flex justify-between items-center border-b border-white/20 pb-3 mb-3">
+              <div className="my-6 max-w-md mx-auto bg-gradient-to-br from-holiday-velvet via-holiday-wine to-holiday-burgundy text-white rounded-2xl p-6 text-left shadow-xl border-2 border-holiday-gold/60 relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-holiday-gold/15 blur-xl pointer-events-none"></div>
+                <div className="flex justify-between items-center border-b border-holiday-gold/30 pb-3 mb-3 relative z-10">
                   <div>
                     <span className="text-[10px] text-holiday-gold uppercase font-bold tracking-wider">Pass Code</span>
                     <p className="text-2xl font-mono font-bold">{confirmedBooking.ref}</p>
@@ -890,7 +904,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                 </div>
                 <button
                   type="submit"
-                  className="w-full sm:w-auto px-8 py-3.5 bg-holiday-red hover:bg-holiday-reddark text-white font-extrabold text-sm rounded-xl shadow-lg transition transform hover:scale-[1.02]"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-gradient-to-r from-holiday-wine via-holiday-crimson to-holiday-redlight hover:brightness-110 text-white font-extrabold text-sm rounded-xl shadow-lg border border-holiday-gold/40 transition transform hover:scale-[1.02]"
                 >
                   Confirm 5-Minute Photo Shoot →
                 </button>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600;1,700&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,23 +6,41 @@
 
 @layer base {
   :root {
-    --holiday-pine: #0B3B24;
-    --holiday-pinedark: #062416;
-    --holiday-red: #C41E3A;
-    --holiday-gold: #D4AF37;
+    --holiday-pine: #5A0612;      /* Rich velvet burgundy wine */
+    --holiday-pinedark: #3B030A;  /* Deep shadow wine */
+    --holiday-red: #9E0E21;       /* Cardinal ruby crimson */
+    --holiday-gold: #D4AF37;      /* Warm champagne metallic gold */
+    --holiday-goldlight: #F3D894; /* Sparkling gold */
+    --holiday-champagne: #FAF1DC; /* Soft champagne bokeh */
   }
 
   html {
     scroll-behavior: smooth;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: #0F172A;
-    background-color: #F8FAFC;
+    color: #1A080B;
+    background-color: #FAF6F0;
     -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Playfair Display', 'Outfit', Georgia, serif;
   }
+}
+
+.font-script {
+  font-family: 'Great Vibes', cursive;
+}
+
+.font-serif-title {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.flyer-crimson-gradient {
+  background: linear-gradient(135deg, #3B030A 0%, #5A0612 35%, #7D0C1B 70%, #9E0E21 100%);
+}
+
+.flyer-gold-gradient {
+  background: linear-gradient(135deg, #FDF7E7 0%, #F5E2B0 50%, #E8C879 100%);
 }
 
 /* Glassmorphism & Festive Cards */

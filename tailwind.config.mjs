@@ -5,21 +5,35 @@ export default {
     extend: {
       colors: {
         holiday: {
-          pine: '#0B3B24',       // Deep festive pine green
-          pinedark: '#062416',   // Ultra dark forest
-          pinelight: '#135937',  // Rich evergreen
-          red: '#C41E3A',        // Holiday cardinal red
-          reddark: '#9E152D',    // Deep crimson
-          mistletoe: '#1B5E20',  // Warm mistletoe green
-          gold: '#D4AF37',       // Champagne holiday gold
-          goldlight: '#F3C053',  // Sparkling gold
-          cream: '#FDFBF7',      // Warm festive parchment
-          ice: '#F0F9FF',        // Crisp winter ice
-          slate: '#0F172A',      // Midnight slate
+          velvet: '#3B030A',      // Ultra deep shadow wine
+          wine: '#5A0612',        // Rich velvet burgundy wine
+          burgundy: '#750B1A',    // Classic holiday burgundy
+          crimson: '#9E0E21',     // Cardinal ruby crimson
+          red: '#9E0E21',         // Primary holiday crimson
+          redlight: '#BD162C',    // Vibrant holiday ruby
+          scarlet: '#D81E35',     // Bright ribbon scarlet
+          
+          gold: '#D4AF37',        // Warm champagne metallic gold
+          goldlight: '#F3D894',   // Sparkling champagne highlight
+          golddark: '#997018',    // Deep antique bronze gold
+          amber: '#C59B27',       // Warm amber glow
+          champagne: '#FAF1DC',   // Soft champagne parchment
+          cream: '#FCF8EE',       // Silk ribbon cream
+          
+          // Legacy aliases so existing components automatically receive flyer theme:
+          pine: '#5A0612',        // Maps green -> flyer velvet wine
+          pinedark: '#3B030A',    // Maps dark green -> flyer dark shadow wine
+          pinelight: '#7D0C1B',   // Maps light green -> flyer ruby wine
+          reddark: '#42040C',
+          mistletoe: '#6B0916',
+          ice: '#FFF8F8',
+          slate: '#1A080B',
         }
       },
       fontFamily: {
-        heading: ['Outfit', 'sans-serif'],
+        heading: ['"Playfair Display"', 'Outfit', 'Georgia', 'serif'],
+        script: ['"Great Vibes"', 'cursive'],
+        serif: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
         sans: ['Inter', 'sans-serif'],
       },
       animation: {

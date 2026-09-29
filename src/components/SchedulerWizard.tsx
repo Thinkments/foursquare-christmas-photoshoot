@@ -217,7 +217,7 @@ END:VCALENDAR`;
           <div className="flex flex-wrap items-center justify-center gap-4">
             <button
               onClick={downloadIcsCalendar}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-holiday-pine hover:bg-holiday-pinelight text-holiday-gold font-bold text-sm rounded-xl shadow-lg transition"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-holiday-wine to-holiday-crimson hover:brightness-110 text-holiday-goldlight font-bold text-sm rounded-xl shadow-lg border border-holiday-gold/40 transition"
             >
               <Download className="w-4 h-4" />
               <span>Add to Apple / Google Calendar (.ics)</span>
