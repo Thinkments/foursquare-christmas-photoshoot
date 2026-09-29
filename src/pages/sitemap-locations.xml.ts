@@ -3,8 +3,8 @@ import { FACILITY_LIST } from '../data/facilities';
 
 export const GET: APIRoute = async () => {
   const urls = [
-    ...FACILITY_LIST.map((f) => `https://foursquare-christmas-photoshoot.netlify.app/${f.code}`),
-    'https://foursquare-christmas-photoshoot.netlify.app/cml-day2',
+    ...FACILITY_LIST.map((f) => `https://christmasphotos.netlify.app/${f.code}`),
+    'https://christmasphotos.netlify.app/cml-day2',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -2,11 +2,11 @@ import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async () => {
   const urls = [
-    'https://foursquare-christmas-photoshoot.netlify.app/',
-    'https://foursquare-christmas-photoshoot.netlify.app/services/staff-portraits',
-    'https://foursquare-christmas-photoshoot.netlify.app/services/resident-family',
-    'https://foursquare-christmas-photoshoot.netlify.app/services/santa-experience',
-    'https://foursquare-christmas-photoshoot.netlify.app/services/department-teams',
+    'https://christmasphotos.netlify.app/',
+    'https://christmasphotos.netlify.app/services/staff-portraits',
+    'https://christmasphotos.netlify.app/services/resident-family',
+    'https://christmasphotos.netlify.app/services/santa-experience',
+    'https://christmasphotos.netlify.app/services/department-teams',
   ];
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

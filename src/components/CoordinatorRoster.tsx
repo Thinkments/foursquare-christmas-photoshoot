@@ -115,7 +115,7 @@ export default function CoordinatorRoster() {
   const handleCopyLink = (refCode: string, campusId: string) => {
     const url = typeof window !== 'undefined'
       ? `${window.location.origin}/reschedule?facility=${campusId}&ref=${encodeURIComponent(refCode)}`
-      : `https://foursquare-christmas-photoshoot.netlify.app/reschedule?facility=${campusId}&ref=${encodeURIComponent(refCode)}`;
+      : `https://christmasphotos.netlify.app/reschedule?facility=${campusId}&ref=${encodeURIComponent(refCode)}`;
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(url);
     }

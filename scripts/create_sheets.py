@@ -222,7 +222,7 @@ def format_worksheet(ws, facility, date_str):
     rows = [
         [f"🎄 FOURSQUARE HEALTHCARE 2026 CHRISTMAS PHOTO TOUR — {facility['name'].upper()}"],
         [f"📍 Location: {facility['city']} | 📅 Shoot Date: {date_str} | 🛋️ Staging: {facility['loungeName']}"],
-        [f"🔗 Live Portal: https://foursquare-christmas-photoshoot.netlify.app/{facility['code']} | 📞 Reception Desk Coordinator Live Sheet"],
+        [f"🔗 Live Portal: https://christmasphotos.netlify.app/{facility['code']} | 📞 Reception Desk Coordinator Live Sheet"],
         [], # blank line
         HEADERS
     ]

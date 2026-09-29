@@ -36,7 +36,7 @@ export default function ReschedulePortal() {
     if (typeof window !== 'undefined') {
       return `${window.location.origin}/reschedule?ref=${encodeURIComponent(refCode)}`;
     }
-    return `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(refCode)}`;
+    return `https://christmasphotos.netlify.app/reschedule?ref=${encodeURIComponent(refCode)}`;
   };
 
   const handleCopyLink = (refCode: string) => {

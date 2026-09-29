@@ -101,7 +101,7 @@ BEGIN:VEVENT
 UID:${bookingRef}@foursquarehealthcare.com
 DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z
 SUMMARY:4SQ Christmas Photo Shoot: ${formData.residentName} (${formData.roomNumber})
-DESCRIPTION:Christmas Photo Shoot with ${formData.residentName} (${formData.roomNumber})\\nCampus: ${selectedCampus.name}\\nStudio: ${selectedCampus.studioRoom}\\nRef Code: ${bookingRef}\\nNeed to Reschedule? Visit https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${bookingRef}
+DESCRIPTION:Christmas Photo Shoot with ${formData.residentName} (${formData.roomNumber})\\nCampus: ${selectedCampus.name}\\nStudio: ${selectedCampus.studioRoom}\\nRef Code: ${bookingRef}\\nNeed to Reschedule? Visit https://christmasphotos.netlify.app/reschedule?ref=${bookingRef}
 LOCATION:${selectedCampus.address}
 STATUS:CONFIRMED
 END:VEVENT
@@ -208,7 +208,7 @@ END:VCALENDAR`;
             <p className="text-slate-600">
               No need to call the reception desk. Simply open{' '}
               <a href={`/reschedule?ref=${bookingRef}`} className="font-bold text-holiday-red underline">
-                foursquare-christmas-photoshoot.netlify.app/reschedule?ref={bookingRef}
+                christmasphotos.netlify.app/reschedule?ref={bookingRef}
               </a>{' '}
               to switch to any open slot in 10 seconds.
             </p>

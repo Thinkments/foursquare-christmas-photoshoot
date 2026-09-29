@@ -259,7 +259,7 @@ function formatSheet(ws, fac, dateStr, slots, headers) {
   // Subtitle (Row 2)
   ws.getRange("A2:L2").merge();
   const subCell = ws.getRange("A2");
-  subCell.setValue("📍 Location: " + fac.city + "  |  📅 Date: " + dateStr + "  |  🛋️ Lounge: " + fac.loungeName + "  |  🔗 https://foursquare-christmas-photoshoot.netlify.app/" + fac.code);
+  subCell.setValue("📍 Location: " + fac.city + "  |  📅 Date: " + dateStr + "  |  🛋️ Lounge: " + fac.loungeName + "  |  🔗 https://christmasphotos.netlify.app/" + fac.code);
   subCell.setBackground("#2D6A4F");
   subCell.setFontColor("#F8FAFC");
   subCell.setFontSize(10);
@@ -287,7 +287,7 @@ function formatSheet(ws, fac, dateStr, slots, headers) {
     const isBreak = slot.indexOf("Lunch Break") !== -1;
     const status = isLocked ? "LOCKED" : (isBreak ? "BREAK" : "Open");
     const notes = isLocked ? "Reserved exclusively for Facility Department Head Portrait" : (isBreak ? "Photographer meal break & studio lighting reset" : "");
-    const resched = (!isLocked && !isBreak) ? ("https://foursquare-christmas-photoshoot.netlify.app/reschedule") : "";
+    const resched = (!isLocked && !isBreak) ? ("https://christmasphotos.netlify.app/reschedule") : "";
 
     rows.push([
       slot,

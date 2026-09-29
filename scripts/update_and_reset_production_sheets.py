@@ -292,7 +292,7 @@ def main():
         values.append([f"🎄 FOURSQUARE HEALTHCARE 2026 CHRISTMAS PHOTO TOUR — {name.upper()} ({abbr})"])
 
         # Row 2: Subtitle with exact address & link
-        portal_url = f"https://foursquare-christmas-photoshoot.netlify.app/{code}"
+        portal_url = f"https://christmasphotos.netlify.app/{code}"
         values.append([f"📍 Address: {address} ({city})  |  📅 Date: {shoot_date}  |  🛋️ Lounge: {lounge}  |  🔗 Portal: {portal_url}"])
 
         # Row 3: Blank separator
@@ -317,7 +317,7 @@ def main():
             else:
                 status = "Open"
                 notes = ""
-                reschedule = "https://foursquare-christmas-photoshoot.netlify.app/reschedule"
+                reschedule = "https://christmasphotos.netlify.app/reschedule"
 
             values.append([
                 slot_text,

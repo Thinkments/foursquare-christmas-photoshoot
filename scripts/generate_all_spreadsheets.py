@@ -202,7 +202,7 @@ def style_worksheet(ws, facility, date_str):
     # Subtitle Row (Row 2)
     ws.merge_cells("A2:L2")
     sub_cell = ws["A2"]
-    sub_cell.value = f"📍 Location: {facility['city']}  |  📅 Date: {date_str}  |  🛋️ Staging Lounge: {facility['loungeName']}  |  🔗 Online Portal: https://foursquare-christmas-photoshoot.netlify.app/{facility['code']}"
+    sub_cell.value = f"📍 Location: {facility['city']}  |  📅 Date: {date_str}  |  🛋️ Staging Lounge: {facility['loungeName']}  |  🔗 Online Portal: https://christmasphotos.netlify.app/{facility['code']}"
     sub_cell.font = subtitle_font
     sub_cell.fill = subtitle_fill
     sub_cell.alignment = Alignment(horizontal="center", vertical="center")
@@ -242,7 +242,7 @@ def style_worksheet(ws, facility, date_str):
             "", # Email Address
             "", # Mobility Needs
             notes, # Staff Notes
-            f"https://foursquare-christmas-photoshoot.netlify.app/reschedule" if not is_locked_dept and not is_lunch else "",
+            f"https://christmasphotos.netlify.app/reschedule" if not is_locked_dept and not is_lunch else "",
             "" # Check-In Timestamp
         ]
 
@@ -594,7 +594,7 @@ function formatSheet(ws, fac, dateStr, slots, headers) {
   // Subtitle (Row 2)
   ws.getRange("A2:L2").merge();
   const subCell = ws.getRange("A2");
-  subCell.setValue("📍 Location: " + fac.city + "  |  📅 Date: " + dateStr + "  |  🛋️ Lounge: " + fac.loungeName + "  |  🔗 https://foursquare-christmas-photoshoot.netlify.app/" + fac.code);
+  subCell.setValue("📍 Location: " + fac.city + "  |  📅 Date: " + dateStr + "  |  🛋️ Lounge: " + fac.loungeName + "  |  🔗 https://christmasphotos.netlify.app/" + fac.code);
   subCell.setBackground("#2D6A4F");
   subCell.setFontColor("#F8FAFC");
   subCell.setFontSize(10);
@@ -622,7 +622,7 @@ function formatSheet(ws, fac, dateStr, slots, headers) {
     const isBreak = slot.indexOf("Lunch Break") !== -1;
     const status = isLocked ? "LOCKED" : (isBreak ? "BREAK" : "Open");
     const notes = isLocked ? "Reserved exclusively for Facility Department Head Portrait" : (isBreak ? "Photographer meal break & studio lighting reset" : "");
-    const resched = (!isLocked && !isBreak) ? ("https://foursquare-christmas-photoshoot.netlify.app/reschedule") : "";
+    const resched = (!isLocked && !isBreak) ? ("https://christmasphotos.netlify.app/reschedule") : "";
 
     rows.push([
       slot,

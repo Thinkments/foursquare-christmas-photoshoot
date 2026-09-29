@@ -83,7 +83,7 @@ export default function SimpleHolidayScheduler() {
     if (typeof window !== 'undefined') {
       return `${window.location.origin}/reschedule?ref=${encodeURIComponent(refCode)}`;
     }
-    return `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(refCode)}`;
+    return `https://christmasphotos.netlify.app/reschedule?ref=${encodeURIComponent(refCode)}`;
   };
 
   // 1-Click Copy Link with feedback
@@ -178,7 +178,7 @@ export default function SimpleHolidayScheduler() {
     // Sync to Google Sheet and dispatch automated SMS text
     const rescheduleUrl = typeof window !== 'undefined'
       ? `${window.location.origin}/reschedule?ref=${encodeURIComponent(newRef)}`
-      : `https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=${encodeURIComponent(newRef)}`;
+      : `https://christmasphotos.netlify.app/reschedule?ref=${encodeURIComponent(newRef)}`;
 
     syncBookingToGoogle({
       facilityCode: 'aml',

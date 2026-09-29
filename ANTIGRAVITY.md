@@ -6,7 +6,7 @@
 ---
 
 ## 2. Production & Repository Details
-* **Production URL**: [https://foursquare-christmas-photoshoot.netlify.app](https://foursquare-christmas-photoshoot.netlify.app)
+* **Production URL**: [https://christmasphotos.netlify.app](https://christmasphotos.netlify.app)
 * **GitHub Repository**: [https://github.com/Thinkments/foursquare-christmas-photoshoot](https://github.com/Thinkments/foursquare-christmas-photoshoot)
 * **Workspace Configuration**: [`foursquare-christmas-photoshoot.code-workspace`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot.code-workspace)
 * **Project Directory**: [`foursquare-christmas-photoshoot`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot)

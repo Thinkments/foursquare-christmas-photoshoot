@@ -276,7 +276,7 @@ function doPost(e) {
     const ref = data.ref || ("4SQ-" + Math.floor(1000 + Math.random() * 9000));
     const carrier = data.carrier || "";
     const dateStr = data.date || fac.shootDate;
-    const rescheduleUrl = data.rescheduleUrl || ("https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=" + encodeURIComponent(ref));
+    const rescheduleUrl = data.rescheduleUrl || ("https://christmasphotos.netlify.app/reschedule?ref=" + encodeURIComponent(ref));
 
     // 1. Write to the Facility Google Sheet
     if (sheetId) {
@@ -349,7 +349,7 @@ function testFacilitySmsDispatch() {
     "Date/Time: Wednesday, Dec 2 at 10:15 AM\n" +
     "Studio: Ashton Main Fireside Staging Lounge\n" +
     "Pass Ref: 4SQ-7821\n" +
-    "Reschedule anytime: https://foursquare-christmas-photoshoot.netlify.app/reschedule?ref=4SQ-7821";
+    "Reschedule anytime: https://christmasphotos.netlify.app/reschedule?ref=4SQ-7821";
 
   sendSmsNotification(TEST_RECIPIENT, sampleMessage, "");
 }

@@ -5,7 +5,7 @@ export const GET: APIRoute = async () => {
 Allow: /
 Disallow: /*?*
 
-Sitemap: https://foursquare-christmas-photoshoot.netlify.app/sitemap-index.xml
+Sitemap: https://christmasphotos.netlify.app/sitemap-index.xml
 `;
 
   return new Response(robots, {
