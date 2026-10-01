@@ -31,20 +31,43 @@ export interface BookingPayload {
 }
 
 export async function syncBookingToGoogle(payload: BookingPayload): Promise<boolean> {
+  let sheetSuccess = false;
+
+  // 1. Google Sheets sync via Google Apps Script Web App Webhook
   try {
-    // Send to Google Apps Script Web App
-    // mode: 'no-cors' + text/plain avoids browser CORS preflight and guarantees delivery
     await fetch(GOOGLE_WEBHOOK_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: {
         'Content-Type': 'text/plain',
       },
+      body: JSON.stringify({
+        ...payload,
+        smsDispatchedByNetlify: true,
+      }),
+    });
+    sheetSuccess = true;
+  } catch (err) {
+    console.warn('Google Sheet Webhook sync note:', err);
+  }
+
+  // 2. Direct Automated Twilio SMS Dispatch via Netlify Serverless Function
+  try {
+    const smsRes = await fetch('/api/send-sms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(payload),
     });
-    return true;
+    if (smsRes.ok) {
+      console.log('✓ Confirmation SMS successfully dispatched via Twilio');
+    } else {
+      console.warn('SMS dispatch response code:', smsRes.status);
+    }
   } catch (err) {
-    console.warn('Google Sheet & SMS Webhook notification note:', err);
-    return false;
+    console.warn('Twilio Netlify SMS dispatch note:', err);
   }
+
+  return sheetSuccess;
 }

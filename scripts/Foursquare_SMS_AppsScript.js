@@ -14,11 +14,30 @@
 // ============================================================================
 // 1. TWILIO CREDENTIALS & PHONE NUMBER (Foursquare Healthcare Subaccount)
 // ============================================================================
+// Best Practice: You can set these in Project Settings -> Script Properties:
+// TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET, TWILIO_FROM_NUMBER
 const TWILIO_CONFIG = {
-  accountSid: "YOUR_TWILIO_ACCOUNT_SID",
-  authToken: "YOUR_TWILIO_AUTH_TOKEN",
+  accountSid: "YOUR_TWILIO_ACCOUNT_SID", // Recommended: set in Apps Script Project Settings -> Script Properties
+  authToken: "", // Leave blank if using apiKey + apiSecret
+  apiKey: "YOUR_TWILIO_API_KEY", // Recommended: set in Apps Script Project Settings -> Script Properties
+  apiSecret: "YOUR_TWILIO_API_SECRET", // Recommended: set in Apps Script Project Settings -> Script Properties
   fromNumber: "+18176860300"
 };
+
+function getTwilioConfig() {
+  try {
+    const props = PropertiesService.getScriptProperties();
+    return {
+      accountSid: props.getProperty("TWILIO_ACCOUNT_SID") || TWILIO_CONFIG.accountSid,
+      authToken: props.getProperty("TWILIO_AUTH_TOKEN") || TWILIO_CONFIG.authToken,
+      apiKey: props.getProperty("TWILIO_API_KEY") || TWILIO_CONFIG.apiKey,
+      apiSecret: props.getProperty("TWILIO_API_SECRET") || TWILIO_CONFIG.apiSecret,
+      fromNumber: props.getProperty("TWILIO_FROM_NUMBER") || TWILIO_CONFIG.fromNumber
+    };
+  } catch (e) {
+    return TWILIO_CONFIG;
+  }
+}
 
 // ============================================================================
 // 2. FACILITY DIRECTORY & METADATA
@@ -167,29 +186,33 @@ function sendSmsNotification(phoneNumber, messageText, carrier) {
   }
 
   // 1. Check if Twilio is configured
+  const config = getTwilioConfig();
+  const hasAuthToken = config.authToken && !config.authToken.includes("YOUR_");
+  const hasApiKey = config.apiKey && config.apiSecret && !config.apiKey.includes("YOUR_");
   const isTwilioConfigured = 
-    TWILIO_CONFIG.accountSid && 
-    !TWILIO_CONFIG.accountSid.includes("YOUR_") &&
-    TWILIO_CONFIG.authToken && 
-    !TWILIO_CONFIG.authToken.includes("YOUR_") &&
-    TWILIO_CONFIG.fromNumber && 
-    !TWILIO_CONFIG.fromNumber.includes("YOUR_");
+    config.accountSid && 
+    !config.accountSid.includes("YOUR_") &&
+    (hasAuthToken || hasApiKey) &&
+    config.fromNumber && 
+    !config.fromNumber.includes("YOUR_");
 
   if (isTwilioConfigured) {
     try {
       const formattedTo = cleanPhone.startsWith("+") ? cleanPhone : ("+1" + cleanPhone);
-      const url = "https://api.twilio.com/2010-04-01/Accounts/" + TWILIO_CONFIG.accountSid + "/Messages.json";
+      const url = "https://api.twilio.com/2010-04-01/Accounts/" + config.accountSid + "/Messages.json";
 
       const payload = {
         "To": formattedTo,
-        "From": TWILIO_CONFIG.fromNumber,
+        "From": config.fromNumber,
         "Body": messageText
       };
+
+      const authStr = hasApiKey ? (config.apiKey + ":" + config.apiSecret) : (config.accountSid + ":" + config.authToken);
 
       const options = {
         "method": "post",
         "headers": {
-          "Authorization": "Basic " + Utilities.base64Encode(TWILIO_CONFIG.accountSid + ":" + TWILIO_CONFIG.authToken)
+          "Authorization": "Basic " + Utilities.base64Encode(authStr)
         },
         "payload": payload,
         "muteHttpExceptions": true
@@ -314,18 +337,22 @@ function doPost(e) {
 
     // 2. Dispatch Facility-Specific SMS confirmation text
     if (familyPhone) {
-      const residentDisplay = residentName ? (residentName + (roomNumber ? " (" + roomNumber + ")" : "")) : "Your Session";
-      
-      const smsMessage = "🎄 Foursquare Photo Confirmed!\n" +
-        "Resident: " + residentDisplay + "\n" +
-        "Facility: " + fac.name + " (" + fac.abbr + ")\n" +
-        "Address: " + fac.address + "\n" +
-        "Date/Time: " + (dateStr ? (dateStr + " at ") : "") + timeSlot + "\n" +
-        "Studio: " + fac.lounge + "\n" +
-        "Pass Ref: " + ref + "\n" +
-        "Reschedule anytime: " + rescheduleUrl;
+      if (data.smsDispatchedByNetlify) {
+        Logger.log("ℹ️ SMS already dispatched via Netlify Functions, skipping duplicate text.");
+      } else {
+        const residentDisplay = residentName ? (residentName + (roomNumber ? " (" + roomNumber + ")" : "")) : "Your Session";
+        
+        const smsMessage = "🎄 Foursquare Photo Confirmed!\n" +
+          "Resident: " + residentDisplay + "\n" +
+          "Facility: " + fac.name + " (" + fac.abbr + ")\n" +
+          "Address: " + fac.address + "\n" +
+          "Date/Time: " + (dateStr ? (dateStr + " at ") : "") + timeSlot + "\n" +
+          "Studio: " + fac.lounge + "\n" +
+          "Pass Ref: " + ref + "\n" +
+          "Reschedule anytime: " + rescheduleUrl;
 
-      sendSmsNotification(familyPhone, smsMessage, carrier);
+        sendSmsNotification(familyPhone, smsMessage, carrier);
+      }
     }
 
     return ContentService.createTextOutput(JSON.stringify({ status: "success", ref: ref }))
