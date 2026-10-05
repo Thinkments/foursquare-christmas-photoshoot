@@ -2,10 +2,7 @@ import type { APIRoute } from 'astro';
 import { FACILITY_LIST } from '../data/facilities';
 
 export const GET: APIRoute = async () => {
-  const urls = [
-    ...FACILITY_LIST.map((f) => `https://christmasphotos.netlify.app/${f.code}`),
-    'https://christmasphotos.netlify.app/cml-day2',
-  ];
+  const urls = FACILITY_LIST.map((f) => `https://christmasphotos.netlify.app/${f.code}`);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

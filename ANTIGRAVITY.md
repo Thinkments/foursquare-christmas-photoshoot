@@ -24,20 +24,19 @@
 
 ---
 
-## 4. The 13 Facility Shoot Pages & Routes
-1. **HML** – Hillside Medical Lodge (Beeville, TX) • Nov 5 • [`/hml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/hml.astro)
+## 4. The 12 Facility Shoot Pages & Routes
+1. **HML** – Hillside Medical Lodge (Gatesville, TX) • Nov 5 • [`/hml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/hml.astro)
 2. **WNR** – Whitney Nursing & Rehab (Whitney, TX) • Nov 6 • [`/wnr`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/wnr.astro)
-3. **CML** – Cheyenne Medical Lodge (Colorado City, TX) • Nov 9 (Day 1) • [`/cml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/cml.astro)
-4. **CML Day 2** – Cheyenne Medical Lodge • Nov 10 (Day 2) • [`/cml-day2`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/cml-day2.astro)
-5. **PML** – Princeton Medical Lodge (Princeton, TX) • Nov 12 • [`/pml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/pml.astro)
-6. **FHR** – Farmersville Health & Rehab (Farmersville, TX) • Nov 13 • [`/fhr`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/fhr.astro)
-7. **LML** – Lexington Medical Lodge (Farmersville, TX) • Nov 17 • [`/lml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/lml.astro)
-8. **TRAY** – Traymore at Park Cities (Dallas, TX) • Nov 24 • [`/tray`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/tray.astro)
-9. **MML** – Midland Medical Lodge (Midland, TX) • Nov 30 • [`/mml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/mml.astro)
-10. **MMR** – Madison Medical Resort (Odessa, TX) • Dec 1 • [`/mmr`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/mmr.astro)
-11. **AML** – Ashton Medical Lodge (Midland, TX) • Dec 2 • [`/aml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/aml.astro)
-12. **SML** – Sheridan Medical Lodge (Burleson, TX) • Dec 8 • [`/sml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/sml.astro)
-13. **SCWF** – Senior Care Wichita Falls (Wichita Falls, TX) • Dec 9 • [`/scwf`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/scwf.astro)
+3. **CML** – Cheyenne Medical Lodge (Mesquite, TX) • Nov 9 & Nov 10 (Unified 2-Day Session) • [`/cml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/cml.astro)
+4. **PML** – Princeton Medical Lodge (Princeton, TX) • Nov 12 • [`/pml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/pml.astro)
+5. **FHR** – Farmersville Health & Rehab (Farmersville, TX) • Nov 13 • [`/fhr`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/fhr.astro)
+6. **LML** – Lexington Medical Lodge (Farmersville, TX) • Nov 17 • [`/lml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/lml.astro)
+7. **TRAY** – Traymore at Park Cities (Dallas, TX) • Nov 24 • [`/tray`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/tray.astro)
+8. **MML** – Midland Medical Lodge (Midland, TX) • Nov 30 • [`/mml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/mml.astro)
+9. **MMR** – Madison Medical Resort (Odessa, TX) • Dec 1 • [`/mmr`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/mmr.astro)
+10. **AML** – Ashton Medical Lodge (Midland, TX) • Dec 2 • [`/aml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/aml.astro)
+11. **SML** – Sheridan Medical Lodge (Burkburnett, TX) • Dec 8 • [`/sml`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/sml.astro)
+12. **SCWF** – Senior Care Wichita Falls (Wichita Falls, TX) • Dec 9 • [`/scwf`](file:///C:/Users/Corey/.gemini/antigravity-ide/scratch/foursquare-christmas-photoshoot/src/pages/scwf.astro)
 
 ---
 

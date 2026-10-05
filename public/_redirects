@@ -1,0 +1,4 @@
+# Netlify Redirects
+/cml-day2    /cml    301!
+/cml-2       /cml    301!
+/cml2        /cml    301!

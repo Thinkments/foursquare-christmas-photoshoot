@@ -635,14 +635,14 @@ export default function SimpleHolidayScheduler() {
                   </div>
                 </div>
 
-                <label className="flex items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 cursor-pointer">
+                <label className="flex items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 cursor-pointer hover:bg-slate-100/80 transition">
                   <input
                     type="checkbox"
                     checked={needsWheelchair}
                     onChange={(e) => setNeedsWheelchair(e.target.checked)}
                     className="rounded text-holiday-pine focus:ring-holiday-pine w-4 h-4"
                   />
-                  <span>Resident uses a wheelchair / motorized chair (Coordinator will prepare ramp access)</span>
+                  <span className="font-medium">Requires Mobility Assistant</span>
                 </label>
               </div>
 

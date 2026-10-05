@@ -175,7 +175,10 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
               b.residentName.toLowerCase().includes(cleanQ) ||
               (cleanPhone.length >= 7 && b.familyPhone.replace(/\D/g, '').includes(cleanPhone))
           );
-          if (found) setMatchedBooking(found);
+          if (found) {
+            setMatchedBooking(found);
+            if (found.date) setSelectedDate(found.date);
+          }
         }
       } else if (tab === 'coordinator') {
         setActiveTab('coordinator');
@@ -189,6 +192,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
       localStorage.setItem(storageKey, JSON.stringify(newList));
       // Also update master list for coordinator view
       localStorage.setItem(`4sq_master_bookings`, JSON.stringify(newList));
+      localStorage.setItem(`4sq_master_bookings_prod`, JSON.stringify(newList));
     } catch {}
   };
 
@@ -309,7 +313,9 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     );
 
     setMatchedBooking(found || null);
-    if (!found) {
+    if (found) {
+      if (found.date) setSelectedDate(found.date);
+    } else {
       setRescheduleMessage('No reservation found matching that pass code, resident name, or phone number.');
     }
   };
@@ -508,7 +514,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                   <p><strong>Date & Time:</strong> <span className="text-holiday-gold font-bold">{confirmedBooking.timeSlot}</span> on {confirmedBooking.date}</p>
                   <p><strong>Care Companion / Contact:</strong> {confirmedBooking.familyContact} ({confirmedBooking.familyPhone})</p>
                   {confirmedBooking.needsWheelchair && (
-                    <p className="text-holiday-gold font-semibold">✓ Wheelchair ramp assistance flagged for floor staff</p>
+                    <p className="text-holiday-gold font-semibold">✓ Mobility assistance flagged for floor staff</p>
                   )}
                 </div>
               </div>
@@ -611,13 +617,71 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                         5-Min Slots
                       </span>
                     </h3>
-                    <p className="text-xs text-slate-500">{facility.name} • {selectedDate}</p>
+                    <p className="text-xs text-slate-500">
+                      {facility.name} • <strong className="text-holiday-crimson font-bold">{selectedDate}</strong>
+                    </p>
                   </div>
                   <div className="text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                     <span><strong>{ALL_BOOKABLE_SLOTS.length - bookedSlots.length}</strong> of {ALL_BOOKABLE_SLOTS.length} slots available</span>
                   </div>
                 </div>
+
+                {/* Multi-Day Selector for CML (11/9 & 11/10) - Prominent in Step 1 */}
+                {facility.dates && facility.dates.length > 1 && (
+                  <div className="mb-6 p-4 bg-gradient-to-r from-holiday-wine/10 via-amber-50 to-holiday-pine/10 border-2 border-holiday-gold/60 rounded-2xl shadow-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                      <div>
+                        <span className="text-[11px] uppercase font-extrabold text-holiday-wine tracking-wider flex items-center gap-1.5">
+                          <Calendar className="w-3.5 h-3.5 text-holiday-crimson" /> 2-Day Photo Shoot Session
+                        </span>
+                        <p className="text-xs text-slate-700 font-semibold mt-0.5">
+                          Choose which day you would like to reserve:
+                        </p>
+                      </div>
+                      <span className="text-[10px] bg-white/90 text-holiday-wine font-bold px-2.5 py-0.5 rounded-full border border-holiday-gold/50 shadow-xs self-start sm:self-auto">
+                        Combined 2-Day Portal
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {facility.dates.map((d) => {
+                        const dayBookedCount = bookings.filter((b) => b.date === d.dateStr).length;
+                        const isSelected = selectedDate === d.dateStr;
+                        return (
+                          <button
+                            key={d.shortDate}
+                            type="button"
+                            onClick={() => {
+                              setSelectedDate(d.dateStr);
+                              setRoomError(null);
+                            }}
+                            className={`p-3.5 rounded-xl border-2 text-left transition flex items-center justify-between gap-3 ${
+                              isSelected
+                                ? 'bg-gradient-to-r from-holiday-wine to-holiday-crimson text-white border-holiday-gold shadow-md scale-[1.01]'
+                                : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-200 hover:border-holiday-gold/60'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <Calendar className={`w-5 h-5 shrink-0 ${isSelected ? 'text-holiday-gold' : 'text-holiday-crimson'}`} />
+                              <div>
+                                <strong className="block text-sm font-bold font-heading">{d.label}</strong>
+                                <span className={`text-[11px] ${isSelected ? 'text-rose-100' : 'text-slate-500'}`}>
+                                  {d.dateStr}
+                                </span>
+                              </div>
+                            </div>
+                            <span className={`text-xs font-bold px-2.5 py-1 rounded-lg shrink-0 ${
+                              isSelected ? 'bg-black/30 text-holiday-gold' : 'bg-slate-100 text-slate-700'
+                            }`}>
+                              {ALL_BOOKABLE_SLOTS.length - dayBookedCount} Open
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 {/* Morning Hourly Blocks */}
                 <div className="space-y-4 mb-5">
@@ -884,14 +948,14 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                   </div>
                 </div>
 
-                <label className="flex items-center gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 cursor-pointer">
+                <label className="flex items-center gap-2.5 p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 cursor-pointer hover:bg-slate-100/80 transition">
                   <input
                     type="checkbox"
                     checked={needsWheelchair}
                     onChange={(e) => setNeedsWheelchair(e.target.checked)}
                     className="rounded text-holiday-pine focus:ring-holiday-pine w-4 h-4"
                   />
-                  <span>Resident requires wheelchair ramp / zero-threshold staging assist</span>
+                  <span className="font-medium">Requires Mobility Assistant</span>
                 </label>
               </div>
 
@@ -1001,9 +1065,38 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                 </button>
               </div>
 
+              {/* Multi-Day Selector in Reschedule Tab */}
+              {facility.dates && facility.dates.length > 1 && (
+                <div className="mb-4 p-3 bg-white border border-slate-200 rounded-xl">
+                  <span className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                    Reschedule to Shoot Date:
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {facility.dates.map((d) => (
+                      <button
+                        key={d.shortDate}
+                        type="button"
+                        onClick={() => {
+                          setSelectedDate(d.dateStr);
+                          setRescheduleSlot('');
+                        }}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 ${
+                          selectedDate === d.dateStr
+                            ? 'bg-holiday-pine text-holiday-gold border-holiday-pine shadow-sm'
+                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        }`}
+                      >
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{d.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Open 5-Min Slots for Rescheduling */}
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
-                Click an Open 5-Minute Slot to Switch (Frees Previous Slot Automatically)
+                Click an Open 5-Minute Slot for {selectedDate} (Frees Previous Slot Automatically):
               </label>
 
               <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-10 gap-1.5 mb-4 max-h-60 overflow-y-auto p-1">
