@@ -65,7 +65,9 @@ Address: ${address}
 Date/Time: ${dateTimeStr}
 Studio: ${lounge}
 Pass Ref: ${ref}
-Reschedule anytime: ${rescheduleUrl}`;
+Reschedule: ${rescheduleUrl}
+
+Reply STOP to opt out.`;
 
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
     const authUser = process.env.TWILIO_API_KEY || process.env.TWILIO_ACCOUNT_SID;

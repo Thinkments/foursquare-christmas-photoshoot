@@ -228,6 +228,13 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
       }
     }
 
+    // Check mobile phone format (must have at least 10 digits for SMS delivery)
+    const phoneDigits = familyPhone.replace(/\D/g, '');
+    if (phoneDigits.length < 10) {
+      setRoomError('Please enter a valid 10-digit mobile phone number (including area code) to receive your instant SMS text confirmation.');
+      return;
+    }
+
     setRoomError(null);
     const newRef = `${facility.abbr}-${Math.floor(100 + Math.random() * 900)}`;
     const effectiveBed = bookingType === 'Staff' ? 'Staff / Station' : bed;
