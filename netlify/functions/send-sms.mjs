@@ -68,24 +68,29 @@ Pass Ref: ${ref}
 Reschedule anytime: ${rescheduleUrl}`;
 
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
-    const apiKey = process.env.TWILIO_API_KEY;
-    const apiSecret = process.env.TWILIO_API_SECRET;
+    const authUser = process.env.TWILIO_API_KEY || process.env.TWILIO_ACCOUNT_SID;
+    const authPass = process.env.TWILIO_API_SECRET || process.env.TWILIO_AUTH_TOKEN;
+    const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
     const fromNumber = process.env.TWILIO_FROM_NUMBER || '+18176860300';
 
-    if (!accountSid || !apiKey || !apiSecret) {
-      console.error('Missing Twilio credentials in environment');
+    if (!accountSid || !authUser || !authPass) {
+      console.error('Missing Twilio credentials in environment (requires TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN or TWILIO_API_KEY/SECRET)');
       return new Response(
         JSON.stringify({ error: 'Twilio credentials not configured in environment' }),
         { status: 500, headers: corsHeaders }
       );
     }
 
-    const authHeader = 'Basic ' + Buffer.from(`${apiKey}:${apiSecret}`).toString('base64');
+    const authHeader = 'Basic ' + Buffer.from(`${authUser}:${authPass}`).toString('base64');
     const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
 
     const params = new URLSearchParams();
     params.append('To', cleanPhone);
-    params.append('From', fromNumber);
+    if (messagingServiceSid) {
+      params.append('MessagingServiceSid', messagingServiceSid);
+    } else {
+      params.append('From', fromNumber);
+    }
     params.append('Body', messageText);
 
     const twilioRes = await fetch(twilioUrl, {

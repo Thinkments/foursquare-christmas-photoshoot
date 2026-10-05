@@ -1,3 +1,6 @@
+# API Endpoints
+/api/send-sms    /.netlify/functions/send-sms    200!
+
 # Netlify Redirects
 /cml-day2    /cml    301!
 /cml-2       /cml    301!
