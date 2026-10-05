@@ -955,7 +955,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                     onChange={(e) => setNeedsWheelchair(e.target.checked)}
                     className="rounded text-holiday-pine focus:ring-holiday-pine w-4 h-4"
                   />
-                  <span className="font-medium">Requires Mobility Assistant</span>
+                  <span className="font-medium">Requires Mobility Assistance</span>
                 </label>
               </div>
 

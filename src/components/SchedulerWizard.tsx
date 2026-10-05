@@ -494,7 +494,7 @@ END:VCALENDAR`;
                       onChange={(e) => setFormData({ ...formData, isWheelchairNeeded: e.target.checked })}
                       className="rounded border-slate-300 text-holiday-pine focus:ring-holiday-pine"
                     />
-                    <span className="font-medium">Requires Mobility Assistant</span>
+                    <span className="font-medium">Requires Mobility Assistance</span>
                   </label>
                   <label className="flex items-center gap-2.5 text-xs sm:text-sm text-slate-700 cursor-pointer">
                     <input
