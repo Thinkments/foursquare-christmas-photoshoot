@@ -587,19 +587,6 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                 <button
                   type="button"
                   onClick={() => {
-                    setConfirmedBooking(null);
-                    setResidentName('');
-                    setRoomNumber('');
-                    setGuestCount(0);
-                    setRoomError(null);
-                  }}
-                  className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition"
-                >
-                  Book Another Session
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
                     setActiveTab('reschedule');
                     setLookupQuery(confirmedBooking.ref);
                     setMatchedBooking(confirmedBooking);

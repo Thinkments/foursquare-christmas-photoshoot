@@ -441,17 +441,6 @@ export default function SimpleHolidayScheduler() {
                 <button
                   type="button"
                   onClick={() => {
-                    setConfirmedBooking(null);
-                    setResidentName('');
-                    setRoomNumber('');
-                  }}
-                  className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition"
-                >
-                  Book Another Family Member
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
                     setActiveTab('reschedule');
                     setLookupQuery(confirmedBooking.ref);
                     const cleanQ = confirmedBooking.ref.toLowerCase().trim();
