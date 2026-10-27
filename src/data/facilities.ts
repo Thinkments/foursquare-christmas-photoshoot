@@ -218,44 +218,44 @@ export const LUNCH_BREAK = {
 
 export const AFTERNOON_HOURLY_BLOCKS = [
   {
-    hourLabel: '02:00 PM – 02:50 PM',
+    hourLabel: '2:00 PM – 2:50 PM',
     slots: [
-      '02:00 PM', '02:05 PM', '02:10 PM', '02:15 PM', '02:20 PM',
-      '02:25 PM', '02:30 PM', '02:35 PM', '02:40 PM', '02:45 PM',
+      '2:00 PM', '2:05 PM', '2:10 PM', '2:15 PM', '2:20 PM',
+      '2:25 PM', '2:30 PM', '2:35 PM', '2:40 PM', '2:45 PM',
     ],
-    bufferLabel: '02:50 PM – 03:00 PM (10-Min Studio Reset)',
+    bufferLabel: '2:50 PM – 3:00 PM (10-Min Studio Reset)',
   },
   {
-    hourLabel: '03:00 PM – 03:50 PM',
+    hourLabel: '3:00 PM – 3:50 PM',
     slots: [
-      '03:00 PM', '03:05 PM', '03:10 PM', '03:15 PM', '03:20 PM',
-      '03:25 PM', '03:30 PM', '03:35 PM', '03:40 PM', '03:45 PM',
+      '3:00 PM', '3:05 PM', '3:10 PM', '3:15 PM', '3:20 PM',
+      '3:25 PM', '3:30 PM', '3:35 PM', '3:40 PM', '3:45 PM',
     ],
-    bufferLabel: '03:50 PM – 04:00 PM (10-Min Studio Reset)',
+    bufferLabel: '3:50 PM – 4:00 PM (10-Min Studio Reset)',
   },
   {
-    hourLabel: '04:00 PM – 04:50 PM',
+    hourLabel: '4:00 PM – 4:50 PM',
     slots: [
-      '04:00 PM', '04:05 PM', '04:10 PM', '04:15 PM', '04:20 PM',
-      '04:25 PM', '04:30 PM', '04:35 PM', '04:40 PM', '04:45 PM',
+      '4:00 PM', '4:05 PM', '4:10 PM', '4:15 PM', '4:20 PM',
+      '4:25 PM', '4:30 PM', '4:35 PM', '4:40 PM', '4:45 PM',
     ],
-    bufferLabel: '04:50 PM – 05:00 PM (10-Min Studio Reset)',
+    bufferLabel: '4:50 PM – 5:00 PM (10-Min Studio Reset)',
   },
   {
-    hourLabel: '05:00 PM – 05:50 PM',
+    hourLabel: '5:00 PM – 5:50 PM',
     slots: [
-      '05:00 PM', '05:05 PM', '05:10 PM', '05:15 PM', '05:20 PM',
-      '05:25 PM', '05:30 PM', '05:35 PM', '05:40 PM', '05:45 PM',
+      '5:00 PM', '5:05 PM', '5:10 PM', '5:15 PM', '5:20 PM',
+      '5:25 PM', '5:30 PM', '5:35 PM', '5:40 PM', '5:45 PM',
     ],
-    bufferLabel: '05:50 PM – 06:00 PM (10-Min Studio Reset)',
+    bufferLabel: '5:50 PM – 6:00 PM (10-Min Studio Reset)',
   },
   {
-    hourLabel: '06:00 PM – 06:50 PM',
+    hourLabel: '6:00 PM – 6:50 PM',
     slots: [
-      '06:00 PM', '06:05 PM', '06:10 PM', '06:15 PM', '06:20 PM',
-      '06:25 PM', '06:30 PM', '06:35 PM', '06:40 PM', '06:45 PM',
+      '6:00 PM', '6:05 PM', '6:10 PM', '6:15 PM', '6:20 PM',
+      '6:25 PM', '6:30 PM', '6:35 PM', '6:40 PM', '6:45 PM',
     ],
-    bufferLabel: '06:50 PM – 07:00 PM (Day Wrap-Up & Pack-Down)',
+    bufferLabel: '6:50 PM – 7:00 PM (Day Wrap-Up & Pack-Down)',
   },
 ];
 

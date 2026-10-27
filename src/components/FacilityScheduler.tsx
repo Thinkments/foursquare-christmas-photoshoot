@@ -66,6 +66,9 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
   const [activeTab, setActiveTab] = useState<'book' | 'reschedule'>('book');
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [serverBookedSlots, setServerBookedSlots] = useState<string[]>([]);
+  const [isLoadingLive, setIsLoadingLive] = useState<boolean>(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [copiedRef, setCopiedRef] = useState<string | null>(null);
 
   // Form State
@@ -94,6 +97,28 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
   // Helper to normalize room numbers (e.g., "Room 204B" -> "204B", "rm 102" -> "102")
   const normalizeRoom = (val: string) => val.trim().replace(/^(room|rm|unit|#)\s*/i, '').toUpperCase();
+
+  // Normalize time strings for resilient matching ("02:00 PM" <-> "2:00 PM")
+  const normalizeTimeStr = (t: string) => (t || '').trim().toLowerCase().replace(/^0/, '');
+
+  // Helper to detect if a slot is booked across Google Sheets and local state
+  const isSlotBooked = (slot: string, targetDate: string = selectedDate) => {
+    const normSlot = normalizeTimeStr(slot);
+    // For multi-day facilities like CML, match date specifically
+    if (facility.dates && facility.dates.length > 1) {
+      return bookings.some(
+        (b) => b.date === targetDate && normalizeTimeStr(b.timeSlot) === normSlot
+      );
+    }
+    // For single-day facilities, check serverBookedSlots
+    if (serverBookedSlots.some((s) => normalizeTimeStr(s) === normSlot)) {
+      return true;
+    }
+    return bookings.some(
+      (b) => (b.date === targetDate || !b.date || targetDate === facility.shootDate) &&
+             normalizeTimeStr(b.timeSlot) === normSlot
+    );
+  };
 
   // Helper to detect if a resident room is already booked on this date (limit 1 slot per resident)
   const checkDuplicateResident = (room: string, date: string, excludeId?: string) => {
@@ -129,7 +154,32 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     setTimeout(() => setCopiedRef(null), 3000);
   };
 
-  // Load from local storage and handle ?ref= query params
+  // Live Google Sheets fetcher
+  const fetchLiveBookings = async () => {
+    setIsLoadingLive(true);
+    try {
+      const res = await fetch(`/api/get-bookings?facility=${encodeURIComponent(facility.code)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.bookings)) {
+          const liveList: Booking[] = data.bookings;
+          setBookings(liveList);
+          setServerBookedSlots(data.bookedSlots || []);
+          setLastSyncedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          try {
+            localStorage.setItem(storageKey, JSON.stringify(liveList));
+            localStorage.setItem('4sq_master_bookings_prod', JSON.stringify(liveList));
+          } catch {}
+        }
+      }
+    } catch (err) {
+      console.warn('Live bookings fetch note:', err);
+    } finally {
+      setIsLoadingLive(false);
+    }
+  };
+
+  // Load from local storage and handle ?ref= query params, then sync live
   useEffect(() => {
     let list: Booking[] = [];
     try {
@@ -156,6 +206,9 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
       list = [];
     }
     setBookings(list);
+
+    // Fetch latest bookings from Google Sheets
+    fetchLiveBookings();
 
     // Auto-detect URL query params (?ref=... or ?tab=...)
     if (typeof window !== 'undefined') {
@@ -197,7 +250,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
   };
 
   // Booked slots for currently selected date
-  const bookedSlots = bookings.filter((b) => b.date === selectedDate).map((b) => b.timeSlot);
+  const bookedSlots = ALL_BOOKABLE_SLOTS.filter((s) => isSlotBooked(s, selectedDate));
 
   // Validate room on blur or change
   const handleRoomBlur = () => {
@@ -303,6 +356,11 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
         colors: ['#5A0612', '#9E0E21', '#D4AF37', '#FAF1DC'],
       });
     } catch {}
+
+    // Refresh live bookings from Google Sheets
+    setTimeout(() => {
+      fetchLiveBookings();
+    }, 1500);
   };
 
   // Lookup for Rescheduling
@@ -342,6 +400,10 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     try {
       confetti({ particleCount: 70, spread: 60, colors: ['#5A0612', '#9E0E21', '#D4AF37', '#FAF1DC'] });
     } catch {}
+
+    setTimeout(() => {
+      fetchLiveBookings();
+    }, 1500);
   };
 
   // Cancel Booking
@@ -351,6 +413,10 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
     saveBookings(updated);
     setMatchedBooking(null);
     setRescheduleMessage('Reservation cancelled. That 5-minute slot is now open for another family or staff member.');
+
+    setTimeout(() => {
+      fetchLiveBookings();
+    }, 1500);
   };
 
   return (
@@ -615,9 +681,23 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
                       {facility.name} • <strong className="text-holiday-crimson font-bold">{selectedDate}</strong>
                     </p>
                   </div>
-                  <div className="text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                    <span><strong>{ALL_BOOKABLE_SLOTS.length - bookedSlots.length}</strong> of {ALL_BOOKABLE_SLOTS.length} slots available</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="text-xs text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200 flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                      <span><strong>{ALL_BOOKABLE_SLOTS.length - bookedSlots.length}</strong> of {ALL_BOOKABLE_SLOTS.length} slots available</span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => fetchLiveBookings()}
+                      disabled={isLoadingLive}
+                      className="inline-flex items-center gap-1.5 text-xs text-holiday-pine bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-3 py-1.5 rounded-xl font-semibold transition cursor-pointer"
+                      title="Sync with live Google Sheets"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${isLoadingLive ? 'animate-spin' : ''}`} />
+                      <span>{isLoadingLive ? 'Syncing...' : 'Live Synced'}</span>
+                      {lastSyncedAt && <span className="text-[10px] text-slate-500">({lastSyncedAt})</span>}
+                    </button>
                   </div>
                 </div>
 
@@ -695,7 +775,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
                       <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-1.5">
                         {block.slots.map((slot) => {
-                          const isTaken = bookedSlots.includes(slot);
+                          const isTaken = isSlotBooked(slot, selectedDate);
                           const isSelected = timeSlot === slot;
 
                           return (
@@ -740,7 +820,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
                       <div className="grid grid-cols-2 sm:grid-cols-5 md:grid-cols-10 gap-1.5">
                         {block.slots.map((slot) => {
-                          const isTaken = bookedSlots.includes(slot);
+                          const isTaken = isSlotBooked(slot, selectedDate);
                           const isSelected = timeSlot === slot;
 
                           return (
@@ -1095,7 +1175,7 @@ export default function FacilityScheduler({ facilityCode, forcedDate }: Props) {
 
               <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-10 gap-1.5 mb-4 max-h-60 overflow-y-auto p-1">
                 {ALL_BOOKABLE_SLOTS.filter((s) => s !== matchedBooking.timeSlot).map((slot) => {
-                  const isTaken = bookedSlots.includes(slot);
+                  const isTaken = isSlotBooked(slot, selectedDate);
                   const isSelected = rescheduleSlot === slot;
 
                   return (

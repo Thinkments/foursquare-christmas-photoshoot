@@ -63,14 +63,39 @@ export default function CoordinatorRoster() {
   const [callStatusFilter, setCallStatusFilter] = useState<string>('all');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [copiedRef, setCopiedRef] = useState<string | null>(null);
+  const [isLoadingLive, setIsLoadingLive] = useState<boolean>(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
+
+  const fetchLiveBookings = async (campus = selectedCampus) => {
+    setIsLoadingLive(true);
+    try {
+      const res = await fetch(`/api/get-bookings?facility=${encodeURIComponent(campus)}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.bookings)) {
+          setBookings(data.bookings);
+          setLastSyncedAt(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+          try {
+            localStorage.setItem('4sq_master_bookings_prod', JSON.stringify(data.bookings));
+          } catch {}
+        }
+      }
+    } catch (err) {
+      console.warn('Coordinator live fetch note:', err);
+    } finally {
+      setIsLoadingLive(false);
+    }
+  };
 
   useEffect(() => {
     // Check URL params for pre-selected campus
+    let initialCampus = 'all';
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const fac = params.get('facility') || params.get('campus');
       if (fac && (FOURSQUARE_FACILITIES[fac.toLowerCase()] || fac === 'all')) {
-        setSelectedCampus(fac.toLowerCase());
+        initialCampus = fac.toLowerCase();
+        setSelectedCampus(initialCampus);
       }
     }
 
@@ -88,7 +113,15 @@ export default function CoordinatorRoster() {
     } catch {
       setBookings([]);
     }
+
+    // Immediately fetch live bookings from Google Sheets
+    fetchLiveBookings(initialCampus);
   }, []);
+
+  // Sync whenever user selects a different facility tab
+  useEffect(() => {
+    fetchLiveBookings(selectedCampus);
+  }, [selectedCampus]);
 
   const saveBookings = (updated: BookingRecord[]) => {
     setBookings(updated);
@@ -193,6 +226,17 @@ export default function CoordinatorRoster() {
               <FileSpreadsheet className="w-3.5 h-3.5" />
               <span>{activeFacility ? `${activeFacility.abbr} Google Sheet` : 'All Facility Sheets'}</span>
             </a>
+            <button
+              type="button"
+              onClick={() => fetchLiveBookings(selectedCampus)}
+              disabled={isLoadingLive}
+              className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-1.5 cursor-pointer"
+              title="Refresh from Google Sheets"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingLive ? 'animate-spin' : ''}`} />
+              <span>{isLoadingLive ? 'Syncing...' : 'Live Synced'}</span>
+              {lastSyncedAt && <span className="text-[10px] text-emerald-200">({lastSyncedAt})</span>}
+            </button>
             <button
               type="button"
               onClick={handlePrint}

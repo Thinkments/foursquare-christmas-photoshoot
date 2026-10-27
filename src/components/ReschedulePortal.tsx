@@ -129,8 +129,31 @@ export default function ReschedulePortal() {
       }
     } catch {}
 
-    setCurrentBooking(null);
-    setIsSearching(false);
+    // 3. Fallback: Query live API for bookings directly from Google Sheets
+    fetch(`/api/get-bookings?facility=all`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.bookings)) {
+          const match = data.bookings.find(
+            (b: any) =>
+              (b.ref && b.ref.toLowerCase() === cleanInput) ||
+              (b.residentName && b.residentName.toLowerCase().includes(cleanInput)) ||
+              (cleanDigits.length >= 7 && b.familyPhone && b.familyPhone.replace(/\D/g, '').includes(cleanDigits))
+          );
+          if (match) {
+            setMatchedFacilityCode(match.facilityCode || match.campusId || '');
+            setCurrentBooking(match);
+            setIsSearching(false);
+            return;
+          }
+        }
+        setCurrentBooking(null);
+        setIsSearching(false);
+      })
+      .catch(() => {
+        setCurrentBooking(null);
+        setIsSearching(false);
+      });
   };
 
   const handleReschedule = () => {

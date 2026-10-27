@@ -8,6 +8,11 @@
   to = "/.netlify/functions/send-sms"
   status = 200
 
+[[redirects]]
+  from = "/api/get-bookings"
+  to = "/.netlify/functions/get-bookings"
+  status = 200
+
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
