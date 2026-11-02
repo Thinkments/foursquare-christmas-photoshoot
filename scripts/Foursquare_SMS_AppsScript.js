@@ -145,7 +145,7 @@ const FACILITIES_CONFIG = {
     address: "6640 Iola Ave, Lubbock, TX 79424",
     lounge: "Crown Point Staging Lounge",
     shootDate: "Thursday, Dec 10, 2026",
-    sheetId: ""
+    sheetId: "1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU"
   }
 };
 
@@ -304,14 +304,27 @@ function doPost(e) {
     // 1. Write to the Facility Google Sheet
     if (sheetId) {
       const ss = SpreadsheetApp.openById(sheetId);
-      const ws = ss.getActiveSheet();
+      let ws = ss.getActiveSheet();
+      if (facilityCode === "cml" && dateStr) {
+        const dLower = String(dateStr).toLowerCase();
+        const targetTabName = (dLower.indexOf("10") !== -1 || dLower.indexOf("day 2") !== -1)
+          ? "Day 2 (Nov 10)"
+          : "Day 1 (Nov 9)";
+        const foundSheet = ss.getSheetByName(targetTabName);
+        if (foundSheet) ws = foundSheet;
+      }
+
+      const normSlot = String(timeSlot).trim().replace(/^(\d):/, "0$1:").toUpperCase();
       const lastRow = ws.getLastRow();
       let matchedRow = -1;
 
       if (lastRow >= 5) {
-        const timeColumn = ws.getRange(5, 1, lastRow - 4, 1).getValues();
-        for (let i = 0; i < timeColumn.length; i++) {
-          if (String(timeColumn[i][0]).includes(timeSlot)) {
+        const rowValues = ws.getRange(5, 1, lastRow - 4, 2).getDisplayValues();
+        for (let i = 0; i < rowValues.length; i++) {
+          const cellSlot = String(rowValues[i][0] || "").trim().replace(/^(\d):/, "0$1:").toUpperCase();
+          const cellStatus = String(rowValues[i][1] || "").trim().toUpperCase();
+          if (cellStatus === "BUFFER" || cellStatus === "BREAK" || cellStatus === "LOCKED") continue;
+          if (cellSlot === normSlot) {
             matchedRow = 5 + i;
             break;
           }
@@ -321,7 +334,7 @@ function doPost(e) {
       const targetRow = matchedRow > 0 ? matchedRow : ws.getLastRow() + 1;
       const timestamp = Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "MM/dd hh:mm a");
 
-      ws.getRange(targetRow, 1).setValue(timeSlot);
+      ws.getRange(targetRow, 1).setNumberFormat("@").setValue(normSlot);
       ws.getRange(targetRow, 2).setValue("Confirmed");
       ws.getRange(targetRow, 3).setValue(ref);
       ws.getRange(targetRow, 4).setValue(residentName);

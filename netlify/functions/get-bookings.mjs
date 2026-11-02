@@ -104,6 +104,14 @@ const FACILITIES = {
     sheetId: '1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA',
     tabs: ['Schedule & Roster'],
   },
+  cp: {
+    code: 'cp',
+    name: 'Crown Point Health Suites',
+    abbr: 'CP',
+    shootDate: 'Thursday, December 10, 2026',
+    sheetId: '1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU',
+    tabs: ['Schedule & Roster'],
+  },
 };
 
 // Cached Google OAuth Access Token
@@ -148,7 +156,7 @@ async function getAccessToken(sa) {
   const claim = Buffer.from(
     JSON.stringify({
       iss: sa.client_email,
-      scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
       aud: 'https://oauth2.googleapis.com/token',
       exp: now + 3600,
       iat: now,
@@ -226,8 +234,14 @@ async function fetchFacilityBookings(fac, accessToken) {
         const familyEmail = (r[7] || '').trim();
         const mobilityNeeds = (r[8] || '').trim();
 
-        // If status is Confirmed OR there is a resident name or booking ref
-        if (status.toLowerCase() === 'confirmed' || (residentName && status.toLowerCase() !== 'buffer')) {
+        // Ignore buffer, break, or locked rows so they are never treated as bookings
+        const lowerStatus = status.toLowerCase();
+        if (lowerStatus === 'buffer' || lowerStatus === 'break' || lowerStatus === 'locked') {
+          continue;
+        }
+
+        // If status is Confirmed OR there is a resident name
+        if (lowerStatus === 'confirmed' || residentName) {
           const norm = normalizeTimeSlot(rawTime);
           if (norm.padded) bookedSlots.add(norm.padded);
           if (norm.unpadded) bookedSlots.add(norm.unpadded);
@@ -274,11 +288,103 @@ async function fetchFacilityBookings(fac, accessToken) {
   return { bookings, bookedSlots: Array.from(bookedSlots) };
 }
 
+async function writeFacilityBooking(data, accessToken) {
+  const facilityCode = String(data.facilityCode || 'hml').toLowerCase();
+  const fac = FACILITIES[facilityCode] || FACILITIES.hml;
+
+  // Select appropriate tab (supports multi-day CML Day 1 vs Day 2)
+  let tab = fac.tabs[0];
+  if (fac.code === 'cml' && data.date) {
+    const dStr = String(data.date).toLowerCase();
+    if (dStr.includes('november 10') || dStr.includes('nov 10') || dStr.includes('day 2') || dStr.includes('11/10')) {
+      tab = 'Day 2 (Nov 10)';
+    } else {
+      tab = 'Day 1 (Nov 9)';
+    }
+  }
+
+  const normTarget = normalizeTimeSlot(data.timeSlot || '');
+  const paddedSlot = normTarget.padded || data.timeSlot || '';
+
+  const readRange = encodeURIComponent(`${tab}!A1:L130`);
+  const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${fac.sheetId}/values/${readRange}`;
+  const readResp = await fetch(readUrl, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const readData = await readResp.json();
+  const rows = readData.values || [];
+
+  let targetRow = -1;
+  for (let i = 4; i < rows.length; i++) {
+    const r = rows[i] || [];
+    const rowStatus = String(r[1] || '').trim().toLowerCase();
+    if (rowStatus === 'buffer' || rowStatus === 'break' || rowStatus === 'locked') continue;
+    const rowNorm = normalizeTimeSlot(String(r[0] || ''));
+    if (rowNorm.padded && rowNorm.padded === paddedSlot) {
+      targetRow = i + 1; // 1-indexed sheet row
+      break;
+    }
+  }
+
+  if (targetRow === -1) {
+    targetRow = Math.max(rows.length + 1, 5);
+  }
+
+  const ref = data.ref || `${fac.abbr}-${Math.floor(100 + Math.random() * 900)}`;
+  const mobilityNeeds = data.needsWheelchair
+    ? 'Wheelchair assistance requested'
+    : (data.mobilityNeeds || 'Standard seating');
+  const rescheduleUrl =
+    data.rescheduleUrl ||
+    `https://christmasphotos.netlify.app/reschedule?facility=${fac.code}&ref=${encodeURIComponent(ref)}`;
+  const nowStr = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Chicago',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  }).replace(',', '');
+
+  const rowValues = [
+    paddedSlot,
+    'Confirmed',
+    ref,
+    data.residentName || '',
+    data.roomNumber || '',
+    data.familyContact || '',
+    data.familyPhone || '',
+    data.familyEmail || '',
+    mobilityNeeds,
+    'Booked via Online Portal',
+    rescheduleUrl,
+    `📲 Web Confirmed: ${nowStr}`,
+  ];
+
+  const writeRange = encodeURIComponent(`${tab}!A${targetRow}:L${targetRow}`);
+  const writeUrl = `https://sheets.googleapis.com/v4/spreadsheets/${fac.sheetId}/values/${writeRange}?valueInputOption=RAW`;
+  const writeResp = await fetch(writeUrl, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ values: [rowValues] }),
+  });
+
+  if (!writeResp.ok) {
+    const errText = await writeResp.text();
+    throw new Error(`Google Sheets write error: ${errText}`);
+  }
+
+  return { status: 'ok', facilityCode: fac.code, tab, row: targetRow, ref, timeSlot: paddedSlot };
+}
+
 export default async (req, context) => {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Content-Type': 'application/json',
     'Cache-Control': 'public, max-age=5, s-maxage=15', // 5-second browser cache, 15-second CDN cache
   };
@@ -288,9 +394,6 @@ export default async (req, context) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const facilityParam = (url.searchParams.get('facility') || url.searchParams.get('campus') || 'hml').toLowerCase();
-
     const sa = getServiceAccount();
     if (!sa) {
       return new Response(
@@ -300,6 +403,18 @@ export default async (req, context) => {
     }
 
     const token = await getAccessToken(sa);
+
+    if (req.method === 'POST') {
+      const payload = await req.json();
+      const result = await writeFacilityBooking(payload, token);
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: { ...corsHeaders, 'Cache-Control': 'no-store' },
+      });
+    }
+
+    const url = new URL(req.url);
+    const facilityParam = (url.searchParams.get('facility') || url.searchParams.get('campus') || 'hml').toLowerCase();
 
     if (facilityParam === 'all') {
       const allBookings = [];

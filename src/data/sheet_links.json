@@ -125,6 +125,16 @@
       "shootDate": "Wednesday, December 9, 2026",
       "sheetUrl": "https://docs.google.com/spreadsheets/d/1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA/edit",
       "spreadsheetId": "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"
+    },
+    "cp": {
+      "code": "cp",
+      "abbr": "CP",
+      "name": "Crown Point Health Suites",
+      "address": "6640 Iola Ave, Lubbock, TX 79424",
+      "city": "Lubbock, TX",
+      "shootDate": "Thursday, December 10, 2026",
+      "sheetUrl": "https://docs.google.com/spreadsheets/d/1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU/edit",
+      "spreadsheetId": "1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU"
     }
   }
 }

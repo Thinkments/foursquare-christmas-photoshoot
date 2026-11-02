@@ -147,7 +147,7 @@ SCHEDULE_ROWS = [
     {"slot": "10:35 AM", "type": "slot"},
     {"slot": "10:40 AM", "type": "slot"},
     {"slot": "10:45 AM", "type": "slot"},
-    {"slot": "10:50 AM – 11:00 AM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "10:50 – 10:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 11:00 AM block
     {"slot": "11:00 AM", "type": "slot"},
@@ -160,7 +160,7 @@ SCHEDULE_ROWS = [
     {"slot": "11:35 AM", "type": "slot"},
     {"slot": "11:40 AM", "type": "slot"},
     {"slot": "11:45 AM", "type": "slot"},
-    {"slot": "11:50 AM – 12:00 PM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "11:50 – 11:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 12:00 PM block
     {"slot": "12:00 PM", "type": "slot"},
@@ -173,10 +173,10 @@ SCHEDULE_ROWS = [
     {"slot": "12:35 PM", "type": "slot"},
     {"slot": "12:40 PM", "type": "slot"},
     {"slot": "12:45 PM", "type": "slot"},
-    {"slot": "12:50 PM – 01:00 PM (10-Min Transition to Lunch)", "type": "buffer"},
+    {"slot": "12:50 – 12:59 (10-Min Transition to Lunch)", "type": "buffer"},
 
     # Lunch Break
-    {"slot": "01:00 PM – 02:00 PM (Photographer Lunch Break & Studio Reset)", "type": "break"},
+    {"slot": "01:00 – 01:59 (Photographer Lunch Break & Studio Reset)", "type": "break"},
 
     # 02:00 PM block
     {"slot": "02:00 PM", "type": "slot"},
@@ -189,7 +189,7 @@ SCHEDULE_ROWS = [
     {"slot": "02:35 PM", "type": "slot"},
     {"slot": "02:40 PM", "type": "slot"},
     {"slot": "02:45 PM", "type": "slot"},
-    {"slot": "02:50 PM – 03:00 PM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "02:50 – 02:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 03:00 PM block
     {"slot": "03:00 PM", "type": "slot"},
@@ -202,7 +202,7 @@ SCHEDULE_ROWS = [
     {"slot": "03:35 PM", "type": "slot"},
     {"slot": "03:40 PM", "type": "slot"},
     {"slot": "03:45 PM", "type": "slot"},
-    {"slot": "03:50 PM – 04:00 PM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "03:50 – 03:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 04:00 PM block
     {"slot": "04:00 PM", "type": "slot"},
@@ -215,7 +215,7 @@ SCHEDULE_ROWS = [
     {"slot": "04:35 PM", "type": "slot"},
     {"slot": "04:40 PM", "type": "slot"},
     {"slot": "04:45 PM", "type": "slot"},
-    {"slot": "04:50 PM – 05:00 PM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "04:50 – 04:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 05:00 PM block
     {"slot": "05:00 PM", "type": "slot"},
@@ -228,7 +228,7 @@ SCHEDULE_ROWS = [
     {"slot": "05:35 PM", "type": "slot"},
     {"slot": "05:40 PM", "type": "slot"},
     {"slot": "05:45 PM", "type": "slot"},
-    {"slot": "05:50 PM – 06:00 PM (10-Min Studio Reset Buffer)", "type": "buffer"},
+    {"slot": "05:50 – 05:59 (10-Min Studio Reset Buffer)", "type": "buffer"},
 
     # 06:00 PM block
     {"slot": "06:00 PM", "type": "slot"},
@@ -241,7 +241,7 @@ SCHEDULE_ROWS = [
     {"slot": "06:35 PM", "type": "slot"},
     {"slot": "06:40 PM", "type": "slot"},
     {"slot": "06:45 PM", "type": "slot"},
-    {"slot": "06:50 PM – 07:00 PM (Day Wrap-Up & Pack-Down)", "type": "buffer"},
+    {"slot": "06:50 – 06:59 (Day Wrap-Up & Pack-Down)", "type": "buffer"},
 ]
 
 HEADERS = [
@@ -348,7 +348,7 @@ def main():
             sheets_service.spreadsheets().values().update(
                 spreadsheetId=sheet_id,
                 range="A1",
-                valueInputOption="USER_ENTERED",
+                valueInputOption="RAW",
                 body=body
             ).execute()
             print(f"[SUCCESS] {abbr} reset successfully with {len(values)} rows (80 bookable 5-min slots + reset buffers).")

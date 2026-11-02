@@ -30,25 +30,57 @@ export interface BookingPayload {
   rescheduleUrl?: string;
 }
 
+function padTimeSlot(timeStr: string): string {
+  const clean = (timeStr || '').trim();
+  const m = clean.match(/^0?(\d+):(\d{2})\s*(AM|PM)$/i);
+  if (m) {
+    const hr = parseInt(m[1], 10);
+    return `${hr < 10 ? '0' + hr : hr}:${m[2]} ${m[3].toUpperCase()}`;
+  }
+  return clean;
+}
+
 export async function syncBookingToGoogle(payload: BookingPayload): Promise<boolean> {
   let sheetSuccess = false;
+  const normalizedPayload = {
+    ...payload,
+    timeSlot: padTimeSlot(payload.timeSlot),
+  };
 
-  // 1. Google Sheets sync via Google Apps Script Web App Webhook
+  // 1. Primary: Direct Google Sheets API write via Netlify Serverless Function (supports multi-tab CML & RAW text format)
   try {
-    await fetch(GOOGLE_WEBHOOK_URL, {
+    const sheetRes = await fetch('/api/get-bookings', {
       method: 'POST',
-      mode: 'no-cors',
       headers: {
-        'Content-Type': 'text/plain',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        ...payload,
-        smsDispatchedByNetlify: true,
-      }),
+      body: JSON.stringify(normalizedPayload),
     });
-    sheetSuccess = true;
+    if (sheetRes.ok) {
+      sheetSuccess = true;
+    }
   } catch (err) {
-    console.warn('Google Sheet Webhook sync note:', err);
+    console.warn('Direct Google Sheets API sync note:', err);
+  }
+
+  // 2. Fallback: Google Apps Script Web App Webhook if direct API did not succeed
+  if (!sheetSuccess) {
+    try {
+      await fetch(GOOGLE_WEBHOOK_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        body: JSON.stringify({
+          ...normalizedPayload,
+          smsDispatchedByNetlify: true,
+        }),
+      });
+      sheetSuccess = true;
+    } catch (err) {
+      console.warn('Google Sheet Webhook sync note:', err);
+    }
   }
 
   // 2. Direct Automated Twilio SMS Dispatch via Netlify Serverless Function

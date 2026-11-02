@@ -171,6 +171,7 @@ export const FOURSQUARE_FACILITIES: Record<string, FacilityConfig> = {
     shortDate: '12/10',
     dayOfWeek: 'Thursday',
     loungeName: 'Crown Point Staging Lounge',
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU/edit',
   },
 };
 
