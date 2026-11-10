@@ -22,7 +22,7 @@ FACILITIES = {
         "address": "300 S Highway 36 Byp N, Gatesville, TX 76528",
         "city": "Gatesville, TX",
         "shootDate": "Thursday, November 5, 2026",
-        "loungeName": "Hillside Fireside Solarium",
+        "loungeName": "Living Area",
     },
     "wnr": {
         "code": "wnr",
@@ -31,7 +31,7 @@ FACILITIES = {
         "address": "101 S San Marcos St, Whitney, TX 76692",
         "city": "Whitney, TX",
         "shootDate": "Friday, November 6, 2026",
-        "loungeName": "Whitney Heritage Community Room",
+        "loungeName": "Living Area",
     },
     "cml": {
         "code": "cml",
@@ -40,7 +40,7 @@ FACILITIES = {
         "address": "750 Hwy 352, Mesquite, TX 75149",
         "city": "Mesquite, TX",
         "shootDate": "Monday, November 9 & Tuesday, November 10, 2026",
-        "loungeName": "Cheyenne Grand Prairie Staging Room",
+        "loungeName": "Living Area",
     },
     "pml": {
         "code": "pml",
@@ -49,7 +49,7 @@ FACILITIES = {
         "address": "1401 W Princeton Dr, Princeton, TX 75407",
         "city": "Princeton, TX",
         "shootDate": "Thursday, November 12, 2026",
-        "loungeName": "Princeton Courtyard Pavilion",
+        "loungeName": "Living Area",
     },
     "fhr": {
         "code": "fhr",
@@ -58,7 +58,7 @@ FACILITIES = {
         "address": "205 Beech St, Farmersville, TX 75442",
         "city": "Farmersville, TX",
         "shootDate": "Friday, November 13, 2026",
-        "loungeName": "Farmersville Evergreen Great Room",
+        "loungeName": "Living Area",
     },
     "lml": {
         "code": "lml",
@@ -67,7 +67,7 @@ FACILITIES = {
         "address": "2000 W Audie Murphy Pkwy, Farmersville, TX 75442",
         "city": "Farmersville, TX",
         "shootDate": "Tuesday, November 17, 2026",
-        "loungeName": "Lexington Magnolia Activity Atrium",
+        "loungeName": "Living Area",
     },
     "tray": {
         "code": "tray",
@@ -76,7 +76,7 @@ FACILITIES = {
         "address": "4315 Hopkins Ave, Dallas, TX 75209",
         "city": "Dallas, TX",
         "shootDate": "Tuesday, November 24, 2026",
-        "loungeName": "Traymore Highland Park Holiday Studio",
+        "loungeName": "Living Area",
     },
     "mml": {
         "code": "mml",
@@ -85,7 +85,7 @@ FACILITIES = {
         "address": "3000 Mockingbird, Midland, TX 79705",
         "city": "Midland, TX",
         "shootDate": "Monday, November 30, 2026",
-        "loungeName": "Midland Rose Garden Recreation Room",
+        "loungeName": "Living Area",
     },
     "mmr": {
         "code": "mmr",
@@ -94,7 +94,7 @@ FACILITIES = {
         "address": "5001 Office Park, Odessa, TX 79762",
         "city": "Odessa, TX",
         "shootDate": "Tuesday, December 1, 2026",
-        "loungeName": "Madison Grand Ballroom Staging Suite",
+        "loungeName": "Living Area",
     },
     "aml": {
         "code": "aml",
@@ -103,7 +103,7 @@ FACILITIES = {
         "address": "801 S Loop 250 W, Midland, TX 79703",
         "city": "Midland, TX",
         "shootDate": "Wednesday, December 2, 2026",
-        "loungeName": "Ashton Main Fireside Staging Lounge",
+        "loungeName": "Living Area",
     },
     "sml": {
         "code": "sml",
@@ -112,7 +112,7 @@ FACILITIES = {
         "address": "1119 S Red River Expy, Burkburnett, TX 76354",
         "city": "Burkburnett, TX",
         "shootDate": "Tuesday, December 8, 2026",
-        "loungeName": "Sheridan Chisholm Trail Gathering Room",
+        "loungeName": "Living Area",
     },
     "scwf": {
         "code": "scwf",
@@ -121,7 +121,7 @@ FACILITIES = {
         "address": "910 Midwestern Pkwy, Wichita Falls, TX 76302",
         "city": "Wichita Falls, TX",
         "shootDate": "Wednesday, December 9, 2026",
-        "loungeName": "Wichita Falls Red River Sunroom",
+        "loungeName": "Living Area",
     },
     "cp": {
         "code": "cp",
@@ -130,7 +130,7 @@ FACILITIES = {
         "address": "6640 Iola Ave, Lubbock, TX 79424",
         "city": "Lubbock, TX",
         "shootDate": "Thursday, December 10, 2026",
-        "loungeName": "Crown Point Staging Lounge",
+        "loungeName": "Living Area",
     }
 }
 

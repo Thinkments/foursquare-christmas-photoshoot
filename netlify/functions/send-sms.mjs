@@ -53,7 +53,7 @@ export default async (req, context) => {
     const dateStr = data.date || '';
     const timeSlot = data.timeSlot || '';
     const dateTimeStr = dateStr && timeSlot ? `${dateStr} at ${timeSlot}` : (dateStr || timeSlot || 'Scheduled Time');
-    const lounge = data.loungeName || 'Holiday Studio Lounge';
+    const lounge = data.loungeName || 'Living Area';
     const ref = data.ref || '4SQ-CONFIRMED';
     const rescheduleUrl = data.rescheduleUrl || `https://christmasphotos.netlify.app/reschedule?ref=${encodeURIComponent(ref)}`;
 
@@ -63,7 +63,7 @@ Resident: ${residentDisplay}
 Facility: ${facilityName}${facilityAbbr}
 Address: ${address}
 Date/Time: ${dateTimeStr}
-Studio: ${lounge}
+Location: ${lounge}
 Pass Ref: ${ref}
 Reschedule: ${rescheduleUrl}
 

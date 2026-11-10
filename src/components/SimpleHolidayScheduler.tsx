@@ -186,7 +186,7 @@ export default function SimpleHolidayScheduler() {
       facilityAbbr: 'AML',
       facilityAddress: '801 S Loop 250 W, Midland, TX 79703',
       facilityCity: 'Midland, TX',
-      loungeName: 'Ashton Main Fireside Staging Lounge',
+      loungeName: 'Living Area',
       date: SHOOT_DATE,
       timeSlot,
       residentName: residentName.trim(),
@@ -267,7 +267,7 @@ export default function SimpleHolidayScheduler() {
             {FACILITY_NAME}
           </h2>
           <p className="text-xs text-slate-200 mt-0.5">
-            📅 <strong>{SHOOT_DATE}</strong> • Main Fireside Staging Lounge
+            📅 <strong>{SHOOT_DATE}</strong> • Living Area
           </p>
         </div>
 

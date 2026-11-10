@@ -47,7 +47,7 @@ const FACILITIES_CONFIG = {
     name: "Hillside Medical Lodge",
     abbr: "HML",
     address: "300 S Highway 36 Byp N, Gatesville, TX 76528",
-    lounge: "Hillside Fireside Solarium",
+    lounge: "Living Area",
     shootDate: "Thursday, Nov 5, 2026",
     sheetId: "1ICSuhXYnnBH5gAaikJyXOuQlAIGa70q3gowZiKxw3j4"
   },
@@ -55,7 +55,7 @@ const FACILITIES_CONFIG = {
     name: "Whitney Nursing & Rehabilitation",
     abbr: "WNR",
     address: "101 S San Marcos St, Whitney, TX 76692",
-    lounge: "Whitney Heritage Community Room",
+    lounge: "Living Area",
     shootDate: "Friday, Nov 6, 2026",
     sheetId: "1tCTVeltddtPnSVFRdvcaaPZneGJIKn9MASTm4cTwBbQ"
   },
@@ -63,7 +63,7 @@ const FACILITIES_CONFIG = {
     name: "Cheyenne Medical Lodge",
     abbr: "CML",
     address: "750 Hwy 352, Mesquite, TX 75149",
-    lounge: "Cheyenne Grand Prairie Staging Room",
+    lounge: "Living Area",
     shootDate: "Nov 9 & 10, 2026",
     sheetId: "1eCYxLcAEY5ItRn_4LpgH0gGgadCUKz_Cm7xqK8j4Bos"
   },
@@ -71,7 +71,7 @@ const FACILITIES_CONFIG = {
     name: "Princeton Medical Lodge",
     abbr: "PML",
     address: "1401 W Princeton Dr, Princeton, TX 75407",
-    lounge: "Princeton Courtyard Pavilion",
+    lounge: "Living Area",
     shootDate: "Thursday, Nov 12, 2026",
     sheetId: "1W638inRfm4VszJhtomYWPG0ufpperUfnu4ms3uT0NxU"
   },
@@ -79,7 +79,7 @@ const FACILITIES_CONFIG = {
     name: "Farmersville Health & Rehabilitation",
     abbr: "FHR",
     address: "205 Beech St, Farmersville, TX 75442",
-    lounge: "Farmersville Evergreen Great Room",
+    lounge: "Living Area",
     shootDate: "Friday, Nov 13, 2026",
     sheetId: "1AJMGyZzrGDHxB3N5gBMI435tWdU1aPudeFC29O0Yx-c"
   },
@@ -87,7 +87,7 @@ const FACILITIES_CONFIG = {
     name: "Lexington Medical Lodge",
     abbr: "LML",
     address: "2000 W Audie Murphy Pkwy, Farmersville, TX 75442",
-    lounge: "Lexington Magnolia Activity Atrium",
+    lounge: "Living Area",
     shootDate: "Tuesday, Nov 17, 2026",
     sheetId: "1jms0PsKi1Iy0lcEvipd57JcKA9YdRDQSQdousDQhN7c"
   },
@@ -95,7 +95,7 @@ const FACILITIES_CONFIG = {
     name: "Traymore at Park Cities",
     abbr: "T@PC",
     address: "4315 Hopkins Ave, Dallas, TX 75209",
-    lounge: "Traymore Highland Park Holiday Studio",
+    lounge: "Living Area",
     shootDate: "Tuesday, Nov 24, 2026",
     sheetId: "1HhrpSrtuE_Z_tnQYpGkZMgxR_ytmgGe_tdlnPejweIo"
   },
@@ -103,7 +103,7 @@ const FACILITIES_CONFIG = {
     name: "Midland Medical Lodge",
     abbr: "MML",
     address: "3000 Mockingbird, Midland, TX 79705",
-    lounge: "Midland Rose Garden Recreation Room",
+    lounge: "Living Area",
     shootDate: "Monday, Nov 30, 2026",
     sheetId: "1ytJ_HVCUZCjFHdXpU5lTqaWfmoq5ta6N7SbypFKixcE"
   },
@@ -111,7 +111,7 @@ const FACILITIES_CONFIG = {
     name: "Madison Medical Resort",
     abbr: "MMR",
     address: "5001 Office Park, Odessa, TX 79762",
-    lounge: "Madison Grand Ballroom Staging Suite",
+    lounge: "Living Area",
     shootDate: "Tuesday, Dec 1, 2026",
     sheetId: "1fhMmZV27mXXfX5jAF5YAERQGjCqFan07GvgNseznAbw"
   },
@@ -119,7 +119,7 @@ const FACILITIES_CONFIG = {
     name: "Ashton Medical Lodge",
     abbr: "AML",
     address: "801 S Loop 250 W, Midland, TX 79703",
-    lounge: "Ashton Main Fireside Staging Lounge",
+    lounge: "Living Area",
     shootDate: "Wednesday, Dec 2, 2026",
     sheetId: "1n9LasYjsQUJGszzPVBlY9KjMqEocG2SoH2tyHbucBkg"
   },
@@ -127,7 +127,7 @@ const FACILITIES_CONFIG = {
     name: "Sheridan Medical Lodge",
     abbr: "SML",
     address: "1119 S Red River Expy, Burkburnett, TX 76354",
-    lounge: "Sheridan Chisholm Trail Gathering Room",
+    lounge: "Living Area",
     shootDate: "Tuesday, Dec 8, 2026",
     sheetId: "13e41eSswwEOar9k9DvWTVTNgvMR7jqTKr3zOZbq0OEk"
   },
@@ -135,7 +135,7 @@ const FACILITIES_CONFIG = {
     name: "Senior Care Wichita Falls",
     abbr: "SCWF",
     address: "910 Midwestern Pkwy, Wichita Falls, TX 76302",
-    lounge: "Wichita Falls Red River Sunroom",
+    lounge: "Living Area",
     shootDate: "Wednesday, Dec 9, 2026",
     sheetId: "1YwIN107MjS5t4RD1PmhAMB0sivr6wmPWOoaVIveV7CA"
   },
@@ -143,7 +143,7 @@ const FACILITIES_CONFIG = {
     name: "Crown Point Health Suites",
     abbr: "CP",
     address: "6640 Iola Ave, Lubbock, TX 79424",
-    lounge: "Crown Point Staging Lounge",
+    lounge: "Living Area",
     shootDate: "Thursday, Dec 10, 2026",
     sheetId: "1C7dLg7u0V9NCxSOhrjzHm8xa2WZkULFml3oq5m766gU"
   }
